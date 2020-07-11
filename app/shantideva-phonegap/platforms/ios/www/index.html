@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+        
+	<script src="lib/jquery-3.1.1.min.js"></script> 
+	<script src="lib/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script> 
+	
+	<script src="content/localize.js"></script>
+	
+	
+	<title>Daily Verses</title>
+
+<script>
+
+CONFIG = {
+  _language:null,
+  _textLanguage:null,
+  _textLanguage2:null,
+  _messageEnabled:null,
+  _messageHour:null,
+  
+  /** get UI language */
+  getUILang:function() {
+    if(this._language === null) {
+      // get ui language from configuration
+      var cfgSetting = localStorage.getItem("uiLanguage");
+      if(cfgSetting) {
+        this._language = cfgSetting;
+      } 
+    
+      // check if any of the user's preferred language is supported by the app
+      if(!this._language) {
+        if(navigator.languages) {
+            for(var i in navigator.languages) {
+                browserLang = navigator.languages[i].substring(0,2).toLowerCase();
+                if(LANG_LIST[browserLang]) {
+                    this._language = browserLang;
+                    break;
+                }
+            }
+        }
+      }
+
+      if(!this._language) {
+        if (navigator.language && LANG_LIST[navigator.language]) {
+            this._language = navigator.language;
+        }
+      }
+
+      if(!this._language)
+        this._language = 'en';
+    }
+    return this._language;
+  },
+  
+  getMessageEnabled:function() {
+    if(this._messageEnabled === null) {
+      var cfgSetting = localStorage.getItem("messageEnabled");
+      if(cfgSetting === false || cfgSetting === "false"  ) {
+        this._messageEnabled = false;
+      } else {
+        this._messageEnabled = true;
+      }
+    }
+    return this._messageEnabled;
+  },
+
+  getMessageHour:function() {
+    if(this._messageHour === null) {
+      var cfgSetting = localStorage.getItem("messageHour");
+      if(cfgSetting || (cfgSetting == 0)) {
+        this._messageHour = Number( cfgSetting );
+      } else {
+        this._messageHour = 10;
+      }
+    }
+    return this._messageHour;
+  },
+  
+  /** get current text language */
+  getTextLang:function( ) {
+    if(this._textLanguage === null) {
+      var cfgSetting = localStorage.getItem("textLanguage");
+      if(cfgSetting) {
+        this._textLanguage = cfgSetting;
+      } else {
+        var uiLang = this.getUILang();
+        if(TEXT_LANG_LIST[uiLang]) {
+          this._textLanguage = uiLang;
+        } else {
+          this._textLanguage = 'en';
+        }
+      }
+    }
+    return this._textLanguage;
+  },
+
+  getTextLang2:function( ) {
+    if(this._textLanguage2 === null) {
+      var cfgSetting = localStorage.getItem("textLanguage2");
+      if(cfgSetting) {
+        this._textLanguage2 = cfgSetting;
+      } else {
+        this._textLanguage2 = ''; // default value is that 2nd text language is deactivated
+      }
+    }
+    return this._textLanguage2;
+  },
+
+  getTextUrl:function( ) {
+    return 'content/text_'+this.getTextLang()+'.txt';
+  },
+    
+  /* load all settings - currently only calls callback function but could do asynchronous loading later */
+  loadSettings:function(callbackFunc) {
+    callbackFunc();
+  },
+  
+  /* save all settings  
+   * attributes of the settings object: {messageEnabled:true, messageHour:'10', messageMinute:00, uiLanguage:'en', textLanguage:'en', textLanguage2:''}
+   */ 
+  saveSettings:function(settings) {
+    for(var setting in settings) {
+      // save all configuration properties
+      localStorage.setItem(setting, settings[setting] );
+    }
+    
+    this.getCordovaPlugin().saveSettings(settings);
+    
+  },
+  
+  /* get the object of our native cordova plugin */
+  getCordovaPlugin:function(settings) {
+    if(window.cordova && cordova.plugins && cordova.plugins.DailyVersesPlugin) {
+      // we are running inside of cordova - return the native plugin
+      return cordova.plugins.DailyVersesPlugin;
+    } else {
+      // we are running as we application. Return a dummy object
+      return {
+        testNotification: function(success, error) {},
+        setAlarm: function(success, error) {},
+        testTimer: function(success, error) {},
+        saveSettings:function(settings, success, error) {}
+      }
+    }
+  }
+}
+
+
+UI = {
+  currentChapter: -1,
+  isSettingsInitialized:false,
+
+  _setDropdownValues:function(dropdownId, options, selectedOption ) {
+      var optHtml='';
+      for(var opt in options) {
+        var selected = ( opt === selectedOption ? ' selected="selected"' : '' );
+        optHtml += '<option value="'+ opt +'"'+ selected +'>'+ options[opt] +'</option>'
+      }
+      var $dropdown = $('#'+dropdownId);
+      $dropdown.html( $dropdown.html() + optHtml );      
+      $dropdown.selectmenu("refresh");
+  }, 
+
+  getSettingsFromUI:function() {
+    var uiLang = $('#uiLanguage').val();
+    var verseOfTheDayTxt = LANG[uiLang]["Verse of the Day"];
+    var settings = {
+      uiLanguage: uiLang,
+      textLanguage: $('#textLanguage').val(),
+      textLanguage2: $('#textLanguage2').val(),
+      messageEnabled: $('#messageEnabled').is(":checked"),
+      messageHour: parseInt($('#messageHour').val(),10),
+      messageMinute: 0,
+      verseOfTheDay: verseOfTheDayTxt
+    };
+    
+    if(!settings.textLanguage2) {
+      settings.textLanguage2 = '';
+    }
+    return settings;
+  },
+
+  btnSave:function() {
+    var settings = this.getSettingsFromUI();
+    CONFIG.saveSettings( settings );
+    location.reload();
+  },
+
+  btnCancel:function() {
+    this.openTab('homeTab');
+  },
+
+  initSettingsTab:function() {
+    if(!this.isSettingsInitialized) {
+      if(!window.cordova) {
+        $("#settingsTab").addClass("web");
+      } else {
+        $("#settingsTab").addClass("mobile");      
+      }
+    
+      $("#messageEnabled").prop("checked", CONFIG.getMessageEnabled() );
+      $("#messageHour").val(CONFIG.getMessageHour() );
+
+      $("#settingsTab input[type=checkbox]").checkboxradio();
+      $("#settingsTab select").selectmenu();
+      $("#settingsTab button").button();
+      
+      /* language dropdowns for text language */
+      this._setDropdownValues('textLanguage', TEXT_LANG_LIST, CONFIG.getTextLang());
+      
+      this._setDropdownValues('textLanguage2', TEXT_LANG_LIST, CONFIG.getTextLang2());
+      
+      /* language dropdowns for text language */
+      this._setDropdownValues('uiLanguage', LANG_LIST, CONFIG.getUILang());
+      
+
+      $("#saveBtn").click(function( event ) { UI.btnSave(); }); 
+      $("#cancelBtn").click(function( event ) { UI.btnCancel(); }); 
+      
+      this.isSettingsInitialized = true;
+    }
+  },
+  
+  openTab:function(tabName) {
+    if(tabName == 'homeTab') {
+      this.updateVerseOfTheDay();
+    } else if(tabName == 'textTab') {
+      if(this.currentChapter == -1) {
+        this.showChapter(1);
+      }
+    } else if(tabName == 'settingsTab') {
+      this.initSettingsTab();
+    }
+    
+    this.doOpenTab(tabName);
+    this.scrollElementToTop($('#'+tabName)[0]);
+  },
+  
+  doOpenTab:function(tabName) {
+    $('.tabcontent').hide(); // hide all tab content
+    $('#'+tabName).show(); // show desired tab content
+    
+    $('.tabtitle').hide(); // hide all tabs titles
+    $('#'+tabName+"Title").show(); // show title of desired tab
+    $('#footer .tab').show(); // make sure the footer becomes visible
+    
+    $('.tab li').removeClass("active"); // make the currently active tab inactive
+    $('#'+tabName+"Link").parent().addClass("active"); // make the newly selected tab active
+  },
+
+  replaceAll:function(str, search, replace) {
+    return str.split(search).join(replace);
+  },
+  
+  /** Localize a text */
+  getText:function(txtid) {
+    var txt = "";
+    if (window.LANG && LANG[CONFIG.getUILang()]) {
+      txt = LANG[CONFIG.getUILang()][txtid];
+    } 
+    if(!txt) {
+      txt = txtid;
+    }
+    
+    if(arguments.length > 1) { // additional placeholders present
+      for(var i=1;i<arguments.length;i++) {
+        txt = txt.replace('%'+i,arguments[i]);
+      }
+    }
+
+    return txt;
+  },
+
+  localizeText:function() {
+    var htmlCode = $('body').html();
+    if (window.LANG && LANG[CONFIG.getUILang()]) {
+      for(var txtid in LANG[CONFIG.getUILang()]) {
+        var textVal = LANG[CONFIG.getUILang()][txtid];
+        htmlCode = this.replaceAll(htmlCode,"{{"+txtid+"}}",textVal);
+      }
+    }
+    htmlCode = this.replaceAll(htmlCode,"{{","");
+    htmlCode = this.replaceAll(htmlCode,"}}","");
+    $('body').html(htmlCode);
+  },
+  
+  
+  scrollElementIntoView:function(scrollParent, targetElement, deltaOffset) {  
+    if(!deltaOffset) {
+      deltaOffset=0;
+    }
+    scrollParent.parentNode.scrollTop = targetElement.offsetTop + deltaOffset;
+    $(targetElement).effect("highlight", {}, 1500);
+  },
+  
+  scrollElementToTop:function(scrollParent) {  
+    scrollParent.parentNode.scrollTop = 0;
+  },
+  
+  jumpToVerseOfTheDay:function() {
+    var verseInfo = DATA.getVerseOfTheDay();
+    this.showChapter(verseInfo.chapter);
+    this.openTab('textTab');
+    
+    var verseId = '#verse'+verseInfo.totalNr;
+    var verseDom = $(verseId);
+    this.scrollElementIntoView($('#textTab')[0], verseDom[0], -8);
+  },
+  
+  updateVerseOfTheDay:function() {
+    var verseInfo = DATA.getVerseOfTheDay();
+    var verseText = verseInfo.verseText.replace(/^<p>\([0-9]+\) */,"<p>"); // remove verse number at the beginning of the first line
+
+    htmlCode = '<div id="verseOfTheDayCont" class="vcenterContainer"><div id="verseOfTheDay" class="vcenter"><div id="verseOfTheDayNarrow">' 
+
+    htmlCode += verseText;
+    htmlCode += '<a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', verseInfo.chapter, verseInfo.nr)+'</a>';
+    htmlCode += '</div></div></div>';
+    $('#homeTab').html(htmlCode);
+    
+    $('#homeTab a').button();
+  },
+  
+  showChapter:function(chapterNr) {
+    if(this.currentChapter != chapterNr) {
+        if(chapterNr < 1) {
+          chapterNr = 1;
+        } else if(chapterNr >= DATA.chaptersSizes.length - 1) {
+          chapterNr = DATA.chaptersSizes.length - 1;
+        }
+
+        // select the right chapter in the dropdown
+        $('#chapterDropdown select').val(chapterNr).selectmenu("refresh");;
+        
+        // show the chapter content on the "full text" tab
+        var htmlCode = '<div class="textView"><h1>'+DATA.chaptersNames[chapterNr] + '</h1>';
+        for(var i=0;i<DATA.verses.length;i++) {
+          var verse=DATA.verses[i];
+          if(verse.chapter == chapterNr) {
+            htmlCode+='<div class="verse" id="verse'+verse.totalNr+'">' + verse.verseText + '</div>';
+          }
+        }
+        
+        htmlCode+='</div>';
+        var $textTab = $('#textTab');
+        $textTab.html(htmlCode);
+        this.scrollElementToTop($textTab[0]);
+        
+        this.currentChapter = chapterNr;
+    }
+  },
+  
+  moveChapter:function(direction) {
+    var newChapter = this.currentChapter + direction;
+    this.showChapter(newChapter);
+  },
+  
+  initChaptersDropdown:function() {
+    var htmlCode = '<select>'
+    for(var chapter in DATA.chaptersNames) {
+      htmlCode += '<option value="'+chapter+'">'+DATA.chaptersNames[chapter]+'</option>'
+    }
+    htmlCode += '/<select>'
+
+    $('#chapterDropdown').html(htmlCode);
+    
+    var $select = $('#chapterDropdown select').selectmenu();
+
+    $select.on("selectmenuchange",function() {
+      UI.showChapter(Number($select.val()));
+    });
+    
+    $('#btnBack').button({icon:'ui-icon ui-icon-caret-1-w'});
+    $('#btnNext').button({icon:'ui-icon ui-icon-caret-1-e'});
+    
+  },
+  
+  init:function() {
+    this.initChaptersDropdown();
+    this.openTab('homeTab');
+  }
+  
+}
+
+DATA = {
+  verses:[],
+  chaptersNames:[],
+  chaptersSizes:[],
+  
+  loadVerses:function(settings) {
+    $.ajax({url:CONFIG.getTextUrl(), success:$.proxy(this.parseVerses,this)});
+  },
+  
+  parseVerses:function(text) {
+    var data = [],
+        lines=text.split('\n'),
+        count=lines.length,
+        record,
+        verseNr=0,
+        chapterNr=0,
+        verse='',
+        sortPosition='',
+        currLine,
+        i;
+    
+    for (i = 0; i < count; i++) {
+        currLine = lines[i];
+        if(currLine.indexOf('***')>=0) {
+            chapterNr++;
+            this.chaptersNames[chapterNr] = currLine.replace(/ *[*]+ ?/g,'');
+            
+            if(verse!=='') {
+              data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id}});
+            }
+
+            verseNr=1;
+            verse='';
+            
+        } else if(currLine === '') {
+            if(verse!=='') {
+              data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id}});
+            
+              verseNr++;
+              verse='';
+            }
+        } else {
+            verse += '<p>'+ currLine+'</p>';
+            //verse += currLine+'<br>';
+        }
+        this.chaptersSizes[chapterNr] = verseNr - 1;
+    }
+    this.verses = data;
+    
+    UI.init();
+  },
+  
+   /**
+    * helper function - calculate a random integer value based on a random seed
+    * @param seed the seed to initialize the random number generation
+    * @param maxValue the highest value that may be returned (random numbers will be between 0 and this value, inclusive)
+    * @return a random integer value
+    */
+  getRandomIntWithSeed: function(seed,maxValue) {
+    var randomNumber = Number("0." + (Math.sin(seed).toString().substring(7)));
+      return parseInt((maxValue+1)*randomNumber,10);
+  },
+  
+
+  getVerseOfTheDay: function(day) {
+    var totalVerseCount = this.verses.length;
+    
+    //calculate a seed for the random number generator that will be stable for each day;
+    //  then use it to get the random verse for today
+    var now=day||new Date();
+    var randSeedForTheDay = now.getFullYear()*400+now.getMonth()*31+now.getDate();
+    var verseOfTheDayNr = this.getRandomIntWithSeed(randSeedForTheDay, totalVerseCount - 1);
+    return this.verses[verseOfTheDayNr];
+  }
+  
+}
+
+
+$(function() {
+    CONFIG.loadSettings(function() {    
+      DATA.loadVerses();
+      UI.localizeText();
+      
+      $('body').addClass(CONFIG.getTextLang());
+      
+      if(!window.localStorage) {
+        // if the browser doesn't support local storage we can't store settings so we have to hide the settings tab.
+        $('#settingsTabBtn').hide();
+      }
+      
+    });
+});
+
+document.addEventListener("deviceready", function() {
+   CONFIG.getCordovaPlugin().setAlarm();
+});
+</script>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="tabtitle" id="homeTabTitle">
+      <h1>{{App_Title}} - {{Verse of the Day}}</h1>
+    </div>
+    <div class="tabtitle" id="textTabTitle">
+      <a href="javascript:void(0)" id="btnBack" onclick="UI.moveChapter(-1)"></a>
+      <span id="chapterDropdown"></span>
+      <a  href="javascript:void(0)" id="btnNext" onclick="UI.moveChapter(+1)"></a>
+    </div>
+    <div class="tabtitle" id="settingsTabTitle">
+      <h1>{{Settings}}</h1>
+    </div>
+    <div class="tabtitle" id="infoTabTitle">
+      <h1>{{About This App}}</h1>
+    </div>
+    
+</div>
+
+<div class="tabcontentWrap">
+    <div id="homeTab" class="tabcontent">
+    </div>
+
+    <div id="textTab" class="tabcontent">
+    </div>
+
+    <div id="settingsTab" class="tabcontent">
+      <div class="vcenterContainer settings"><div class="vcenter">
+      
+      
+        <fieldset>
+        <legend>{{Language of Shantideva's text}}</legend>
+        <table>
+        <!-- <tr><td colspan="2">{{You can show the text in up to two different languages at the same time in order to compare different translations.}}</td></tr>-->
+        <tr>
+          <td><label for="textLanguage" class="label">{{Text Language}}:</label></td>
+          <td><select id="textLanguage"></select></td>
+        </tr>
+        <!-- <tr>
+          <td><label for="textLanguage2">{{Text Language 2}}</label></td>
+          <td><select id="textLanguage2"><option value="" selected> ---------------- </option></select></td>
+        </tr>-->
+        </table>
+        </fieldset>
+        
+        <fieldset class="hideForWeb">
+        <legend>{{Notification Messages}}</legend>
+        <table>
+        <tr>
+            <td><span class="label">{{Daily Message}}:</span></td>
+            <td><label for="messageEnabled">{{Show Messages}}</label> <input type="checkbox" name="messageEnabled" id="messageEnabled"></td>
+        </tr><tr>
+            <td><label for="messageHour" class="label">{{Time}}:</label></td>
+            <td><select name="messageHour" id="messageHour">
+              <option value="1">{{1 am}}</option>
+              <option value="2">{{2 am}}</option>
+              <option value="3">{{3 am}}</option>
+              <option value="4">{{4 am}}</option>
+              <option value="5">{{5 am}}</option>
+              <option value="6">{{6 am}}</option>
+              <option value="7">{{7 am}}</option>
+              <option value="8">{{8 am}}</option>
+              <option value="9">{{9 am}}</option>
+              <option value="10">{{10 am}}</option>
+              <option value="11">{{11 am}}</option>
+              <option value="12">{{12 am}}</option>
+              <option value="13">{{1 pm}}</option>
+              <option value="14">{{2 pm}}</option>
+              <option value="15">{{3 pm}}</option>
+              <option value="16">{{4 pm}}</option>
+              <option value="17">{{5 pm}}</option>
+              <option value="18">{{6 pm}}</option>
+              <option value="19">{{7 pm}}</option>
+              <option value="20">{{8 pm}}</option>
+              <option value="21">{{9 pm}}</option>
+              <option value="22">{{10 pm}}</option>
+              <option value="23">{{11 pm}}</option>
+              <option value="0">{{12 pm}}</option>
+            </select></td>
+        </tr></tr>
+          <td colspan="2" class="smallFormInfo">{{Enable the options above the see the verse of the day as a notification message at the time of your choice.}}</td>
+        <tr>
+        </table>
+      </fieldset>
+
+
+        
+        <fieldset>
+        <legend>{{Language of the App}}</legend>
+        <table>
+        <tr>
+            <td><label for="uiLanguage" class="label">{{App Language}}:</label></td>
+            <td><select id="uiLanguage"></select></td>
+        </tr>
+        </table>
+        </fieldset>        
+      <br />
+      <div class="center">
+        <button id="cancelBtn">{{Cancel}}</button><button id="saveBtn">{{Save}}</button>
+      </div>
+      </div></div>
+      
+    </div>
+    <div id="infoTab" class="tabcontent">
+      {{About_Text}}
+    </div>
+</div>
+
+<div id="footer" class="footer">
+ <ul class="tab">
+  <li class="active"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('homeTab')" id="homeTabLink">{{Verse of the Day}}</a>
+  </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('textTab')" id="textTabLink">{{Full Text}}</a>
+  </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('settingsTab')" id="settingsTabLink">{{Settings}}</a>
+  </li><li id="settingsTabBtn"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('infoTab')" id="infoTabLink">{{About}}</a></li>
+</ul>
+</div>
+
+
+ <script type="text/javascript" src="cordova.js"></script>
+ <script type="text/javascript" src="js/index.js"></script>
+ 
+</body>
+</html>

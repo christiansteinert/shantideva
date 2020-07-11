@@ -1,0 +1,343 @@
+@font-face { font-family: TangerineBold; src:url(Tangerine_Bold.ttf) format('truetype'); }
+@font-face { font-family: RobotoRegular; src:url(Roboto-Regular.ttf) format('truetype'); }
+
+
+.de #verseOfTheDay p, 
+.de .textView h1,
+.en #verseOfTheDay p,
+.en .textView h1 {
+  font-family:"TangerineBold";
+}
+
+.vcenterContainer{
+ height:100%;
+ width:100%;
+ display: table;
+}
+
+fieldset+fieldset {
+ margin-top: 1em;
+}
+
+.settings {
+ max-width: 30em !important;
+ margin:0 auto !important; 
+ padding: 1em 0 2em 0;
+}
+#messageHour-menu{
+overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1px;
+    max-height: 12em;
+}
+
+.vcenter{
+ /*horizontal and vertical centering*/
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+}
+
+#verseOfTheDayNarrow{
+ max-width:25em;
+ display:inline-block;
+}
+
+#verseOfTheDay p{
+ 
+ font-size:2em;
+ text-align:center;
+ margin:0.5em 0;
+}
+
+html, body{ 
+ padding:0;
+ margin:0;
+ background-color:#fff;
+ color:#000;
+ height:100%;
+ overflow:hidden;
+ font-family:Roboto,RobotoRegular,Arial,sans-serif;
+}
+
+.header, .footer {
+ background-color: #136AA6;
+ color:#fff;
+}
+
+.footer{
+ position:absolute;
+ bottom:0;
+ left:0;
+ width:100%;
+ height:50px;
+ overflow:hidden;
+ text-align:center;
+}
+
+.header{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:3em;
+ text-align:center
+}
+.tabtitle{
+ padding-top: 0.4em;
+}
+
+.header h1 {
+ padding:0;
+ margin:0.5em 0 0 0;
+ font-size:1em;
+ font-weight:bold;
+}
+
+.header a{
+ padding-left: 1%;
+ padding-right: 1%;
+ min-width:2em;
+
+}
+
+
+/* Style the list */
+.tab{
+ list-style-type: none;
+ margin: 0;
+ padding: 0;
+ overflow: hidden;
+ color: #fff;
+ display:none;
+ height:50px;
+}
+
+/* Float the list items side by side */
+.tab li {
+ display:inline-block;
+ height:50px;
+ overflow:hidden;
+}
+
+/* Style the links inside the list items */
+.tab li a {
+ display: inline-block;
+ color: #fff;
+ text-align: center;
+ text-decoration: none;
+ transition: 0.1s;
+ font-size:0.7em;
+ font-weight:bold;
+ padding:32px 0.5em 0 0.5em;
+ min-width:4.5em; 
+ line-height:0.85em;
+ height:18px; /* 50px - 32px for padding = 18px*/
+ overflow:hidden;
+}
+
+/* Change background color of links on hover */
+.tab li:hover,.tab li:hover a{
+ background-color: #ddd;
+ color:#136AA6;
+}
+
+.tab .active, .tab .active a{
+ background-color: #ccc;
+ color:#136AA6;
+}
+
+
+/* tablink classes */
+.tablinks{
+ background-size: 25px 25px;
+ background-repeat: no-repeat;
+ background-position: center 3px; 
+}
+
+#homeTabLink{
+ background-image: url('../icons/sun.png');
+}
+#homeTabLink:hover, .active #homeTabLink{
+ background-image: url('../icons/sun_active.png');
+}
+
+#infoTabLink{
+ background-image: url('../icons/info.png');
+}
+#infoTabLink:hover, .active #infoTabLink{
+ background-image: url('../icons/info_active.png');
+}
+
+#settingsTabLink{
+ background-image: url('../icons/settings.png');
+}
+#settingsTabLink:hover, .active #settingsTabLink{
+ background-image: url('../icons/settings_active.png');
+}
+
+#textTabLink{
+ background-image: url('../icons/text.png');
+}
+#textTabLink:hover, .active #textTabLink{
+ background-image: url('../icons/text_active.png');
+}
+.spacer{height:1em;}
+
+#settingsTab #saveBtn{
+ background: #494;
+ color:#fff;
+ font-weight:bold;
+ width:45%;
+}
+
+
+#settingsTab #cancelBtn{
+ background: #b33;
+ color:#fff;
+ font-weight:bold;
+ width:45%;
+ margin-right:9%;
+}
+#settingsTab #saveBtn:hover{
+ background: #4a4;
+}
+#settingsTab #cancelBtn:hover{
+ background: #c22;
+}
+#settingsTab legend{
+ text-align:left;
+}
+
+.center{
+ text-align:center;
+}
+#settingsTab td{
+ text-align:left;
+}
+
+#notifyHour-button{
+ max-width:4.5em;
+}
+
+.label{
+ font-weight:bold;
+ padding-right:0.2em;
+}
+.smallFormInfo{
+ font-size:0.9em;
+ color:#444;
+ padding-top:0.7em;
+}
+#settingsTab .ui-checkboxradio-label{
+ padding-left:0.3em;    
+ padding-right:0.3em;    
+}
+
+.tabcontentWrap {
+ overflow:auto;
+ position:absolute;
+ top:3em;
+ bottom:3em;
+ left:0;
+ right:0;
+}
+
+
+/* Style the tab content */
+.tabcontent {
+ display: none;
+ height:100%;
+ padding: 0 2%;
+}
+
+.tabtitle {
+ display: none;
+}
+
+#chapterDropdown .ui-selectmenu-button {
+ width:30em;
+ max-width: 60%;
+ padding-left: 1%;
+ padding-right: 1%; 
+}
+
+.ui-selectmenu-menu {
+  max-width: 70vw;
+}
+
+x.web .hideForWeb{
+ display:none
+}
+
+.tabcontent {
+ -webkit-animation: fadeEffect 1s;
+ animation: fadeEffect 1s;
+}
+
+@-webkit-keyframes fadeEffect {
+ from {opacity: 0;}
+ to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+ from {opacity: 0;}
+ to {opacity: 1;}
+}
+
+/* chapter view */
+.textView{
+  max-width: 40em;
+  margin: 0 auto;
+}
+.textView p{
+ font-family:Roboto,RobotoRegular,Arial,sans-serif;
+ text-indent:-1em;
+ padding-left:1em;
+ padding-right:0.6em;
+ margin:0;
+ font-size: 1.1em;
+}
+
+.textView .verse{
+ margin-bottom:0.75em;
+}
+
+.textView h1{
+ margin:0.5em 0 0.5em 0;
+ font-size:2em;
+ text-decoration:none;
+ border-bottom: 2px solid #000;
+ display:inline-block;
+ line-height:0.8em;
+}
+
+
+@media only screen and (max-width: 400px) {
+ .ui-selectmenu-button.ui-button {
+    width: 140px !important;
+  }
+  
+ .tab li a {
+  font-size:0.65em;
+  min-width:25px;
+  padding-left:3px;
+  padding-right:3px;
+  float:left;
+ }  
+}
+    
+@media only screen and (max-width: 300px) {
+ .ui-selectmenu-button.ui-button {
+    width: 100px !important;
+  }
+  
+ .tab li a {
+  min-width:20px;
+  padding-left:3px;
+  padding-right:3px;
+  max-height:50px;
+  float:left;
+  overflow:hidden;
+ }
+}

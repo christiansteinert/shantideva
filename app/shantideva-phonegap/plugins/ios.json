@@ -1,0 +1,18 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "de.christiansteinert.dailyversesplugin": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    }
+  },
+  "dependent_plugins": {}
+}
