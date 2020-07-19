@@ -1,0 +1,18 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Schema for device de-registration",
+  "required": [
+   "devicetoken"
+  ],
+  "properties": {
+    "devicetoken":{
+      "type":"string",
+      "title":"Device Token",
+      "minLength":32,
+      "maxLength":256,
+      "pattern": "^[0-9a-fA-F ]+$"
+    }
+  }
+}

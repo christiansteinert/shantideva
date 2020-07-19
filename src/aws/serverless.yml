@@ -1,0 +1,132 @@
+# service definition file for lambda services
+# (packaged and deployed serverless framework; serverless.com)
+# 
+# these lambda functions allow 
+#  - for ios devices to subscribe or unsubscribe for a daily notification message for the verse of the day 
+#  - a timer-triggered lambda function runs every hour 
+
+service: shantideva
+
+
+plugins:
+  - serverless-pseudo-parameters  
+#  - serverless-plugin-warmup
+
+
+provider:
+  name: aws
+  runtime: python3.7
+
+  stage: prd           #stage-ID
+  region: eu-central-1 #AWS region to deploy to
+  
+  memorySize: 128
+  timeout: 600
+  versionFunctions: false
+
+  environment: # set environment variables for lambda functions
+    # Set environment variable with the name of the dynamodb table. This environment variable is then used inside the lambda functions
+    DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE: ${self:custom.dynamodb.pushSubscriptionsTable} 
+
+  iamRoleStatements: # set permissions for our lambda functions so that they have access to dynamodb 
+    - Effect: Allow
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:BatchWriteItem"
+      Resource:
+        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.pushSubscriptionsTable}
+        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.pushSubscriptionsTable}/index/push_platform
+
+package:
+  individually: true
+  exclude:
+    - '**' # exclude everything from packaging; for each deployed function we will then individually add only the required resources
+
+# register lambda functions and expose them through API gateway
+functions:
+  register:
+    handler: device-register/device-register.register
+    events:
+      - http:
+          path: /v1/device/register
+          method: post
+          request:
+            schema:
+              application/json: ${file(device-register/schema-device_register_request.json)}
+    package:
+      include:
+        - 'device-register/**'
+          
+  unregister:
+    handler: device-unregister/device-unregister.unregister
+    events:
+      - http:
+          path: /v1/device/unregister
+          method: post
+          request:
+            schema:
+              application/json: ${file(device-unregister/schema-device_unregister_request.json)}
+    package:
+      include:
+        - 'device-unregister/**'
+
+              
+  send_messages:
+    handler: send-messages/send-messages.send_msgs
+    package:
+      include:
+        - 'send-messages/**/*.py'
+        - 'send-messages/**/*.pem'
+        - 'send-messages/content/*.txt'
+    events: # run this function every full hour
+      - schedule: 
+          rate: cron(0 * * * ? *)
+          enabled: false      
+              
+              
+# define a value that contains the name of the database table so that we can reference it elsewhere in this file
+custom:
+  dynamodb:
+    # call the table: shantideva.PushSubscriptions-dev / -prd
+    pushSubscriptionsTable: ${self:service}.PushSubscriptions-${self:provider.stage}          
+
+
+resources:
+  Resources:
+    # define a dynamodb table for registered devices
+    # only key and index fields are defined here; all other fields are created by DynamoDB on demand as they are written
+    pushSubscriptions:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.dynamodb.pushSubscriptionsTable} # create a table containing the ios push message subscriptions
+        AttributeDefinitions:
+          - AttributeName: push_platform
+            AttributeType: S
+          - AttributeName: push_devicetoken
+            AttributeType: S
+          - AttributeName: is_disabled
+            AttributeType: N
+          - AttributeName: last_push_date
+            AttributeType: S
+        KeySchema:
+          - AttributeName: push_devicetoken
+            KeyType: HASH
+          - AttributeName: push_platform
+            KeyType: RANGE        
+        BillingMode: PAY_PER_REQUEST    
+        GlobalSecondaryIndexes: # create a secondary index for efficiently querying all devices which are currently subscribed and have not been notified yet today
+          - IndexName: pendingNotifications
+            KeySchema:
+              - AttributeName: is_disabled
+                KeyType: HASH
+              - AttributeName: last_push_date
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+                    
+

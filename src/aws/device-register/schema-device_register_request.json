@@ -1,0 +1,50 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Schema for device registration",
+  "required": [
+   "devicetoken",
+   "timezone_offset",
+   "notification_time",
+   "language",
+   "ui_language"
+  ],
+  "properties": {
+    "devicetoken":{
+      "type":"string",
+      "title":"Device Token",
+      "minLength":32,
+      "maxLength":256,
+      "pattern": "^[0-9a-fA-F ]+$"
+    },
+    "timezone_offset":{
+      "type":"string",
+      "title":"Timezone Offset",
+      "minLength":1,
+      "maxLength":5,
+      "pattern": "^-?[0-9]+$"
+    },
+    "notification_time":{
+      "type":"string",
+      "title":"Notification Time",
+      "minLength":1,
+      "maxLength":4,
+      "pattern": "^[0-9]+$"
+    },
+    "language":{
+      "type":"string",
+      "title":"Language",
+      "minLength":2,
+      "maxLength":5,
+      "pattern": "^[a-z][a-z](-[a-zA-Z][a-zA-Z])?$"
+    },
+    "ui_language":{
+      "type":"string",
+      "title":"UI Language",
+      "minLength":2,
+      "maxLength":5,
+      "pattern": "^[a-z][a-z](-[a-zA-Z][a-zA-Z])?$"
+    }
+  }
+}

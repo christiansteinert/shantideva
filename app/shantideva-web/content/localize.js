@@ -154,7 +154,7 @@ var LANG_TRANSLATIONS = '<p><ul style="text-align:left;"><li>English translation
     +'</li>'
     +'</ul></p>';
     
-var LANG_ABOUT_EN = 'This App displays one verse a day from Shantideva\'s text "Engaging in Bodhisattva Behavior" (Bodhisattvacharyavatara) and allows to read through the entire text. '
+var LANG_ABOUT_EN = 'This App displays one verse a day from Shantideva\'s Buddhist text "Engaging in Bodhisattva Behavior" (Bodhisattvacharyavatara) and allows to read through the entire text. '
     +'"Engaging in Bodhisattva Behavior" is an outstandingly practical and inspiring Buddhist text that covers all the aspects of the Buddhist path. '
     +'Shantideva was a great Indian master who lived during the 8th century CE. Two of his texts survive - the Bodhicharyavatara (the text that is displayed in this app) and the '
     +'Shikshasamuccaya ("Compendium of Trainings"). Both texts are still used to the present day by and especially the Bodhicharyavatara is one of the most cherished and most frequently taught ' 
@@ -165,7 +165,7 @@ var LANG_ABOUT_EN = 'This App displays one verse a day from Shantideva\'s text "
     +'this text'
     +'</a> '
     +'and much more Buddhist material in many languages at: '
-    +'<a href="https://www.studybuddhism.com" target="_blank" onclick="window.open(\'https://www.studybuddhism.com\',\'_system\');return false;">'
+    +'<a href="https://studybuddhism.com" target="_blank" onclick="window.open(\'https://studybuddhism.com\',\'_system\');return false;">'
     +'studybuddhism.com'
     +'</a></strong></p>'
     +'<p>'
@@ -217,9 +217,8 @@ LANG['ru']={
   "Android App":"Android-приложение",
   "iOS App":"iOS-приложение",
   "Online App":"Веб приложение",
-  "Verse of the Day":"آية اليوم",  
   "Verse of the Day":"Стих дня",
-  "About":"Инфор&shy;мация",
+  "About":"Информация",
   "Settings":"На&shy;строй&shy;ки",
   "Full Text":"Текст",
   "Chapter %1, Verse %2":"Глава %1, Стих %2",
@@ -268,6 +267,7 @@ LANG['ar']={
   "Jump to this verse in the text.":"تبين هذه الآية",
   "Language of Shantideva's text":"لغة نص شانتيديفا",
   "You can show the text in up to three different languages at the same time in order to compare different translations.":"يمكنك عرض النص بثلاث لغات مختلفة. مع هذا يمكنك مقارنة ترجمات مختلفة.",
+  "Language of the App":"لغة التطبيق",
   "Text Language":"لغة النص",
   "Text Language 2":"اللغة الثانية للنص",
   "Text Language 3":"اللغة الثالثة للنص",
@@ -277,14 +277,13 @@ LANG['ar']={
   "Text color":"لون الخط",
   "Black text on white background":"نص أسود بخلفية بيضاء",
   "White text on black background":"نص أبيض بخلفية سوداء",
-
   "Cancel":"إلغاء",  
   "Save":"حفظ",  
-   "Notification Messages":"إعدادات الإشعار",
-    "Time":"زمن",
-    "Daily Message":"إخطار يومي",
-    "Show Messages":"مكين الإخطارات",
-    "Enable the options below the see the verse of the day as a notification message.":"يمكنك تفعيل الخيارات أدناه لرؤية الآية اليومية كرسالة إخطار.", 
+  "Notification Messages":"إعدادات الإشعار",
+  "Time":"زمن",
+  "Daily Message":"إخطار يومي",
+  "Show Messages":"مكين الإخطارات",
+  "Enable the options below the see the verse of the day as a notification message.":"يمكنك تفعيل الخيارات أدناه لرؤية الآية اليومية كرسالة إخطار.", 
   "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
     + LANG_ABOUT_EN
     +'</p>'
@@ -326,9 +325,13 @@ LANG['de']={
     "Cancel":"Abbrechen",
     "Save":"Speichern",
     "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p>'
-    +'<p>Diese kleine App zeigt täglich einen Vers aus Shantideva\'s Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text.</p>'
-    +'<p><strong><a href="https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes" target="_blank" onclick="window.open(\'https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes\',\'_system\');return false;">Dieser Text</a> und umfangreichere weitere Materialien sind verfügbar auf <a href="https://www.studybuddhism.com" target="_blank" onclick="window.open(\'https://www.studybuddhism.com\',\'_system\');return false;">studybuddhism.com</a></strong></p>'
-    +'<p>Studybuddhism.com ist eine Website, die umfassendes buddhistisches Material Buddhism in vielen Sprachen zur Verfügung stellt. Falls Sie diese App hilfreich finden, dann erwägen Sie bitte eine Spende auf der Website von studybuddhism.com um dieses umfangreiche Projekt zu unterstützen.</p>'
+    +'<p>Diese App zeigt täglich einen Vers aus Shantideva\'s buddhistischem Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text.'
+    +'Shantideva war ein großer indischer Meister, der während des 8. Jahrhunderts unserer Zeitrechnung lebte. Zwei seiner Texte sind erhalten geblieben - das Bodhicharyavatara (der Text, welcher in dieser App enthalten ist) sowie das '
+    +'Shikshasamuccaya ("Kompendium der Schulungen"). Beide Texte werden bis zum heutigen Tag gelesen und studiert und insbesondere das Bodhicharyavatara ist einer der am häufigsten gelehrten ' 
+    +'Texte innerhalb der tibetisch-buddhistischen Tradition.'
+    +'</p>'
+    +'<p><strong><a href="https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes" target="_blank" onclick="window.open(\'https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes\',\'_system\');return false;">Dieser Text</a> und umfangreichere weitere Materialien sind in zahlreichen Sprachen auf <a href="https://studybuddhism.com" target="_blank" onclick="window.open(\'https://studybuddhism.com\',\'_system\');return false;">studybuddhism.com</a> verfügbar.</strong></p>'
+    +'<p>Studybuddhism.com ist eine Website, die umfassendes buddhistisches Material Buddhism in 31 verschiedenen Sprachen zur Verfügung stellt. Falls Sie diese App hilfreich finden, dann erwägen Sie bitte eine Spende auf der Website von studybuddhism.com um dieses umfangreiche Projekt zu unterstützen.</p>'
     +LANG_TRANSLATIONS
     +'<hr />'
     + LANG_FONTS

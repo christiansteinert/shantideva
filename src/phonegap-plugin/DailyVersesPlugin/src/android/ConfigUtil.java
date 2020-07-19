@@ -401,7 +401,6 @@ public class ConfigUtil {
         // find that verse within the chapters and return its content
         int verseCount = 0;
         int chapterNum = 0;
-        int verseNum = 0;
         for(Chapter chapter2: chapters) {
           chapterNum++;
           if(verseOfTheDay < verseCount + chapter2.size()) {

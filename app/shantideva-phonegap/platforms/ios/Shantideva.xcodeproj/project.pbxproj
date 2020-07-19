@@ -15,10 +15,10 @@
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
 		526091E582385D22E118B397 /* libPods-Shantideva.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		97F99365C7BE403792354AC4 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = E540F927D883472985AE2DDF /* DailyVersesPlugin.m */; };
 		1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */; };
 		21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FF3096D2D646358EA7CB02 /* PushPlugin.m */; };
 		538072ACF19A47F7BB114885 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D04F05D62AE44E09A736D0D2 /* PushKit.framework */; };
+		1974741FD44E4A948374E206 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDA55197C19465CA73B924A /* DailyVersesPlugin.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,6 @@
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19BAC01E88A84204E83AA2C /* Pods-Shantideva.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.release.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.release.xcconfig"; sourceTree = "<group>"; };
 		A80B6CC8C1B572EDAB9C3F17 /* Pods-Shantideva.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.debug.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.debug.xcconfig"; sourceTree = "<group>"; };
-		E540F927D883472985AE2DDF /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */ = {isa = PBXFileReference; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */ = {isa = PBXFileReference; name = "PushPlugin.h"; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		D04F05D62AE44E09A736D0D2 /* PushKit.framework */ = {isa = PBXFileReference; name = "PushKit.framework"; path = "System/Library/Frameworks/PushKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		FDDA55197C19465CA73B924A /* DailyVersesPlugin.m */ = {isa = PBXFileReference; name = "DailyVersesPlugin.m"; path = "de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,11 +184,11 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				E540F927D883472985AE2DDF /* DailyVersesPlugin.m */,
 				FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */,
 				F0FF3096D2D646358EA7CB02 /* PushPlugin.m */,
 				ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */,
 				11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */,
+				FDDA55197C19465CA73B924A /* DailyVersesPlugin.m */,
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
@@ -351,9 +351,9 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				97F99365C7BE403792354AC4 /* DailyVersesPlugin.m in Sources */,
 				1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */,
 				21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */,
+				1974741FD44E4A948374E206 /* DailyVersesPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -42,10 +42,9 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <icon src="apple_icon180.png" />      
+        <icon src="apple_icon180.png" />
     </platform>
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
-    <plugin name="de.christiansteinert.dailyversesplugin" spec="/home/christian/OWN/programmierung/javascript/Shantideva2/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses" />
 </widget>

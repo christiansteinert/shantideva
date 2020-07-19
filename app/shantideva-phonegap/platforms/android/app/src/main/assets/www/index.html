@@ -50,7 +50,7 @@ CONFIG = {
       return false;
     }
   },
-  
+
   /** get UI language */
   getUILang:function() {
     if(this._language === null) {
@@ -283,7 +283,6 @@ CONFIG = {
       this.getCordovaPlugin().loadSettings(
         function(cordovaSettings) {
           CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromConfig());
-          callbackFunc();
         }
       );
     } else {
@@ -316,7 +315,7 @@ CONFIG = {
   
   /* get the object of our native cordova plugin */
   getCordovaPlugin:function(settings) {
-    if(window.cordova && cordova.plugins && cordova.plugins.DailyVersesPlugin) {
+    if(window.cordova && cordova.plugins && cordova.plugins.DailyVersesPlugin ) {
       // we are running inside of cordova - return the native plugin
       return cordova.plugins.DailyVersesPlugin;
     } else {
@@ -862,7 +861,6 @@ function run() {
 
   var uiLangCssClass = 'uilang-' + CONFIG.getCssClassForLang(CONFIG.getUILang());
   $('body').addClass(uiLangCssClass).addClass(CONFIG.getColorTheme());
-    
 
   var fontSize = CONFIG.getFontSize() / 100;
   // if size < 100% then only make the font in the content area Smaller 
@@ -893,13 +891,15 @@ function cordovaReady() {
     // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
     CONFIG.loadSettings(function() {    
       $(run);
+      CONFIG.getCordovaPlugin().setAlarm( CONFIG.getSettingsFromConfig() );
     });
+  } else {
+    CONFIG.getCordovaPlugin().setAlarm( CONFIG.getSettingsFromConfig() );
   }
   
   // register for pause / resume events and make sure that the Java part initializes the timer for ther notification message 
   document.addEventListener("pause", function() { UI.onPause(); });
   document.addEventListener("resume", function() { window.setTimeout(function(){UI.onResume();}), 1 });  
-  CONFIG.getCordovaPlugin().setAlarm();
 }
 
 if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost') > 0)) {
@@ -915,7 +915,7 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
     // Cordova-specific stuff will run later when Cordova sends a deviceready event
     $(run);
   }
-  document.addEventListener("deviceready", cordovaReady);  
+  document.addEventListener("deviceready", function() { $(cordovaReady) });  
 }
 
 </script>
