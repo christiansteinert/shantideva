@@ -11,16 +11,12 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.setAlarm = function(settings, success, error) {
-        alert('setAlarm');
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
         var cloudDevicePushToken = localStorage.getItem("cloudDevicePushToken")|| ''; // get last push notification token for this device was already shared with the server        
         var cloudMessageTime = localStorage.getItem("cloudDeviceMessageTime")|| ''; // get last push notification token for this device was already shared with the server        
         var appMessageEnabled = settings.messageEnabled;
         var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
-
-        
-        alert('setAlarm' + appMessageEnabled + '/' + appMessageTime);
 
         if( !cloudMessageEnabled && !settings.messageEnabled ) {
             // Push message is turned off and the cloud knows that.
@@ -36,8 +32,6 @@ if ( cordova.platformId == 'ios' ) {
                 sound: "false"
             }
         });
-
-        alert('setAlarm: push');
 
         push.on('registration', function(data) {
             if( cloudMessageEnabled === appMessageEnabled
