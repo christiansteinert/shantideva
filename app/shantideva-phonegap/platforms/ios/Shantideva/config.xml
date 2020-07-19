@@ -22,6 +22,9 @@
     <feature name="PushNotification">
         <param name="ios-package" value="PushPlugin" />
     </feature>
+    <feature name="DailyVersesPlugin">
+        <param name="ios-package" value="DailyVersesPlugin" />
+    </feature>
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -55,7 +58,4 @@
     <preference name="PaginationMode" value="unpaginated" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
-    <feature name="DailyVersesPlugin">
-        <param name="ios-package" value="DailyVersesPlugin" />
-    </feature>
 </widget>

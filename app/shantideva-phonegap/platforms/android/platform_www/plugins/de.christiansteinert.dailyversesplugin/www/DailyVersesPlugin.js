@@ -1,6 +1,17 @@
 cordova.define("de.christiansteinert.dailyversesplugin.DailyVersesPlugin", function(require, exports, module) {
-var exec = require('cordova/exec');
-if ( window.cordova.platform == 'ios' ) {
+
+var exec = cordova.require('cordova/exec');
+/*
+if(!(typeof exports === 'object') ) {
+  // workaround for a cordova 9 bug on iOS
+  var exports={};
+  var de = window.de || {};
+  de.christiansteinert = {};
+  de.christiansteinert.dailyversesplugin = {};
+  de.christiansteinert.dailyversesplugin.DailyVersesPlugin = exports;
+}*/
+
+if ( cordova.platformId == 'ios' ) {
     // Plugin code for iOS
     // On iOS we do not call into platform code; instead, the javascript file 
     // just serves as an abstraction that contains most of the platform-specific code
@@ -10,10 +21,17 @@ if ( window.cordova.platform == 'ios' ) {
     };
 
     exports.setAlarm = function(settings, success, error) {
+        alert('setAlarm');
         // find out how we are already registered with the cloud-based push service
-        var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled"); // get last message status that was already shared with the server
-        var cloudDevicePushToken = localStorage.getItem("cloudDevicePushToken"); // get last push notification token for this device was already shared with the server
+        var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
+        var cloudDevicePushToken = localStorage.getItem("cloudDevicePushToken")|| ''; // get last push notification token for this device was already shared with the server        
+        var cloudMessageTime = localStorage.getItem("cloudDeviceMessageTime")|| ''; // get last push notification token for this device was already shared with the server        
+        var appMessageEnabled = settings.messageEnabled;
+        var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
+
         
+        alert('setAlarm' + appMessageEnabled + '/' + appMessageTime);
+
         if( !cloudMessageEnabled && !settings.messageEnabled ) {
             // Push message is turned off and the cloud knows that.
             // We can abort here without having to request a push message token because we don't care whether the token has changed
@@ -29,8 +47,13 @@ if ( window.cordova.platform == 'ios' ) {
             }
         });
 
+        alert('setAlarm: push');
+
         push.on('registration', function(data) {
-            if( cloudMessageEnabled === settings.messageEnabled && cloudDevicePushToken === data.registrationId ) {
+            if( cloudMessageEnabled === appMessageEnabled
+                && cloudMessageTime === appMessageTime
+                && cloudDevicePushToken === data.registrationId 
+                ) {
                 // -> the current push settings are already known to the cloud. We do not need to send a subscrption / unsubsription request
                 return;
             }
@@ -69,17 +92,21 @@ if ( window.cordova.platform == 'ios' ) {
                 url:url, 
                 data: JSON.stringify(payload),
                 contentType: 'application/json',
-                async: true
+                async: false
             }).done(function() {
-                // Call was successful. Remember that this registration status is the last status sent to the cloud and call the callback function
-                localStorage.setItem("cloudMessageEnabled", settings.messageEnabled);
-                localStorage.getItem("cloudDevicePushToken", data.registrationId);
+                // Call was successful. Remember that this configuration is the one that was also sent to the cloud
+                localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
+                localStorage.setItem("cloudDevicePushToken", data.registrationId);
+                localStorage.setItem("cloudDeviceMessageTime", appMessageTime);
                 if(success) {
                     success();
                 }
             }).fail(function() {
                 // Call failed. Let's re-try in 5 minutes by calling the setAlarm function again in 5 minutes
                 window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 300000 );
+                if(error) {
+                    error();
+                }
             });
         });
     };
@@ -91,7 +118,9 @@ if ( window.cordova.platform == 'ios' ) {
     exports.saveSettings = function(settings, success, error) {
         localStorage.getItem("cloudDevicePushToken", ''); // clear locally saved push token to force re-registration of the device with the cloud
         exports.setAlarm(settings); // register again with the server
-        success();
+        if(success) {
+            success();
+        }
     };
 
     exports.loadSettings = function(success, error) {

@@ -4,9 +4,6 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="DailyVersesPlugin">
-        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
-    </feature>
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -47,4 +44,7 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
+    <feature name="DailyVersesPlugin">
+        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
+    </feature>
 </widget>

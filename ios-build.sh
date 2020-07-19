@@ -5,8 +5,15 @@ rm app/shantideva-phonegap/www/css/*.ttf
 rm app/shantideva-phonegap/www/css/*.woff2
 rm app/shantideva-phonegap/www/favicon*.png
 
+#cp src/phonegap-plugin/DailyVersesPlugin/www/*.js app/shantideva-phonegap/platforms/ios/platform_www/plugins/de.christiansteinert.dailyversesplugin/www/
+#cp src/phonegap-plugin/DailyVersesPlugin/www/*.js app/shantideva-phonegap/platforms/ios/www/plugins/de.christiansteinert.dailyversesplugin/www/
+#cp src/phonegap-plugin/DailyVersesPlugin/www/*.js app/shantideva-phonegap/platforms/ios/build/emulator/Shantideva.app/www/plugins/de.christiansteinert.dailyversesplugin/www/
+#cp src/phonegap-plugin/DailyVersesPlugin/www/*.js app/shantideva-phonegap/plugins/de.christiansteinert.dailyversesplugin/www/
+
 cd app/shantideva-phonegap
 
+cordova plugin remove de.christiansteinert.dailyversesplugin
+cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin
 
 cordova build ios --release
 
