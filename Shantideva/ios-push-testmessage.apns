@@ -1,0 +1,9 @@
+{
+    "aps": {
+        "alert": {
+            "title": "Verse of the Day",
+            "body": "A lifetime passes quickly, and in vain.\nYet, analytical discernment is so difficult to gain!\nSo there, as well, where's there a means\nFor turning back chronic distraction?"
+        }
+    },
+    "Simulator Target Bundle": "de.christiansteinert.shantidevaverses"
+}

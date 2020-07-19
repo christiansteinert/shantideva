@@ -1,0 +1,18 @@
+{
+  "phonegap-plugin-push": {
+    "source": {
+      "type": "registry",
+      "id": "phonegap-plugin-push"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-support-google-services": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-support-google-services@~1.3.1"
+    },
+    "is_top_level": false,
+    "variables": {}
+  }
+}

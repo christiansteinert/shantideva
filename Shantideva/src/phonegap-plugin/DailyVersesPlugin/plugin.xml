@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="de.christiansteinert.dailyversesplugin" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>DailyVersesPlugin</name>
+    <js-module name="DailyVersesPlugin" src="www/DailyVersesPlugin.js">
+        <clobbers target="cordova.plugins.DailyVersesPlugin" />
+    </js-module>
+    <platform name="android">
+        <framework src="com.android.support:support-v4:28.+"/>
+        
+        <config-file target="res/xml/config.xml" parent="/*" >
+            <feature name="DailyVersesPlugin"><param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" /></feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:xlargeScreens="true" /> 
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.BootupReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </receiver>
+            <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver">
+                <intent-filter>
+                    <action android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </receiver>            
+        </config-file>            
+
+        <source-file src="src/android/DailyVersesPlugin.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/AlarmReceiver.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/BootupReceiver.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/ConfigUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/ThreadUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/Chapter.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml"><feature name="DailyVersesPlugin"><param name="ios-package" value="DailyVersesPlugin" /></feature></config-file>
+        <source-file src="src/ios/DailyVersesPlugin.m" />
+    </platform>
+</plugin>

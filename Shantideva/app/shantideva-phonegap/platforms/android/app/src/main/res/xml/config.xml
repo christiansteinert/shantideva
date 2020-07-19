@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="de.christian_steinert.shantideva_verses" version="2.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="DailyVersesPlugin">
+        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
+    </feature>
+    <name>Shantideva</name>
+    <description>
+    An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
+    </description>
+    <author email="shantideva@christian-steinert.de" href="https://www.christian-steinert.de">
+    Christian Steinert 
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <icon density="mdpi" height="48" src="icon48.png" width="48" />
+    <icon density="hdpi" height="72" src="icon72.png" width="72" />
+    <icon density="xhdpi" height="96" src="icon96.png" width="96" />
+    <icon density="xxhdpi" height="144" src="icon144.png" width="144" />
+    <icon density="xxxhdpi" height="192" src="icon192.png" width="192" />
+    <resource-file src="notify24.png" target="app/src/main/res/drawable-mdpi/ic_notify.png" />
+    <resource-file src="notify36.png" target="app/src/main/res/drawable-hdpi/ic_notify.png" />
+    <resource-file src="notify48.png" target="app/src/main/res/drawable-xhdpi/ic_notify.png" />
+    <resource-file src="notify72.png" target="app/src/main/res/drawable-xxhdpi/ic_notify.png" />
+    <resource-file src="notify96.png" target="app/src/main/res/drawable-xxxhdpi/ic_notify.png" />
+    <resource-file src="strings-ar.xml" target="app/src/main/res/values-ar/strings.xml" />
+    <resource-file src="strings-ru.xml" target="app/src/main/res/values-ru/strings.xml" />
+    <resource-file src="strings-cn.xml" target="app/src/main/res/values-zh/strings.xml" />
+    <resource-file src="strings-tw.xml" target="app/src/main/res/values-zh-rTW/strings.xml" />
+    <resource-file src="strings-tw.xml" target="app/src/main/res/values-zh-rHK/strings.xml" />
+    <resource-file src="strings-tw.xml" target="app/src/main/res/values-zh-rMO/strings.xml" />
+    <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+HK/strings.xml" />
+    <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+MO/strings.xml" />
+    <allow-intent href="market:*" />
+    <config-file parent="/manifest/application" target="AndroidManifest.xml">
+        <meta-data android:name="ic_notify" android:resource="@drawable/ic_notify" />
+    </config-file>
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="29" />
+</widget>
