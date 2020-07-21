@@ -43,6 +43,7 @@
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <icon src="apple_icon180.png" />
+    <splash src="www/content/info-logo.png" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />

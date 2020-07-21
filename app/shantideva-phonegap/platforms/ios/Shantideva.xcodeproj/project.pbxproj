@@ -10,15 +10,15 @@
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */; };
+		21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FF3096D2D646358EA7CB02 /* PushPlugin.m */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
 		526091E582385D22E118B397 /* libPods-Shantideva.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */; };
-		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */; };
-		21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FF3096D2D646358EA7CB02 /* PushPlugin.m */; };
 		538072ACF19A47F7BB114885 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D04F05D62AE44E09A736D0D2 /* PushKit.framework */; };
-		9ED827A4B0D74E2BB3CC2D27 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D02CD27F7C1D47B2A5BC3571 /* DailyVersesPlugin.m */; };
+		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
+		F885EF73FB6F42E89A942827 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Shantideva/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = PushPlugin.h; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Shantideva.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shantideva.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,16 +66,15 @@
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19BAC01E88A84204E83AA2C /* Pods-Shantideva.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.release.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.release.xcconfig"; sourceTree = "<group>"; };
 		A80B6CC8C1B572EDAB9C3F17 /* Pods-Shantideva.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.debug.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.debug.xcconfig"; sourceTree = "<group>"; };
+		D04F05D62AE44E09A736D0D2 /* PushKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
+		ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		F0FF3096D2D646358EA7CB02 /* PushPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = PushPlugin.m; path = "phonegap-plugin-push/PushPlugin.m"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = Shantideva/config.xml; sourceTree = "<group>"; };
-		FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */ = {isa = PBXFileReference; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		F0FF3096D2D646358EA7CB02 /* PushPlugin.m */ = {isa = PBXFileReference; name = "PushPlugin.m"; path = "phonegap-plugin-push/PushPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */ = {isa = PBXFileReference; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */ = {isa = PBXFileReference; name = "PushPlugin.h"; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		D04F05D62AE44E09A736D0D2 /* PushKit.framework */ = {isa = PBXFileReference; name = "PushKit.framework"; path = "System/Library/Frameworks/PushKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		D02CD27F7C1D47B2A5BC3571 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; name = "DailyVersesPlugin.m"; path = "de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; };
+		4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; name = "DailyVersesPlugin.m"; path = "de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,7 +188,7 @@
 				F0FF3096D2D646358EA7CB02 /* PushPlugin.m */,
 				ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */,
 				11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */,
-				D02CD27F7C1D47B2A5BC3571 /* DailyVersesPlugin.m */,
+				4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */,
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
@@ -353,7 +353,7 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */,
 				21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */,
-				9ED827A4B0D74E2BB3CC2D27 /* DailyVersesPlugin.m in Sources */,
+				F885EF73FB6F42E89A942827 /* DailyVersesPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

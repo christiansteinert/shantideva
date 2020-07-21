@@ -20,6 +20,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports.metadata = {
     "cordova-plugin-whitelist": "1.3.1",
     "phonegap-plugin-push": "2.3.0",
+    "cordova-plugin-splashscreen": "6.0.0",
     "de.christiansteinert.dailyversesplugin": "0.0.1"
   };
 });

@@ -14,5 +14,13 @@
     },
     "is_top_level": false,
     "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

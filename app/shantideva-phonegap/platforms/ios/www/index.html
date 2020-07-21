@@ -247,7 +247,7 @@ CONFIG = {
    */
   mixSettings:function(cordovaSettings, jsSettings) {
     var settings = jsSettings;
-      
+
     if(Object.keys(cordovaSettings).length > 0) {
       // settings from cordova - especially locale settings - are more reliable. Prefer them if they are present
       if(cordovaSettings.uiLanguage) {
@@ -283,6 +283,7 @@ CONFIG = {
       this.getCordovaPlugin().loadSettings(
         function(cordovaSettings) {
           CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromConfig());
+          callbackFunc();
         }
       );
     } else {

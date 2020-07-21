@@ -1,15 +1,6 @@
 cordova.define("de.christiansteinert.dailyversesplugin.DailyVersesPlugin", function(require, exports, module) {
 
 var exec = cordova.require('cordova/exec');
-/*
-if(!(typeof exports === 'object') ) {
-  // workaround for a cordova 9 bug on iOS
-  var exports={};
-  var de = window.de || {};
-  de.christiansteinert = {};
-  de.christiansteinert.dailyversesplugin = {};
-  de.christiansteinert.dailyversesplugin.DailyVersesPlugin = exports;
-}*/
 
 if ( cordova.platformId == 'ios' ) {
     // Plugin code for iOS
@@ -21,16 +12,12 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.setAlarm = function(settings, success, error) {
-        alert('setAlarm');
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
         var cloudDevicePushToken = localStorage.getItem("cloudDevicePushToken")|| ''; // get last push notification token for this device was already shared with the server        
-        var cloudMessageTime = localStorage.getItem("cloudDeviceMessageTime")|| ''; // get last push notification token for this device was already shared with the server        
+        var cloudMessageTime = localStorage.getItem("cloudMessageTime")|| ''; // get last push notification token for this device was already shared with the server        
         var appMessageEnabled = settings.messageEnabled;
         var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
-
-        
-        alert('setAlarm' + appMessageEnabled + '/' + appMessageTime);
 
         if( !cloudMessageEnabled && !settings.messageEnabled ) {
             // Push message is turned off and the cloud knows that.
@@ -46,8 +33,6 @@ if ( cordova.platformId == 'ios' ) {
                 sound: "false"
             }
         });
-
-        alert('setAlarm: push');
 
         push.on('registration', function(data) {
             if( cloudMessageEnabled === appMessageEnabled
@@ -97,7 +82,7 @@ if ( cordova.platformId == 'ios' ) {
                 // Call was successful. Remember that this configuration is the one that was also sent to the cloud
                 localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
                 localStorage.setItem("cloudDevicePushToken", data.registrationId);
-                localStorage.setItem("cloudDeviceMessageTime", appMessageTime);
+                localStorage.setItem("cloudMessageTime", appMessageTime);
                 if(success) {
                     success();
                 }
@@ -128,7 +113,7 @@ if ( cordova.platformId == 'ios' ) {
         // in a platform specific way.
         // -> Return some default settings for iOS.
         defaultSettings = {
-            messageEnabled: 10,
+            messageHour: 10,
             messageMinute: 0,
             messageEnabled: false                
         };
