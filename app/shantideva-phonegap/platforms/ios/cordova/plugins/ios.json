@@ -7,10 +7,10 @@
     "files": {}
   },
   "installed_plugins": {
-    "phonegap-plugin-push": {
+    "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "cordova-plugin-splashscreen": {
+    "phonegap-plugin-push": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },

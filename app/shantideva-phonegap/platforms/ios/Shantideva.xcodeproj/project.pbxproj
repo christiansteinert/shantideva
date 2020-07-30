@@ -10,15 +10,18 @@
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */; };
-		21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FF3096D2D646358EA7CB02 /* PushPlugin.m */; };
+		2C67CEE6D5BA40AAA0226082 /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 150D74214FD64602B84CD912 /* PushPlugin.m */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
 		526091E582385D22E118B397 /* libPods-Shantideva.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */; };
-		538072ACF19A47F7BB114885 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D04F05D62AE44E09A736D0D2 /* PushKit.framework */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
+		AAD0686D24CB84F8000C02FF /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686C24CB84F8000C02FF /* FirebaseCore.framework */; };
+		AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */; };
+		AAD0687124CB8530000C02FF /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */; };
+		AAD0687324CB8558000C02FF /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */; };
 		F885EF73FB6F42E89A942827 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */; };
+		FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,11 +46,46 @@
 			remoteGlobalIDString = C0C01EB21E3911D50056E6CB;
 			remoteInfo = Cordova;
 		};
+		AA66231D24D2D40800F2A6C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B4507A8AA0AD81E8DFC98020268EFC72;
+			remoteInfo = sqlite3;
+		};
+		AA6F76E924CDE7D000C28ED6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 251C6319AD50CB50F18D50CBF727F8B2;
+			remoteInfo = GoogleToolboxForMac;
+		};
+		AA6F76EB24CDE7D000C28ED6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06FC5C9CF96D60C50FCD47D339C91951;
+			remoteInfo = nanopb;
+		};
+		AA6F76ED24CDE7D000C28ED6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 150553022F8C9A40479BCCA897943C05;
+			remoteInfo = "Pods-Shantideva";
+		};
+		AA6F76EF24CDE7D000C28ED6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C2105C94812B6214B154F54DCEDB72AC;
+			remoteInfo = Protobuf;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Shantideva/Images.xcassets; sourceTree = SOURCE_ROOT; };
-		11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = PushPlugin.h; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; };
+		150D74214FD64602B84CD912 /* PushPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = PushPlugin.m; path = "phonegap-plugin-push/PushPlugin.m"; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Shantideva.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shantideva.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,20 +99,28 @@
 		3047A5101AB8059700498E2A /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "build-release.xcconfig"; path = "cordova/build-release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* Shantideva-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Shantideva-Prefix.pch"; sourceTree = "<group>"; };
+		4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = Shantideva/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		71C4CFB672B74FEFBCF0AF62 /* PushPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = PushPlugin.h; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Shantideva-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Shantideva-Info.plist"; path = "Shantideva/Shantideva-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; };
 		A19BAC01E88A84204E83AA2C /* Pods-Shantideva.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.release.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.release.xcconfig"; sourceTree = "<group>"; };
 		A80B6CC8C1B572EDAB9C3F17 /* Pods-Shantideva.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.debug.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.debug.xcconfig"; sourceTree = "<group>"; };
-		D04F05D62AE44E09A736D0D2 /* PushKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
+		AA094EA724CDE6BD00FBEBC0 /* libGoogleToolboxForMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleToolboxForMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
+		AAD0686724CB83E6000C02FF /* GoogleToolboxForMac */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GoogleToolboxForMac; path = Pods/GoogleToolboxForMac; sourceTree = "<group>"; };
+		AAD0686A24CB842B000C02FF /* Pods */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pods; sourceTree = "<group>"; };
+		AAD0686C24CB84F8000C02FF /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Pods/FirebaseCore/Frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
+		AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseMessaging.framework; path = Pods/FirebaseMessaging/Frameworks/FirebaseMessaging.framework; sourceTree = "<group>"; };
+		AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		B07BB09DEB7A4577A9874C0D /* AppDelegate+notification.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; };
+		E21C0BE264C9461B89C14974 /* PushKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
-		ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		F0FF3096D2D646358EA7CB02 /* PushPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = PushPlugin.m; path = "phonegap-plugin-push/PushPlugin.m"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = Shantideva/config.xml; sourceTree = "<group>"; };
-		FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; };
-		4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; name = "DailyVersesPlugin.m"; path = "de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,9 +128,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 				526091E582385D22E118B397 /* libPods-Shantideva.a in Frameworks */,
-				538072ACF19A47F7BB114885 /* PushKit.framework in Frameworks */,
+				AAD0687324CB8558000C02FF /* FirebaseAnalytics.framework in Frameworks */,
+				AAD0687124CB8530000C02FF /* FirebaseInstanceID.framework in Frameworks */,
+				AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */,
+				AAD0686D24CB84F8000C02FF /* FirebaseCore.framework in Frameworks */,
+				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,8 +205,16 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */,
+				AA094EA724CDE6BD00FBEBC0 /* libGoogleToolboxForMac.a */,
+				AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */,
+				AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */,
+				AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */,
+				AAD0686C24CB84F8000C02FF /* FirebaseCore.framework */,
+				AAD0686A24CB842B000C02FF /* Pods */,
+				AAD0686724CB83E6000C02FF /* GoogleToolboxForMac */,
 				8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */,
-				D04F05D62AE44E09A736D0D2 /* PushKit.framework */,
+				E21C0BE264C9461B89C14974 /* PushKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -184,15 +241,27 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				FDAC5AE692B14BBE9C3FA9FB /* AppDelegate+notification.m */,
-				F0FF3096D2D646358EA7CB02 /* PushPlugin.m */,
-				ECE532D2F280449B8D68EC10 /* AppDelegate+notification.h */,
-				11DFCAF6E9774ACB9620DA9B /* PushPlugin.h */,
 				4081C24A58F2429492C680D0 /* DailyVersesPlugin.m */,
+				9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */,
+				150D74214FD64602B84CD912 /* PushPlugin.m */,
+				B07BB09DEB7A4577A9874C0D /* AppDelegate+notification.h */,
+				71C4CFB672B74FEFBCF0AF62 /* PushPlugin.h */,
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
 			sourceTree = SOURCE_ROOT;
+		};
+		AA6F76DE24CDE7D000C28ED6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA6F76EA24CDE7D000C28ED6 /* libGoogleToolboxForMac.a */,
+				AA6F76EC24CDE7D000C28ED6 /* libnanopb.a */,
+				AA6F76EE24CDE7D000C28ED6 /* libPods-Shantideva.a */,
+				AA6F76F024CDE7D000C28ED6 /* libProtobuf.a */,
+				AA66231E24D2D40800F2A6C2 /* libsqlite3.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
 		};
 		AD80C975980D5EE5695B630C /* Pods */ = {
 			isa = PBXGroup;
@@ -265,6 +334,10 @@
 					ProductGroup = 301BF52E109A57CC0062928A /* Products */;
 					ProjectRef = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
 				},
+				{
+					ProductGroup = AA6F76DE24CDE7D000C28ED6 /* Products */;
+					ProjectRef = AA6F76DD24CDE7D000C28ED6 /* Pods.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -286,6 +359,41 @@
 			fileType = wrapper.framework;
 			path = Cordova.framework;
 			remoteRef = 907D8123214C687600058A10 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AA66231E24D2D40800F2A6C2 /* libsqlite3.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libsqlite3.a;
+			remoteRef = AA66231D24D2D40800F2A6C2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AA6F76EA24CDE7D000C28ED6 /* libGoogleToolboxForMac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGoogleToolboxForMac.a;
+			remoteRef = AA6F76E924CDE7D000C28ED6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AA6F76EC24CDE7D000C28ED6 /* libnanopb.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnanopb.a;
+			remoteRef = AA6F76EB24CDE7D000C28ED6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AA6F76EE24CDE7D000C28ED6 /* libPods-Shantideva.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-Shantideva.a";
+			remoteRef = AA6F76ED24CDE7D000C28ED6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AA6F76F024CDE7D000C28ED6 /* libProtobuf.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libProtobuf.a;
+			remoteRef = AA6F76EF24CDE7D000C28ED6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -351,9 +459,9 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				1E57E5086EB241048904E246 /* AppDelegate+notification.m in Sources */,
-				21FEC32A21FE449A86C5951C /* PushPlugin.m in Sources */,
 				F885EF73FB6F42E89A942827 /* DailyVersesPlugin.m in Sources */,
+				FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */,
+				2C67CEE6D5BA40AAA0226082 /* PushPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +487,13 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 5LRG26P7CX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/FirebaseCore/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseMessaging/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseInstanceID/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -388,6 +503,36 @@
 				INFOPLIST_FILE = "Shantideva/Shantideva-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"Protobuf\"",
+					"-l\"c++\"",
+					"-l\"nanopb\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseNanoPB\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.christiansteinert.shantidevaverses;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -409,6 +554,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 5LRG26P7CX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/FirebaseCore/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseMessaging/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseInstanceID/Frameworks",
+					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Shantideva/Shantideva-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
@@ -416,6 +568,36 @@
 				INFOPLIST_FILE = "Shantideva/Shantideva-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"Protobuf\"",
+					"-l\"c++\"",
+					"-l\"nanopb\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseNanoPB\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.christiansteinert.shantidevaverses;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

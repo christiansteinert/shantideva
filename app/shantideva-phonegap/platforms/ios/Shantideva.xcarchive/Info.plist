@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/Shantideva.app</string>
+		<key>CFBundleIdentifier</key>
+		<string>de.christiansteinert.shantidevaverses</string>
+		<key>CFBundleShortVersionString</key>
+		<string>2.2.0</string>
+		<key>CFBundleVersion</key>
+		<string>2.2.0</string>
+		<key>SigningIdentity</key>
+		<string>Apple Development: Christian Steinert (AJA488WDHH)</string>
+		<key>Team</key>
+		<string>5LRG26P7CX</string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2020-07-23T20:42:48Z</date>
+	<key>Name</key>
+	<string>Shantideva</string>
+	<key>SchemeName</key>
+	<string>Shantideva</string>
+</dict>
+</plist>
