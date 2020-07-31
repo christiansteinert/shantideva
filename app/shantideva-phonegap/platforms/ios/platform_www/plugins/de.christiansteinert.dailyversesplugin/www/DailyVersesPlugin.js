@@ -59,8 +59,8 @@ if ( cordova.platformId == 'ios' ) {
                     "devicetoken":data.registrationId,
                     "timezone_offset" : String(timezoneOffset),
                     "notification_time" : String(notificationTimeGmt),
-                    "language": language,
-                    "ui_language": ui_language
+                    "language": settings.textLanguage,
+                    "ui_language": settings.uiLanguage
                 };
                 
             } else {
