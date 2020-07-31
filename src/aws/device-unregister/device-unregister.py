@@ -5,7 +5,7 @@ import os
 from datetime import datetime 
 
 # name of the dynabodb table where subscriptions for push notifications are stored
-DBTABLE_PUSH_SUBSCRIPTIONS = os.environ['DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE']
+DBTABLE_PUSH_SUBSCRIPTIONS = os.environ.get('DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE','shantideva.PushSubscriptions-prd')
 
 
 def unregister(event, context):

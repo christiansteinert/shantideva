@@ -37,7 +37,7 @@ from apns2.payload import Payload
 
 parsed_languages={}
 
-def read_pending_notifications():
+def read_pending_notifications(is_sandbox_environment):
     now = datetime.utcnow()
     minutes_since_midnight = now.hour * 60 + now.minute + 1
     today = now.replace(hour=0, minute=0, second=0, microsecond=0) # start of current day
@@ -49,15 +49,22 @@ def read_pending_notifications():
     # - the time of day when we should send the notification has been reached for the respective device
     dynamodb = boto3.client('dynamodb')
     paginator = dynamodb.get_paginator('scan')
+
+    if is_sandbox_environment:
+        sandbox = 1
+    else:
+        sandbox = 0
+    
     operation_parameters = {
         'TableName': DBTABLE_PUSH_SUBSCRIPTIONS,
-        'FilterExpression': 'is_disabled = :a AND last_push_date < :b AND notification_time < :c AND push_platform = :d',
+        'FilterExpression': 'is_disabled = :a AND last_push_date < :b AND notification_time <= :c AND push_platform = :d AND is_sandbox = :e',
         'IndexName': 'pendingNotifications', 
         'ExpressionAttributeValues': {
             ':a': {'N': '0'},
             ':b': {'S': today.isoformat()},
             ':c': {'N': str(minutes_since_midnight)},
-            ':d': {'S': 'apns'}
+            ':d': {'S': 'apns'},
+            ':e': {'N': str(sandbox)}
         }
     }
 
@@ -196,7 +203,7 @@ def get_verse_of_the_day(user_day, lang):
     
 
 # To send identical apple push notifications to a batch of recipients
-def send_apns_message(text, subscriptions):
+def send_apns_message(text, subscriptions, is_sandbox_environment):
     topic = 'de.christiansteinert.shantidevaverses'
     payload = Payload(alert=text)
 
@@ -207,7 +214,7 @@ def send_apns_message(text, subscriptions):
         notifications.append(Notification(payload=payload, token=item['push_devicetoken']['S']))
 
     # send the push messages
-    apns_client = APNsClient(credentials = f'{APNS_CERT_FOLDER}/private_key_plus_cert.pem', use_sandbox=False, use_alternative_port=False)
+    apns_client = APNsClient(credentials = f'{APNS_CERT_FOLDER}/private_key_plus_cert.pem', use_sandbox=is_sandbox_environment, use_alternative_port=False)
     return apns_client.send_notification_batch(notifications=notifications, topic=topic)
 
 
@@ -229,7 +236,7 @@ def flatten_dynamodb_object(obj):
                                 
 
 # send the verse of the day to set of subscribed users in the same language and with the same date in their time zone
-def send_notfication_to_lang_group(subscriptions):
+def send_notfication_to_lang_group(subscriptions, is_sandbox_environment):
     now = datetime.utcnow()
     now_str = now.isoformat()
     
@@ -239,7 +246,7 @@ def send_notfication_to_lang_group(subscriptions):
     verse_of_the_day = get_verse_of_the_day(user_day, user_lang)
 
     # send this  verse to all users
-    results = send_apns_message(verse_of_the_day, subscriptions)
+    results = send_apns_message(verse_of_the_day, subscriptions, is_sandbox_environment)
 
     # update the status for each recipient in dynamodb. Do this in a batched way so that we avoid needless DB roundtrips
     dynamodb = boto3.resource('dynamodb')
@@ -263,15 +270,27 @@ def send_notfication_to_lang_group(subscriptions):
                 dynamo_batch.put_item( Item = flatten_dynamodb_object( item ) )
 
 
-# main lambda handler function
-def send_msgs(event, context):
-    # find out which groups devices should be notified now
-    notification_groups = read_pending_notifications()
+# Send all messages either within APNS sandbbox or within regular notification environment
+def send_msgs_within_environment(is_sandbox_environment):
     
+    # find out which groups devices should be notified now
+    notification_groups = read_pending_notifications(is_sandbox_environment)
+    
+    print( f'Sending to { len(notification_groups) } recepient groups. Sandbox: {is_sandbox_environment}')
+        
     # send a notification to each device group
     for subscription_id in notification_groups:
         subscriptions = notification_groups[subscription_id]
-        send_notfication_to_lang_group(subscriptions)
+        send_notfication_to_lang_group(subscriptions, is_sandbox_environment)
+
+
+# main lambda handler function
+def send_msgs(event, context):
+    # Send to sandbox
+    send_msgs_within_environment( is_sandbox_environment = True )
+
+    # Send regular stuff
+    send_msgs_within_environment( is_sandbox_environment = False )
 
     return {
         'statusCode': 200,

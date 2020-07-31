@@ -5,7 +5,7 @@ import os
 from datetime import datetime 
 
 # name of the dynabodb table where subscriptions for push notifications are stored
-DBTABLE_PUSH_SUBSCRIPTIONS = os.environ['DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE']
+DBTABLE_PUSH_SUBSCRIPTIONS = os.environ.get('DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE','shantideva.PushSubscriptions-prd')
 
 
 def register(event, context):
@@ -31,7 +31,12 @@ def register(event, context):
         'language':{'S': event_body['language'].lower()}, 
 
         #UI language within the app (currently not used)
-        'ui_language':{'S': event_body['ui_language'].lower()}
+        'ui_language':{'S': event_body['ui_language'].lower()},
+        
+        # By default devices are not part of the APNS Sandbox environment.
+        # If an individual device has a development version of the app installed directly 
+        # through XCode then the respective setting must be changed manually in dynamoDB.
+        'is_sandbox':{'N': '0'}
     }
     
     dynamodb = boto3.client('dynamodb')
