@@ -21,8 +21,11 @@ provider:
   region: eu-central-1 #AWS region to deploy to
   
   memorySize: 128
-  timeout: 600
   versionFunctions: false
+
+  httpApi:
+    payload: '2.0'
+
 
   environment: # set environment variables for lambda functions
     # Set environment variable with the name of the dynamodb table. This environment variable is then used inside the lambda functions
@@ -46,12 +49,14 @@ package:
   exclude:
     - '**' # exclude everything from packaging; for each deployed function we will then individually add only the required resources
 
+
 # register lambda functions and expose them through API gateway
 functions:
   register:
     handler: device-register/device-register.register
+    timeout: 25
     events:
-      - http:
+      - httpApi:
           path: /v1/device/register
           method: post
           request:
@@ -63,8 +68,9 @@ functions:
           
   unregister:
     handler: device-unregister/device-unregister.unregister
+    timeout: 25
     events:
-      - http:
+      - httpApi:
           path: /v1/device/unregister
           method: post
           request:
@@ -77,6 +83,7 @@ functions:
               
   send_messages:
     handler: send-messages/send-messages.send_msgs
+    timeout: 300
     package:
       include:
         - 'send-messages/**/*.py'

@@ -47,10 +47,10 @@ if ( cordova.platformId == 'ios' ) {
             var callSuccessful = false;
             var url;
             var payload;
-
+ 
             if(settings.messageEnabled) {
                 // messages are enabled. Subscribe this device to our service.                    
-                url = 'https://c66rsfu5b1.execute-api.eu-central-1.amazonaws.com/prd/v1/device/register';
+                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/register';
                 var timezoneOffset = - (new Date).getTimezoneOffset();
                 var notificationTimeGmt = settings.messageHour * 60 + settings.messageMinute + timezoneOffset;
 
@@ -64,7 +64,7 @@ if ( cordova.platformId == 'ios' ) {
                 
             } else {
                 // messages are disabled. Unsubscribe this device from our service
-                url = 'https://c66rsfu5b1.execute-api.eu-central-1.amazonaws.com/prd/v1/device/unregister';
+                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/unregister';
                 payload = {
                     "devicetoken": data.registrationId
                 };
