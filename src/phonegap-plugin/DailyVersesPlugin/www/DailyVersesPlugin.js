@@ -86,8 +86,8 @@ if ( cordova.platformId == 'ios' ) {
                     success();
                 }
             }).fail(function() {
-                // Call failed. Let's re-try in 5 minutes by calling the setAlarm function again in 5 minutes
-                window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 300000 );
+                // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
+                window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
                 if(error) {
                     error();
                 }
