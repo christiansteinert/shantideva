@@ -51,10 +51,10 @@ if ( cordova.platformId == 'ios' ) {
             if(settings.messageEnabled) {
                 // messages are enabled. Subscribe this device to our service.                    
                 url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/register';
-                var timezoneOffset = - (new Date).getTimezoneOffset();
+                var timezoneOffset = (new Date).getTimezoneOffset();
                 var notificationTimeGmt = settings.messageHour * 60 + settings.messageMinute + timezoneOffset;
                 
-                if ( notificationTimeGmt > ( 24 * 60 )  )
+                if ( notificationTimeGmt >= ( 24 * 60 )  )
                     notificationTimeGmt = notificationTimeGmt - ( 24 * 60 );
                 
                 if ( notificationTimeGmt < 0  )
