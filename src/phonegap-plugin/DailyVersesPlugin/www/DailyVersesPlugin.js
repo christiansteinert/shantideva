@@ -63,7 +63,7 @@ if ( cordova.platformId == 'ios' ) {
 
                 payload = {
                     "devicetoken":data.registrationId,
-                    "timezone_offset" : String(timezoneOffset),
+                    "timezone_offset" : String(-timezoneOffset),
                     "notification_time" : String(notificationTimeGmt),
                     "language": settings.textLanguage,
                     "ui_language": settings.uiLanguage
