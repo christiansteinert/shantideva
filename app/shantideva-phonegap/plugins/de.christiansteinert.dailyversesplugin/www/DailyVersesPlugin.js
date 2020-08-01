@@ -47,16 +47,23 @@ if ( cordova.platformId == 'ios' ) {
             var callSuccessful = false;
             var url;
             var payload;
-
+ 
             if(settings.messageEnabled) {
                 // messages are enabled. Subscribe this device to our service.                    
-                url = 'https://c66rsfu5b1.execute-api.eu-central-1.amazonaws.com/prd/v1/device/register';
-                var timezoneOffset = - (new Date).getTimezoneOffset();
+                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/register';
+                var timezoneOffset = (new Date).getTimezoneOffset();
                 var notificationTimeGmt = settings.messageHour * 60 + settings.messageMinute + timezoneOffset;
+                
+                if ( notificationTimeGmt >= ( 24 * 60 )  )
+                    notificationTimeGmt = notificationTimeGmt - ( 24 * 60 );
+                
+                if ( notificationTimeGmt < 0  )
+                    notificationTimeGmt = notificationTimeGmt + ( 24 * 60 );
+                
 
                 payload = {
                     "devicetoken":data.registrationId,
-                    "timezone_offset" : String(timezoneOffset),
+                    "timezone_offset" : String(-timezoneOffset),
                     "notification_time" : String(notificationTimeGmt),
                     "language": settings.textLanguage,
                     "ui_language": settings.uiLanguage
@@ -64,7 +71,7 @@ if ( cordova.platformId == 'ios' ) {
                 
             } else {
                 // messages are disabled. Unsubscribe this device from our service
-                url = 'https://c66rsfu5b1.execute-api.eu-central-1.amazonaws.com/prd/v1/device/unregister';
+                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/unregister';
                 payload = {
                     "devicetoken": data.registrationId
                 };
@@ -86,8 +93,8 @@ if ( cordova.platformId == 'ios' ) {
                     success();
                 }
             }).fail(function() {
-                // Call failed. Let's re-try in 5 minutes by calling the setAlarm function again in 5 minutes
-                window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 300000 );
+                // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
+                window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
                 if(error) {
                     error();
                 }
