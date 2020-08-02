@@ -13,7 +13,7 @@
     <link rel="icon" href="favicon_16.png" type="image/png" sizes="16x16" />    
     <link rel="apple-touch-icon" href="apple_icon180.png" type="image/png" sizes="180x180" />    
     
-	<script src="lib/jquery-3.1.1.min.js" charset="UTF-8"></script> 
+	<script src="lib/jquery-3.5.1.min.js" charset="UTF-8"></script> 
 	<script src="lib/jquery-ui-1.12.1.custom/jquery-ui.min.js" charset="UTF-8"></script> 
 	
 	<script src="content/localize.js" charset="UTF-8"></script>
@@ -247,7 +247,7 @@ CONFIG = {
    */
   mixSettings:function(cordovaSettings, jsSettings) {
     var settings = jsSettings;
-      
+
     if(Object.keys(cordovaSettings).length > 0) {
       // settings from cordova - especially locale settings - are more reliable. Prefer them if they are present
       if(cordovaSettings.uiLanguage) {
@@ -283,6 +283,7 @@ CONFIG = {
       this.getCordovaPlugin().loadSettings(
         function(cordovaSettings) {
           CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromConfig());
+          callbackFunc();
         }
       );
     } else {
