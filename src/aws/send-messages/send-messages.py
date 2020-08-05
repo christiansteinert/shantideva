@@ -214,8 +214,15 @@ def send_apns_message(text, subscriptions, is_sandbox_environment):
         notifications.append(Notification(payload=payload, token=item['push_devicetoken']['S']))
 
     # send the push messages
-    apns_client = APNsClient(credentials = f'{APNS_CERT_FOLDER}/private_key_plus_cert.pem', use_sandbox=is_sandbox_environment, use_alternative_port=False)
-    return apns_client.send_notification_batch(notifications=notifications, topic=topic)
+    message_expiration = int(datetime.utcnow().timestamp()) + (24 * 60 *60) # message is valid 24 for hours
+
+    apns_client = APNsClient(credentials = f'{APNS_CERT_FOLDER}/private_key_plus_cert.pem', 
+                             use_sandbox = is_sandbox_environment, 
+                             use_alternative_port=False)
+    return apns_client.send_notification_batch(notifications=notifications, 
+                                               topic=topic, 
+                                               expiration = message_expiration, 
+                                               collapse_id = 'VerseOfTheDay' )
 
 
 # Flatten a dynamodb object from stuff like 

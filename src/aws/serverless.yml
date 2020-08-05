@@ -92,7 +92,7 @@ functions:
     events: # run this function every full hour
       - schedule: 
           rate: cron(0 * * * ? *)
-          enabled: false      
+          enabled: true      
               
               
 # define a value that contains the name of the database table so that we can reference it elsewhere in this file
