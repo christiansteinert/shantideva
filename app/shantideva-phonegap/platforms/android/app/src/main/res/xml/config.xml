@@ -44,4 +44,7 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
+    <feature name="DailyVersesPlugin">
+        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
+    </feature>
 </widget>

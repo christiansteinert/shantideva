@@ -11,6 +11,10 @@
             {
               "xml": "<feature name=\"PushNotification\"><param name=\"ios-package\" value=\"PushPlugin\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"DailyVersesPlugin\"><param name=\"ios-package\" value=\"DailyVersesPlugin\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -56,6 +60,9 @@
     },
     "phonegap-plugin-push": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
+    "de.christiansteinert.dailyversesplugin": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
   "dependent_plugins": {},
@@ -67,11 +74,20 @@
       "clobbers": [
         "PushNotification"
       ]
+    },
+    {
+      "id": "de.christiansteinert.dailyversesplugin.DailyVersesPlugin",
+      "file": "plugins/de.christiansteinert.dailyversesplugin/www/DailyVersesPlugin.js",
+      "pluginId": "de.christiansteinert.dailyversesplugin",
+      "clobbers": [
+        "cordova.plugins.DailyVersesPlugin"
+      ]
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.1",
     "cordova-plugin-splashscreen": "6.0.0",
-    "phonegap-plugin-push": "2.3.0"
+    "phonegap-plugin-push": "2.3.0",
+    "de.christiansteinert.dailyversesplugin": "0.0.1"
   }
 }
