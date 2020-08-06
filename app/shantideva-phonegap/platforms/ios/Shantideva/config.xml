@@ -56,7 +56,4 @@
     <preference name="PaginationMode" value="unpaginated" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
-    <feature name="DailyVersesPlugin">
-        <param name="ios-package" value="DailyVersesPlugin" />
-    </feature>
 </widget>

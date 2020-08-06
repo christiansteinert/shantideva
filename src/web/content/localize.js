@@ -285,8 +285,8 @@ LANG['ar']={
   "Time":"زمن",
   "Daily Message":"إخطار يومي",
   "Show Messages":"مكين الإخطارات",
-  "You need to be online when you save the notification settings.":"يجب أن تكون متصلاً بالإنترنت عندما تحفظ إعدادات الإعلام.": "يجب أن تكون متصلاً عندما تحفظ إعدادات الإشعار.",
-  "Notifications can only be displayed you when you are online.":"لا يمكن عرض الإشعارات إلا لك عندما تكون متصلاً بالإنترنت.": "لا يمكن عرض الإشعارات إلا عندما تكون متصلاً بالإنترنت."،
+  "You need to be online when you save the notification settings.":"يجب أن تكون متصلاً عندما تحفظ إعدادات الإشعار.",
+  "Notifications can only be displayed you when you are online.":"لا يمكن عرض الإشعارات إلا عندما تكون متصلاً بالإنترنت.",
   "Enable the options below the see the verse of the day as a notification message.":"يمكنك تفعيل الخيارات أدناه لرؤية الآية اليومية كرسالة إخطار.", 
   "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
     + LANG_ABOUT_EN
