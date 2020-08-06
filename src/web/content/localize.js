@@ -243,6 +243,8 @@ LANG['ru']={
     "Daily Message":"Ежедневное уведомление",
     "Show Messages":"Показать уведомления",
     "Enable the options below the see the verse of the day as a notification message.":"Если вы активируете следующие настройки, стихи дня будут отображаться как уведомление.", 
+  "You need to be online when you save the notification settings.":"Вам нужно быть в сети, когда вы сохраняете настройки уведомлений.",
+  "Notifications can only be displayed you when you are online.":"Уведомления могут отображаться только тогда, когда вы в сети.",
   "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
     + LANG_ABOUT_EN
     +'</p>'
@@ -283,6 +285,8 @@ LANG['ar']={
   "Time":"زمن",
   "Daily Message":"إخطار يومي",
   "Show Messages":"مكين الإخطارات",
+  "You need to be online when you save the notification settings.":"يجب أن تكون متصلاً بالإنترنت عندما تحفظ إعدادات الإعلام.": "يجب أن تكون متصلاً عندما تحفظ إعدادات الإشعار.",
+  "Notifications can only be displayed you when you are online.":"لا يمكن عرض الإشعارات إلا لك عندما تكون متصلاً بالإنترنت.": "لا يمكن عرض الإشعارات إلا عندما تكون متصلاً بالإنترنت."،
   "Enable the options below the see the verse of the day as a notification message.":"يمكنك تفعيل الخيارات أدناه لرؤية الآية اليومية كرسالة إخطار.", 
   "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
     + LANG_ABOUT_EN
@@ -322,6 +326,8 @@ LANG['de']={
     "Daily Message":"Tägl. Nachricht",
     "Show Messages":"Nachrichten anzeigen",
     "Enable the options below the see the verse of the day as a notification message.":"Aktivieren Sie die unten stehenden Optionen, um den Vers des Tages als Benachrichtigung angezeigt zu bekommen.",
+    "You need to be online when you save the notification settings.":"Sie müssen online sein, um die Benachrichtigungseinstellungen zu speichern.",
+    "Notifications can only be displayed you when you are online.":"Benachrichtigungen werden nur angezeigt, während Sie online sind.",
     "Cancel":"Abbrechen",
     "Save":"Speichern",
     "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p>'
@@ -368,6 +374,8 @@ LANG['bo']={
     "Daily Message":"Tägl. Nachricht",
     "Show Messages":"Nachrichten anzeigen",
     "Enable the options below the see the verse of the day as a notification message.":"Aktivieren Sie die unten stehenden Optionen, um den Vers des Tages als Benachrichtigung angezeigt zu bekommen.",
+    "You need to be online when you save the notification settings.":"You need to be online when you save the notification settings.",
+    "Notifications can only be displayed you when you are online.":"Notifications can only be displayed you when you are online.",
     "Cancel":"Abbrechen",
     "Save":"Speichern",
 }

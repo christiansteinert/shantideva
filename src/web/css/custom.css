@@ -348,6 +348,12 @@ body.dark {
  right:0;
 }
 
+.mobile .tabcontentWrap {
+ /* iOS scrolling improvements */
+ overflow:scroll;
+ -webkit-overflow-scrolling: touch;
+}
+
 #settingsTab select {
   font-size:1.1em;
   max-width:13em;

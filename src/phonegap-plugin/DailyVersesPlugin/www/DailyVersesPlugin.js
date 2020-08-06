@@ -8,19 +8,18 @@ if ( cordova.platformId == 'ios' ) {
     
     exports.testNotification = function(success, error) {
         // do nothing 
-    };
+    };  
 
     exports.setAlarm = function(settings, success, error) {
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
-        var cloudDevicePushToken = localStorage.getItem("cloudDevicePushToken")|| ''; // get last push notification token for this device was already shared with the server        
-        var cloudMessageTime = localStorage.getItem("cloudMessageTime")|| ''; // get last push notification token for this device was already shared with the server        
+        var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
         var appMessageEnabled = settings.messageEnabled;
         var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
 
         if( !cloudMessageEnabled && !settings.messageEnabled ) {
             // Push message is turned off and the cloud knows that.
-            // We can abort here without having to request a push message token because we don't care whether the token has changed
+            // We can abort here without having to request a push message token because we don't care whether the token or anything else has changed
             return;
         }
         
@@ -34,19 +33,11 @@ if ( cordova.platformId == 'ios' ) {
         });
 
         push.on('registration', function(data) {
-            if( cloudMessageEnabled === appMessageEnabled
-                && cloudMessageTime === appMessageTime
-                && cloudDevicePushToken === data.registrationId 
-                ) {
-                // -> the current push settings are already known to the cloud. We do not need to send a subscrption / unsubsription request
-                return;
-            }
-            
-            
             // -> the message enablement setting or the device token has changed. Notify the cloud about this
             var callSuccessful = false;
             var url;
             var payload;
+            var payloadStr;
  
             if(settings.messageEnabled) {
                 // messages are enabled. Subscribe this device to our service.                    
@@ -68,6 +59,13 @@ if ( cordova.platformId == 'ios' ) {
                     "language": settings.textLanguage,
                     "ui_language": settings.uiLanguage
                 };
+                payloadStr = JSON.stringify(payload);
+                
+                if( payloadStr === cloudSettings ) {
+                    // -> the current push settings are already known to the cloud. We do not need to send a subscription / unsubsription request 
+                    return;
+                }
+                            
                 
             } else {
                 // messages are disabled. Unsubscribe this device from our service
@@ -75,20 +73,20 @@ if ( cordova.platformId == 'ios' ) {
                 payload = {
                     "devicetoken": data.registrationId
                 };
+                payloadStr = JSON.stringify(payload);
             }
 
             // -> send a request to the device registration service
             $.ajax({
                 method:'POST',
                 url:url, 
-                data: JSON.stringify(payload),
+                data: payloadStr,
                 contentType: 'application/json',
                 async: false
             }).done(function() {
                 // Call was successful. Remember that this configuration is the one that was also sent to the cloud
                 localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
-                localStorage.setItem("cloudDevicePushToken", data.registrationId);
-                localStorage.setItem("cloudMessageTime", appMessageTime);
+                localStorage.setItem("cloudSettings", payloadStr);
                 if(success) {
                     success();
                 }
@@ -107,7 +105,7 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.saveSettings = function(settings, success, error) {
-        localStorage.getItem("cloudDevicePushToken", ''); // clear locally saved push token to force re-registration of the device with the cloud
+        localStorage.getItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
         exports.setAlarm(settings); // register again with the server
         if(success) {
             success();
