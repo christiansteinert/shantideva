@@ -50,6 +50,23 @@ CONFIG = {
       return false;
     }
   },
+  
+  isIOS:function() {
+    if (['iPad Simulator',
+         'iPhone Simulator',
+         'iPod Simulator',
+         'iPad',
+         'iPhone',
+         'iPod'].includes(navigator.platform)
+         // iPad on iOS 13 detection
+         || (navigator.userAgent.includes("Mac") && "ontouchend" in document))
+       return true;
+        
+    if(/(iPad|iPhone|iPod)/g.test(navigator.userAgent))        
+      return true;
+       
+    return false
+  },
 
   /** get UI language */
   getUILang:function() {
@@ -880,13 +897,17 @@ function run() {
     // add a class to the body on Android 4 to allow CSS workarounds
     $("body").addClass("android4");
   }
+  
+  if(CONFIG.isIOS()) {
+    $("body").addClass("ios");
+  }
 }
 
 /* Do cordova-specific initializations */
 function cordovaReady() {
   // Cordova is ready now.
   // do the UI initialization if it has not been done yet already:
-  $("body,#settingsTab").addClass("mobile"); 
+  $("body").addClass("mobile"); 
   
   if(!CONFIG.isInitialized()) {
     // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed

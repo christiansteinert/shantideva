@@ -348,7 +348,7 @@ body.dark {
  right:0;
 }
 
-.mobile .tabcontentWrap {
+.ios .tabcontentWrap, .mobile .tabcontentWrap {
  /* iOS scrolling improvements */
  overflow:scroll;
  -webkit-overflow-scrolling: touch;
@@ -578,8 +578,8 @@ body, .tabcontentWrap {
   font-size:0.65em;
   min-width:25px;
   max-width:23vw;  
-  padding-left:3px;
-  padding-right:3px;
+  padding-left:6px;
+  padding-right:6px;
   float:left;
  }
 

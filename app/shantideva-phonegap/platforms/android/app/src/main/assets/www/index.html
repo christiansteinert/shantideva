@@ -415,8 +415,6 @@ UI = {
     if(!this._isSettingsInitialized) {
       if(!window.cordova) {
         $("#settingsTab").addClass("web");
-      } else {
-        $("#settingsTab").addClass("mobile");      
       }
       $("#settingsTab").addClass( CONFIG.getCssClassForLang(CONFIG.getUILang()) );
     
@@ -888,6 +886,8 @@ function run() {
 function cordovaReady() {
   // Cordova is ready now.
   // do the UI initialization if it has not been done yet already:
+  $("body,#settingsTab").addClass("mobile"); 
+  
   if(!CONFIG.isInitialized()) {
     // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
     CONFIG.loadSettings(function() {    
