@@ -1,0 +1,33 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Schema for saving favorite verses",
+  "required": [
+   "device_id",
+   "favorite_verses"
+  ],
+  "properties": {
+    "device_id":{
+      "type":"string",
+      "title":"Device ID for shich the favorite verses are stored",
+      "minLength":36,
+      "maxLength":36,
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "platform":{
+      "type":"string",
+      "title":"Platform (ios/android/web)",
+      "minLength":3,
+      "maxLength":8,
+      "pattern": "^(ios|android|web)$"
+    },
+    "favorite_verses":{
+      "type":"string",
+      "title":"JSON data with favorite verses",
+      "minLength":30,
+      "maxLength":15000,
+      "pattern": "^[ \\\\\"0-9{}:\\.,]*$"
+    }
+  }
+}

@@ -155,7 +155,7 @@ var LANG_TRANSLATIONS = '<p><ul style="text-align:left;"><li>English translation
     +'</ul></p>';
     
 var LANG_ABOUT_EN = 'This App displays one verse a day from Shantideva\'s Buddhist text "Engaging in Bodhisattva Behavior" (Bodhisattvacharyavatara) and allows to read through the entire text. '
-    +'"Engaging in Bodhisattva Behavior" is an outstandingly practical and inspiring Buddhist text that covers all the aspects of the Buddhist path. '
+    +'"Engaging in Bodhisattva Behavior" is an outstandingly practical and inspiring text that covers all the aspects of the Buddhist path. '
     +'Shantideva was a great Indian master who lived during the 8th century CE. Two of his texts survive - the Bodhicharyavatara (the text that is displayed in this app) and the '
     +'Shikshasamuccaya ("Compendium of Trainings"). Both texts are still used to the present day by and especially the Bodhicharyavatara is one of the most cherished and most frequently taught ' 
     +'texts in the Tibetan tradition.'
@@ -171,6 +171,7 @@ var LANG_ABOUT_EN = 'This App displays one verse a day from Shantideva\'s Buddhi
     +'<p>'
     +'Studybuddhism.com is a website that makes comprehensive material about Buddhism available in 31 languages. If you find this app helpful then please consider making a donation at the website of studybuddhism.com to support their extensive efforts.';
     
+LOGO='<p><img src="content/info-logo.png" style="max-width:90%" width="350" /><br/><a href="https://www.shantideva.info/" target="_blank" onclick="window.open(\'https://www.shantideva.info\',\'_system\');return false;"><strong>www.shantideva.info</strong></a></p><hr />';
     
 LANG['en']={
   "App_Title":"Shantideva",
@@ -200,12 +201,13 @@ LANG['en']={
   "24:00":"12 pm (24:00)",   
   "Settings":"Set&shy;tings",
   
-  "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
+  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
     + LANG_ABOUT_EN
     +'</p>'
     + LANG_TRANSLATIONS
     +'<hr />'
     + LANG_FONTS,
+  "Verse of the Day":"Verse&nbsp;of the&nbsp;Day",    
   "App Language":"App Langu&shy;age",
   "Text Language":"Text Langu&shy;age",
   "Text Language 2":"Text Langu&shy;age&nbsp;2",
@@ -218,8 +220,8 @@ LANG['ru']={
   "iOS App":"iOS-приложение",
   "Online App":"Веб приложение",
   "Verse of the Day":"Стих дня",
-  "About":"Информация",
-  "Settings":"На&shy;строй&shy;ки",
+  "About":"Инфор&shy;мация",
+  "Settings":"На&shy;стройки",
   "Full Text":"Текст",
   "Chapter %1, Verse %2":"Глава %1, Стих %2",
   "About This App":"Об этом приложении",  
@@ -245,7 +247,7 @@ LANG['ru']={
     "Enable the options below the see the verse of the day as a notification message.":"Если вы активируете следующие настройки, стихи дня будут отображаться как уведомление.", 
   "You need to be online when you save the notification settings.":"Вам нужно быть в сети, когда вы сохраняете настройки уведомлений.",
   "Notifications can only be displayed you when you are online.":"Уведомления могут отображаться только тогда, когда вы в сети.",
-  "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
+  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
     + LANG_ABOUT_EN
     +'</p>'
     + LANG_TRANSLATIONS
@@ -288,7 +290,7 @@ LANG['ar']={
   "You need to be online when you save the notification settings.":"يجب أن تكون متصلاً عندما تحفظ إعدادات الإشعار.",
   "Notifications can only be displayed you when you are online.":"لا يمكن عرض الإشعارات إلا عندما تكون متصلاً بالإنترنت.",
   "Enable the options below the see the verse of the day as a notification message.":"يمكنك تفعيل الخيارات أدناه لرؤية الآية اليومية كرسالة إخطار.", 
-  "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p><p>'
+  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
     + LANG_ABOUT_EN
     +'</p>'
     + LANG_TRANSLATIONS
@@ -302,7 +304,7 @@ LANG['de']={
     "Android App":"Android App",
     "iOS App":"iOS App",
     "Online App":"Online App",
-    "Verse of the Day":"Vers des Tages",
+    "Verse of the Day":"Vers&nbsp;des Tages",
     "About":"Über",
     "Settings":"Einstel&shy;lungen",
     "Full Text":"Gesamter Text",
@@ -330,9 +332,9 @@ LANG['de']={
     "Notifications can only be displayed you when you are online.":"Benachrichtigungen werden nur angezeigt, während Sie online sind.",
     "Cancel":"Abbrechen",
     "Save":"Speichern",
-    "About_Text":'<div style="text-align:center"><p><img src="content/info-logo.png" style="max-width:90%" width="350" /></p>'
-    +'<p>Diese App zeigt täglich einen Vers aus Shantideva\'s buddhistischem Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text.'
-    +'Shantideva war ein großer indischer Meister, der während des 8. Jahrhunderts unserer Zeitrechnung lebte. Zwei seiner Texte sind erhalten geblieben - das Bodhicharyavatara (der Text, welcher in dieser App enthalten ist) sowie das '
+    "About_Text":'<div style="text-align:center">'+LOGO+'</p>'
+    +'<p>Diese App zeigt täglich einen Vers aus Shantideva\'s buddhistischem Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text. Dieser inspirierede und überaus praktische Text beleuchtet alle Aspekte des buddhistischen Pfades.'
+    +'Shantideva war ein großer buddhistischer Meister, der während des 8. Jahrhunderts unserer Zeitrechnung in Indien lebte. Zwei seiner Texte sind erhalten geblieben - das Bodhicharyavatara (der Text, welcher in dieser App enthalten ist) sowie das '
     +'Shikshasamuccaya ("Kompendium der Schulungen"). Beide Texte werden bis zum heutigen Tag gelesen und studiert und insbesondere das Bodhicharyavatara ist einer der am häufigsten gelehrten ' 
     +'Texte innerhalb der tibetisch-buddhistischen Tradition.'
     +'</p>'

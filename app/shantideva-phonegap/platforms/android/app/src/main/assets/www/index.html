@@ -31,6 +31,7 @@ CONFIG = {
   _messageHour:null,
   _colorTheme:null,
   _fontSize:null,
+  _favoriteVerses:{},
     
   isInitialized:function() {
     if(this._language) {
@@ -49,6 +50,17 @@ CONFIG = {
       // ui language is set. Configuration has the latest format and need not be migrated
       return false;
     }
+  },
+  
+  isIOS:function() {
+    if ( (/(iPad|iPhone|iPod)/g.test(navigator.platform)) ||
+         (/Mac/g.test(navigator.userAgent) && "ontouchend" in document) )
+       return true;
+        
+    if(/(iPad|iPhone|iPod)/g.test(navigator.userAgent))        
+      return true;
+       
+    return false
   },
 
   /** get UI language */
@@ -195,16 +207,22 @@ CONFIG = {
     return this._textLanguage3;
   },
   
-  
+  /* get the CSS class or classes to be used for a language */
   getCssClassForLang:function(lang) {    
     if ( lang == 'bo' || lang == 'ru' || lang == 'ar' || lang == 'zh-cn' || lang == 'zh-tw')
       return lang;
     else if (lang == 'sa-devanagari') 
       return lang;
+    else if (lang == 'bo-wylie') 
+      return 'latin ' + lang;
     else 
       return 'latin ' + this.getLangCode( lang );
   },
 
+  /** get a language code without locale
+   * @param lang a language code with locale
+   * @returns the language from that code without locale 
+   */
   getLangCode:function(lang) {
     // cut off anything behind dash from the language code
     return lang.replace(/-.*/,'');
@@ -329,7 +347,130 @@ CONFIG = {
         loadSettings:function(success, error) {success({}); }
       }
     }
+  },
+  
+  /**
+   * Get the favorite verses of the user 
+   * @returns The result is an object which contains a list of properties for each chapter and within that object, 
+   * for any verse that is a property there is a property with the verse number that is set to "1".
+   * Note that all properties are string properies to be JSON conformant.
+   * For example:
+   * { "1":{"5":"1", "7":"1", }, "2":{}, "3":{}, "4":{}, "5":{}, "6":{}, "7":{}, "8":{}, "9":{}, "10":{} }
+   * => the user has marked verses 5 and 7 of chapter 1 as favorites.
+   */
+  getFavoriteVerses:function() {
+    if ('1' in this._favoriteVerses) {
+      // favorites were already loaded. Just use them.
+      return this._favoriteVerses;
+    } else {    
+      // favorites were not yet loaded. Load them.
+      var favorites = localStorage.getItem('favoriteVerses');
+      if(favorites) {
+        this._favoriteVerses = JSON.parse(favorites);
+      } else {
+        // favorites were never saved before and are initial. Create an empty object.
+        this._favoriteVerses = {};
+        for( var chapterNr in DATA.chaptersSizes ) {
+          this._favoriteVerses[String(chapterNr)] = {};
+        }
+      }
+      return this._favoriteVerses
+    }
+  },
+  
+  /** 
+   * save the information, which verses are favorites of the user 
+   */
+  saveFavoriteVerses:function() {
+    var favoriteVerses = this.getFavoriteVerses();
+    localStorage.setItem('favoriteVerses', JSON.stringify(favoriteVerses));
+    
+    // Remember that the favorite verses should also be sent to the cloud.
+    // this information is not personalized but could be used later to develop additional features 
+    // if we know which verses are particularly popular.
+    localStorage.setItem('favoriteVersesForCloud', JSON.stringify(favoriteVerses));
+    
+    this.saveFavoriteVersesToCloud();
+  },
+  
+  getPlatform:function() {
+    if(window.cordova) {
+      if(this.isIOS()) {
+        return "ios";
+      } else {
+        return "android";      
+      }
+    } else {
+      return "web";
+    }
+  },
+  
+  saveFavoriteVersesToCloud:function() {
+    var versesToSave = localStorage.getItem('favoriteVersesForCloud');
+    
+    if(versesToSave ) {
+      var favoriteVerses = JSON.stringify( this.getFavoriteVerses() );
+      var url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/verses/favorite';
+
+      var payload = {
+        "device_id":this._getDeviceUUID(),
+        "platform": this.getPlatform(),
+        "favorite_verses": favoriteVerses,
+      };
+      payloadStr = JSON.stringify(payload);
+      
+      // -> send a request to the cloud to save the favorite verse
+      $.ajax({
+        method:'POST',
+        url:url, 
+        data: payloadStr,
+        contentType: 'application/json',
+        async: true
+      }).done(function() {
+        // verses were successfully pushed to the cloud. Clear the local information that needed to be pushed
+        localStorage.setItem('favoriteVersesForCloud', '');
+      });
+    }
+  },
+  
+  /**
+   * toggle the state whether a verse is currently a favorite and save that change.
+   * @param chapter
+   * @param verse
+   */
+  toggleVerseFavorite:function(chapter, verse) {
+    this.getFavoriteVerses();
+    var chap = this._favoriteVerses[String(chapter)];
+    if(chap[String(verse)]) {
+      // verse was a favorite before -> delete it from favorites
+      delete chap[String(verse)];
+    } else {
+      // verse was no favorite before -> add it to favorites
+      chap[String(verse)] = '1';
+    }
+    this.saveFavoriteVerses();
+  },
+  
+  
+  /**
+   * create a random-based UUID for this App instance
+   * @returns a UUID that can be used as unique ID for this installation. This is used to send the list of favorite verses to the server. No user-specific data is stored in conjunction with this;  
+   * the information is simply used to get an idea which verses are particulaly popular; this may help with developing new features in the future.
+   */
+  _createUUID:function() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) { var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
+  },
+  
+  _getDeviceUUID:function() {
+    var deviceId = localStorage.getItem('deviceUUID');    
+    if(!deviceId) {
+      deviceId = this._createUUID();
+      localStorage.setItem('deviceUUID', deviceId);    
+    }
+    
+    return deviceId;
   }
+    
 }
 
 
@@ -378,6 +519,59 @@ UI = {
     this._lastPauseTime = new Date();
   },
 
+  /**
+    * get the button code for a liking / unliking a verse
+    */
+  createLikeButtonCode:function(chapter, verse) {
+    var favorites = CONFIG.getFavoriteVerses();
+    var isLiked = favorites[String(chapter)][String(verse)];
+    var cssClass = isLiked?'liked':'unliked';
+    
+    return '<a href="#" class="likeBtn likeBtn'+chapter+'_'+verse+' '+cssClass+'" onclick="return UI.onLikeButton('+chapter+','+verse+');"></a>';
+  },
+  
+  onLikeButton:function(chapter, verse) {
+    CONFIG.toggleVerseFavorite(chapter, verse);
+    
+    var favorites = CONFIG.getFavoriteVerses();
+    var isLiked = favorites[String(chapter)][String(verse)];
+    var cssClass = isLiked?'liked':'unliked';
+
+    $('.likeBtn'+chapter+'_'+verse).removeClass('liked').removeClass('unliked').addClass(cssClass);
+    CONFIG.saveFavoriteVerses();
+    UI.setFavoritesBtnVisibility();
+    
+    return false;
+  },
+  
+  /**
+   * Control the visibility of the "Favorite Verses" tab.
+   * Only if favorite verses exist, this tab is shown.
+   */ 
+  setFavoritesBtnVisibility:function() {
+    var favorites = CONFIG.getFavoriteVerses();
+    var hasFavorites = false;
+
+    // check if there are any favorite verses
+    for(var chapter in favorites) {
+      for(var verse in favorites[chapter]) {
+        hasFavorites = true;
+        break; // leave inner loop
+      }
+      
+      if(hasFavorites) {
+        break; // leave outer loop
+      }
+    }
+    
+    if(hasFavorites) {
+      $('#favoritesTabBtn').show();
+    } else {
+      $('#favoritesTabBtn').hide();
+    }
+  },
+  
+
   onResume:function() {
     if(this._activeTab == 'homeTab') {
       // Refresh the content of the home tab when the app was in background to make sure 
@@ -411,6 +605,7 @@ UI = {
     location.reload();
   },
 
+
   initSettingsTab:function() {
     if(!this._isSettingsInitialized) {
       if(!window.cordova) {
@@ -442,6 +637,7 @@ UI = {
     }
   },
   
+  /* activate a given tab and initialize the state of that tab beforehand if needed */
   openTab:function(tabName) {
     if(tabName == 'homeTab') {
       this.updateVerseOfTheDay();
@@ -449,15 +645,18 @@ UI = {
       if(this.currentChapter == -1) {
         this.showChapter(1);
       }
+    } else if(tabName == 'favoritesTab') {
+      this.initFavoriteVersesTab();      
     } else if(tabName == 'settingsTab') {
       this.initSettingsTab();
     }
     
-    this.doOpenTab(tabName);
+    this._doOpenTab(tabName);
     this.scrollElementToTop($('#'+tabName)[0]);
   },
   
-  doOpenTab:function(tabName) {
+  /* internal helper function: activate a given tab */
+  _doOpenTab:function(tabName) {
     $('.tabcontent').hide(); // hide all tab content
     $('#'+tabName).show(); // show desired tab content
     
@@ -466,12 +665,13 @@ UI = {
     $('#footer .tab').show(); // make sure the footer becomes visible
     
     $('.tab li').removeClass("active"); // make the currently active tab inactive
-    $('#'+tabName+"Link").parent().addClass("active"); // make the newly selected tab active
+    $('#'+tabName+"Btn").parent().addClass("active"); // make the newly selected tab active
 
     this._activeTab = tabName;  
   },
 
-  replaceAll:function(str, search, replace) {
+  /* internal helper function: replace all occurrences of a substring with anoter substring*/
+  _replaceAll:function(str, search, replace) {
     return str.split(search).join(replace);
   },
   
@@ -495,16 +695,17 @@ UI = {
     return txt;
   },
 
+  /*localize all texts within the initial page*/
   localizeText:function() {
     var htmlCode = $('body').html();
     if (window.LANG && LANG[CONFIG.getUILang()]) {
       for(var txtid in LANG[CONFIG.getUILang()]) {
         var textVal = LANG[CONFIG.getUILang()][txtid];
-        htmlCode = this.replaceAll(htmlCode,"{{"+txtid+"}}",textVal);
+        htmlCode = this._replaceAll(htmlCode,"{{"+txtid+"}}",textVal);
       }
     }
-    htmlCode = this.replaceAll(htmlCode,"{{","");
-    htmlCode = this.replaceAll(htmlCode,"}}","");
+    htmlCode = this._replaceAll(htmlCode,"{{","");
+    htmlCode = this._replaceAll(htmlCode,"}}","");
     $('body').html(htmlCode);
     
     var lang = CONFIG.getLangCode( CONFIG.getUILang() );    
@@ -552,34 +753,37 @@ UI = {
     var lang2 = CONFIG.getLangCode(langCode2);
     var lang3 = CONFIG.getLangCode(langCode3);
 
+    var likeBtn = UI.createLikeButtonCode(verseInfo.chapter, verseInfo.nr);
+    verseText = verseText.replace(/<\/p>$/,likeBtn+'</p>');
     
     htmlCode = '<div id="verseOfTheDayCont" class="vcenterContainer"><div id="verseOfTheDay" class="vcenter">';
     htmlCode += '<div id="verseOfTheDayNarrow">';
 
     htmlCode += '<div class="verse '+cssClass+'" lang="'+lang+'">'
     htmlCode += verseText;
+    
     htmlCode += '</div>'
 
-    htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
+    htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
 
     if(verseText2) {
       htmlCode += '<div class="verse '+cssClass2+'" lang="'+lang2+'">'
       htmlCode += verseText2;
       htmlCode += '</div>'
-      htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
+      htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
     }
 
     if(verseText3) {
       htmlCode += '<div class="verse '+cssClass3+'" lang="'+lang3+'">'
       htmlCode += verseText3;
       htmlCode += '</div>'
-      htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
+      htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
     }
     
     htmlCode += '</div></div></div>';
     $('#homeTab').html(htmlCode);
     
-    $('#homeTab a').button();
+    $('#homeTab a.btn').button();
   },
 
   showChapter:function(chapterNr) {
@@ -617,7 +821,9 @@ UI = {
         for(var i=0;i<DATA.verses.length;i++) {
           var verse=DATA.verses[i];
           if(verse.chapter == chapterNr) {
-            htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText + '</div>';
+            var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr);
+            
+            htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
             if(lang2 && DATA.verses2.length > i) {
               var verse2=DATA.verses2[i];
               htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verse2.verseText + '</div>';
@@ -626,6 +832,7 @@ UI = {
               var verse3=DATA.verses3[i];
               htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verse3.verseText + '</div>';
             }
+            htmlCode += '<div class="verseSpacer"></div>';
           }
         }
         
@@ -637,7 +844,64 @@ UI = {
         this.currentChapter = chapterNr;
     }
   },
-  
+
+  initFavoriteVersesTab:function() {
+    var langCode1 = CONFIG.getTextLang();
+    var cssClass = CONFIG.getCssClassForLang(langCode1);
+    var langCode2 = CONFIG.getTextLang2();
+    var cssClass2 = CONFIG.getCssClassForLang(langCode2);
+    var langCode3 = CONFIG.getTextLang3();
+    var cssClass3 = CONFIG.getCssClassForLang(langCode3);
+    var lang = CONFIG.getLangCode(langCode1);
+    var lang2 = CONFIG.getLangCode(langCode2);
+    var lang3 = CONFIG.getLangCode(langCode3);
+
+    // show the chapter content on the "full text" tab
+    var htmlCode = '<div class="textView">';
+    var favorites = CONFIG.getFavoriteVerses();
+    var lastShownChapterTitle = 0;
+    var titlesCount = 0;
+    
+    for(var i=0;i<DATA.verses.length;i++) {
+      var verse=DATA.verses[i];
+      if(favorites[String(verse.chapter)][String(verse.nr)]) {
+        if(lastShownChapterTitle != verse.chapter) {
+          // show chapter title
+          if(titlesCount>0) {
+            htmlCode += '<div class="chapterSpacer"></div>';
+          }
+          
+          htmlCode += '<div><h1 class="'+cssClass+'" lang="'+lang+'">'+DATA.chaptersNames[verse.chapter] + '</h1></div>';
+          if(lang2 && DATA.chaptersNames2[verse.chapter]) {
+            htmlCode += '<div><h1 class="'+cssClass2+'" lang="'+lang2+'">'+DATA.chaptersNames2[verse.chapter]+ '</h1></div>';
+          }
+          if(lang3 && DATA.chaptersNames3[verse.chapter]) {
+            htmlCode += '<div><h1 class="'+cssClass3+'" lang="'+lang3+'">'+DATA.chaptersNames3[verse.chapter]+ '</h1></div>';
+          }
+          lastShownChapterTitle = verse.chapter;
+          titlesCount++;
+        }
+      
+        var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr) ;
+        htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
+        if(lang2 && DATA.verses2.length > i) {
+          var verse2=DATA.verses2[i];
+          htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verse2.verseText + '</div>';
+        }
+        if(lang3 && DATA.verses3.length > i) {
+          var verse3=DATA.verses3[i];
+          htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verse3.verseText + '</div>';
+        }
+        htmlCode += '<div class="verseSpacer"></div>';
+      }
+    }
+    
+    htmlCode+='</div>';
+    var $favoritesTab = $('#favoritesTab');
+    $favoritesTab.html(htmlCode);
+    this.scrollElementToTop($favoritesTab[0]);
+  },
+    
   moveChapter:function(direction) {
     var newChapter = this.currentChapter + direction;
     this.showChapter(newChapter);
@@ -673,7 +937,7 @@ UI = {
     this.initChaptersDropdown();
     this.openTab('homeTab');
   }
-  
+
 }
 
 DATA = {
@@ -686,7 +950,7 @@ DATA = {
   chaptersSizes:[],
   chaptersSizes2:[],
   chaptersSizes3:[],
-  
+
   loadVerses:function(settings) {
     $.ajax({url:CONFIG.getTextUrl(), async: false, success:$.proxy(this.parseVerses1,this)});
     
@@ -697,7 +961,6 @@ DATA = {
     if(CONFIG.getTextLang3()) {
       $.ajax({url:CONFIG.getTextUrl3(), async: false, success:$.proxy(this.parseVerses3,this)});
     }
-    
   },
   
   parseVerses1:function(text) {
@@ -731,7 +994,6 @@ DATA = {
         
         if(currLine.indexOf('***')>=0) {
             chapterNr++;
-            
             var chapterName = currLine.replace(/ *[*]+ ?/g,'');
             if(langNum===1) {
               this.chaptersNames[chapterNr] = chapterName;
@@ -777,7 +1039,7 @@ DATA = {
       this.verses3 = data;
     }    
   },
-  
+    
    /**
     * helper function - calculate a random integer value based on a random seed
     * @param seed the seed to initialize the random number generation
@@ -819,13 +1081,14 @@ DATA = {
     var now=day||new Date();
     var randSeedForTheDay = now.getFullYear()*400+now.getMonth()*31+now.getDate();
     var verseOfTheDayNr = this.getRandomIntWithSeed(randSeedForTheDay, totalVerseCount - 1);
-    
-    if(langNum===1)
+
+    if(langNum===1) {
       return this.verses[verseOfTheDayNr];
-    else if(langNum===2)
+    } else if(langNum===2) {
       return this.verses2[verseOfTheDayNr];
-    else if(langNum===3)
+    } else if(langNum===3) {
       return this.verses3[verseOfTheDayNr];
+    }
   },
   
   getVerseText:function(verseInfo) {
@@ -851,6 +1114,12 @@ DATA = {
 
 
 /*** Initialization Stuff ***/
+/* do final initialization. On mobile devices this is run only after Cordova has been initialized. */
+function finalInit() {
+  // push favorite verses to cloud if it has not happened yet.
+  CONFIG.saveFavoriteVersesToCloud()  
+}
+
 
 /* initialize the UI */
 function run() { 
@@ -880,13 +1149,21 @@ function run() {
     // add a class to the body on Android 4 to allow CSS workarounds
     $("body").addClass("android4");
   }
+  
+  if(CONFIG.isIOS()) {
+    $("body").addClass("ios");
+  }
+  UI.setFavoritesBtnVisibility();  
+  $('.hiddenOnStartup').removeClass('hiddenOnStartup');
+ 
+  finalInit();
 }
 
 /* Do cordova-specific initializations */
 function cordovaReady() {
   // Cordova is ready now.
   // do the UI initialization if it has not been done yet already:
-  $("body,#settingsTab").addClass("mobile"); 
+  $("body").addClass("mobile"); 
   
   if(!CONFIG.isInitialized()) {
     // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
@@ -906,7 +1183,10 @@ function cordovaReady() {
 if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost') > 0)) {
   // running inside the browser
   // We do not need Cordova. Initialize the UI as soon as jQuery is ready
-  $(run);
+  $(function() {
+    run();
+    finalInit();
+  });
 } else {
   // running inside cordova
   if(!CONFIG.isSettingsMigrationNeeded()) {
@@ -916,6 +1196,8 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
     // Cordova-specific stuff will run later when Cordova sends a deviceready event
     $(run);
   }
+  
+  // add handler to do the rest of the initialization when Cordova is ready
   document.addEventListener("deviceready", function() { $(cordovaReady) });  
 }
 
@@ -932,6 +1214,9 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
       <a href="javascript:void(0)" id="btnBack" onclick="UI.moveChapter(-1)"></a>
       <span id="chapterDropdown"></span>
       <a  href="javascript:void(0)" id="btnNext" onclick="UI.moveChapter(+1)"></a>
+    </div>
+    <div class="tabtitle" id="favoritesTabTitle">
+      <h1>{{Favorite Verses}}</h1>
     </div>
     <div class="tabtitle" id="settingsTabTitle">
       <h1>{{Settings}}</h1>
@@ -954,6 +1239,9 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
     <div id="textTab" class="tabcontent hiddenOnStartup">
     </div>
 
+    <div id="favoritesTab" class="tabcontent hiddenOnStartup">
+    </div>
+    
     <div id="settingsTab" class="tabcontent hiddenOnStartup">
       <div class="vcenterContainer settings"><div class="vcenter">
       
@@ -1071,12 +1359,15 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
 </div>
 
 <div id="footer" class="footer">
- <ul class="tab hiddenOnStartup">
-  <li class="active"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('homeTab')" id="homeTabLink">{{Verse of the Day}}</a>
-  </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('textTab')" id="textTabLink">{{Full Text}}</a>
-  </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('settingsTab')" id="settingsTabLink">{{Settings}}</a>
-  </li><li id="settingsTabBtn"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('infoTab')" id="infoTabLink">{{About}}</a></li>
-</ul>
+ <div class="tabs">
+  <ul class="tab hiddenOnStartup">
+   <li class="active"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('homeTab')" id="homeTabBtn">{{Verse of the Day}}</a>
+   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('textTab')" id="textTabBtn">{{Full Text}}</a>
+   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('favoritesTab')" id="favoritesTabBtn">{{Favorite Verses}}</a>
+   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('settingsTab')" id="settingsTabBtn">{{Settings}}</a>
+   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('infoTab')" id="infoTabBtn">{{About}}</a></li>
+  </ul>
+ </div> 
 </div>
 
 

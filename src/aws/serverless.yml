@@ -26,10 +26,17 @@ provider:
   httpApi:
     payload: '2.0'
 
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedHeaders:
+        - '*'
 
   environment: # set environment variables for lambda functions
     # Set environment variable with the name of the dynamodb table. This environment variable is then used inside the lambda functions
     DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE: ${self:custom.dynamodb.pushSubscriptionsTable} 
+    DYNAMODB_FAVORITE_VERSES_TABLE: ${self:custom.dynamodb.favoriteVersesTable} 
+    
 
   iamRoleStatements: # set permissions for our lambda functions so that they have access to dynamodb 
     - Effect: Allow
@@ -43,6 +50,7 @@ provider:
       Resource:
         - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.pushSubscriptionsTable}
         - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.pushSubscriptionsTable}/index/push_platform
+        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.favoriteVersesTable}
 
 package:
   individually: true
@@ -79,6 +87,21 @@ functions:
     package:
       include:
         - 'device-unregister/**'
+        
+  favorite_verses:
+    handler: verses-favorite/verses-favorite.save_favorite_verses
+    timeout: 25
+    events:
+      - httpApi:
+          path: /v1/verses/favorite
+          method: post
+          cors: true
+          request:
+            schema:
+              application/json: ${file(verses-favorite/schema-verses_favorite.json)}
+    package:
+      include:
+        - 'verses-favorite/**'
 
               
   send_messages:
@@ -100,6 +123,7 @@ custom:
   dynamodb:
     # call the table: shantideva.PushSubscriptions-dev / -prd
     pushSubscriptionsTable: ${self:service}.PushSubscriptions-${self:provider.stage}          
+    favoriteVersesTable: ${self:service}.FavoriteVerses-${self:provider.stage}          
 
 
 resources:
@@ -136,4 +160,15 @@ resources:
             Projection:
               ProjectionType: ALL
                     
-
+    favoriteVerses:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.dynamodb.favoriteVersesTable} # create a table containing the favorite verses
+        AttributeDefinitions:
+          - AttributeName: device_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: device_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST    

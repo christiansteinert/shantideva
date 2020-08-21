@@ -59,6 +59,42 @@ select,
   font-family: Roboto,"San Francisco", "Lucida Sans Unicode", "Lucida Grande", "Bitstream Vera Sans",sans-serif,"Jomolhari","Jomolhari ID","DDC Uchen","Kailasa","DDC Rinzin","Uchen_05","Qomolangma-Uchen Sarchung","Qomolangma-Uchen Sutung","Narthang","CTRC-Uchen","Monlam Uni OuChan2","Monlam Uni OuChan1","XenoType Tibetan New","TCRC Youtso Unicode","Tibetan Machine Uni","SambhotaDege","Microsoft Himalaya","Tib-US Unicode";
   text-rendering: optimizeLegibility;
 }
+
+
+
+.likeBtn {
+ display: inline-block;
+ height:20px;
+ width:25px;
+ vertical-align:middle;
+ margin-left:0.3em;
+ background-position: center;
+ background-repeat: no-repeat;
+ background-size: contain;
+ /*float:right;*/    
+}
+#verseOfTheDay .likeBtn{
+ margin-left:0.1em;
+}
+.bo .likeBtn{
+ position:relative;
+ top:0.3em;
+}
+
+.liked{
+ background-image:url('../icons/liked.png');
+ opacity:0.7;
+ filter: saturate(90%); 
+}
+.liked:hover{
+ opacity:1;    
+ filter: saturate(100%); 
+}
+
+.unliked{
+ background-image:url('../icons/not_liked.png')
+}
+
 .textView .zh-cn p, .textView .zh-tw p, .textView .sa-devanagari p {
   font-size:1.2em; 
 }
@@ -163,9 +199,14 @@ body.dark {
  left:0;
  width:100%;
  height:3em;
- overflow:hidden;
+ overflow-x:auto;
+ overflow-y:hidden;
  text-align:center;
 }
+.footer .tabs{display:table; margin:auto;}
+.footer .tab{display:table-row}
+.footer .tab li{display:table-cell;width:auto}
+ 
 
 .header{
  position:absolute;
@@ -207,6 +248,7 @@ body.dark {
  display:inline-block;
  height:3em;
  overflow:hidden;
+ vertical-align:top;
 }
 
 /* Style the links inside the list items */
@@ -243,33 +285,42 @@ body.dark {
  background-position: center 0.2em; 
 }
 
-#homeTabLink{
+#homeTabBtn{
  background-image: url('../icons/sun.png');
 }
-#homeTabLink:hover, .active #homeTabLink{
+#homeTabBtn:hover, .active #homeTabBtn{
  background-image: url('../icons/sun_active.png');
 }
 
-#infoTabLink{
+#infoTabBtn{
  background-image: url('../icons/info.png');
 }
-#infoTabLink:hover, .active #infoTabLink{
+#infoTabBtn:hover, .active #infoTabBtn{
  background-image: url('../icons/info_active.png');
 }
 
-#settingsTabLink{
+#settingsTabBtn{
  background-image: url('../icons/settings.png');
 }
-#settingsTabLink:hover, .active #settingsTabLink{
+#settingsTabBtn:hover, .active #settingsTabBtn{
  background-image: url('../icons/settings_active.png');
 }
 
-#textTabLink{
+#textTabBtn{
  background-image: url('../icons/text.png');
 }
-#textTabLink:hover, .active #textTabLink{
+#textTabBtn:hover, .active #textTabBtn{
  background-image: url('../icons/text_active.png');
 }
+
+#favoritesTabBtn{
+ background-image: url('../icons/favorites.png');
+}
+#favoritesTabBtn:hover, .active #favoritesTabBtn{
+ background-image: url('../icons/favorites_active.png');
+}
+
+
 .spacer{height:1em;}
 
 #settingsTab #saveBtn{
@@ -348,7 +399,7 @@ body.dark {
  right:0;
 }
 
-.mobile .tabcontentWrap {
+.ios .tabcontentWrap, .mobile .tabcontentWrap {
  /* iOS scrolling improvements */
  overflow:scroll;
  -webkit-overflow-scrolling: touch;
@@ -384,7 +435,7 @@ body, .tabcontentWrap {
  width:100%;
 }
 .hiddenOnStartup {
- display:none;
+ display:none !important;
 }
 .tabcontent {
  height:100%;
@@ -436,6 +487,12 @@ body, .tabcontentWrap {
   max-width: 40em;
   margin: 0 auto;
   padding-top:0.5em;
+}
+.textView .chapterSpacer{
+  padding-top: 1.5em;
+}
+.textView .verseSpacer{
+  padding-top: 1.2em;
 }
 
 .textView .verse{
@@ -547,6 +604,14 @@ body, .tabcontentWrap {
  }
 }
 
+@media only screen and (max-width: 999px) {
+ .tab li a {
+  padding-top:2.4em;
+  font-size:0.65em;
+  padding-left:6px;
+  padding-right:6px;
+ }
+}
 
 @media only screen and (max-width: 400px) { 
 /* workaround for Android 4.4  bug */
@@ -572,17 +637,6 @@ body, .tabcontentWrap {
   #homeTabTitle {
     padding-top:0.2em;   
   }
-  
- .tab li a {
-  padding-top:2.4em;
-  font-size:0.65em;
-  min-width:25px;
-  max-width:23vw;  
-  padding-left:3px;
-  padding-right:3px;
-  float:left;
- }
-
  #verseOfTheDay .verse {
   font-size:1.8em;
  } 
@@ -606,10 +660,8 @@ body, .tabcontentWrap {
   }
   
  .tab li a {
-  min-width:20px;
   padding-left:3px;
   padding-right:3px;
-  float:left;
  }
 
  #verseOfTheDay .verse.bo {
