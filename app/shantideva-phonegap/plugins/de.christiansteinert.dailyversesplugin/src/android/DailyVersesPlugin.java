@@ -43,10 +43,10 @@ public class DailyVersesPlugin extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callbackContext) throws JSONException {
 			
-		if (Build.VERSION.SDK_INT >= 21) {
+		if (Build.VERSION.SDK_INT >= 29) {
 		    // force the nav bar to black if Android is in night mode; this is necessary on some Samsung devices which 
 		    // keep a white navigation bar even when the device in night mode
-            this.cordova.getActivity().runOnUiThread(new Runnable() {
+            ThreadUtil.runInMainThread(new Runnable() {
                 @Override
                 public void run() {
                     int currentNightMode = cordova.getActivity().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
