@@ -20,7 +20,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.os.Build;
-
+import android.content.res.Configuration; 
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 /**
  * This class is the main helper class for Android code and is directly called by Javascript
@@ -38,9 +42,32 @@ public class DailyVersesPlugin extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callbackContext) throws JSONException {
+			
+		if (Build.VERSION.SDK_INT >= 21) {
+		    // force the nav bar to black if Android is in night mode; this is necessary on some Samsung devices which 
+		    // keep a white navigation bar even when the device in night mode
+            this.cordova.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int currentNightMode = cordova.getActivity().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    if(currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                        Window window = cordova.getActivity().getWindow();
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+                        int uiOptions = window.getDecorView().getSystemUiVisibility();                
+                        uiOptions = uiOptions | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+                        uiOptions = uiOptions & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                        window.getDecorView().setSystemUiVisibility(uiOptions);
+                        
+                        window.setNavigationBarColor(Color.BLACK);                                
+                    }
+                }
+			});
+        }
+        
 		/**
 		 * The saveConfig action expects only a single object as parameter. This
-		 * object must have the following structure:
+		 * object must have the following structure:0x00000010  
 		 * 
 		 * <pre>
 		 * { messageEnabled:<boolean, messageHour:<int>, messageMinute:<int>, uiLanguage:<string>, textLanguage:<string>, textLanguage2:<string>  }

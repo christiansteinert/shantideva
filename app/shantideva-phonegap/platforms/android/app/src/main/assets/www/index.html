@@ -496,6 +496,8 @@ UI = {
       uiLang = 'en';
     }
     var verseOfTheDayTxt = UI.getText("Verse of the Day");
+    verseOfTheDayTxt = verseOfTheDayTxt.replace(/&shy;/g, ''); 
+    verseOfTheDayTxt = verseOfTheDayTxt.replace(/[^;]*;/g, ' '); // replace any HTML entities with spaces
     var settings = {
       uiLanguage: uiLang,
       fontSize: $('#fontSize').val(),

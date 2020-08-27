@@ -51,5 +51,7 @@
     </platform>
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
+    <preference name="AndroidXEnabled" value="true" />
+
     <plugin name="cordova-plugin-whitelist" spec="1" />
 </widget>
