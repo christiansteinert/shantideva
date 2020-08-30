@@ -3,8 +3,8 @@
 @font-face {
   font-family: 'DDC Uchen';
   src: local('DDC Uchen'),
-       url('DDC_Uchen-webfont.woff') format('woff'),
-       url('DDC_Uchen-webfont.woff2') format('woff2');
+       url('DDC_Uchen-webfont.woff2') format('woff2'),
+       url('DDC_Uchen-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -60,7 +60,18 @@ select,
   text-rendering: optimizeLegibility;
 }
 
-
+.btn.small{
+  text-indent:0;
+  padding: 0.1em 0.25em;
+  font-size:0.9em;
+}
+#favoritesTab .btn {
+  margin-right:0.4em;
+}
+.ar #favoritesTab .btn {
+  margin-right:0;
+  margin-left:0.4em;
+}
 
 .likeBtn {
  display: inline-block;

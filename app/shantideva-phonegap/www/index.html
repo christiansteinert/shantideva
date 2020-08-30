@@ -730,6 +730,10 @@ UI = {
   
   jumpToVerseOfTheDay:function() {
     var verseInfo = DATA.getVerseOfTheDay(1);
+    this.jumpToVerse(verseInfo);
+  },
+
+  jumpToVerse:function(verseInfo) {
     this.showChapter(verseInfo.chapter);
     this.openTab('textTab');
     
@@ -737,6 +741,7 @@ UI = {
     var verseDom = $(verseId);
     this.scrollElementIntoView($('#textTab')[0], verseDom[0], -8);
   },
+
   
   updateVerseOfTheDay:function() {
     var verseInfo = DATA.getVerseOfTheDay(1);
@@ -828,11 +833,13 @@ UI = {
             htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
             if(lang2 && DATA.verses2.length > i) {
               var verse2=DATA.verses2[i];
-              htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verse2.verseText + '</div>';
+              var verseText2 = DATA.getVerseText(verse2);
+              htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verseText2 + '</div>';
             }
             if(lang3 && DATA.verses3.length > i) {
               var verse3=DATA.verses3[i];
-              htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verse3.verseText + '</div>';
+              var verseText3 = DATA.getVerseText(verse3);
+              htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verseText3 + '</div>';
             }
             htmlCode += '<div class="verseSpacer"></div>';
           }
@@ -881,18 +888,28 @@ UI = {
             htmlCode += '<div><h1 class="'+cssClass3+'" lang="'+lang3+'">'+DATA.chaptersNames3[verse.chapter]+ '</h1></div>';
           }
           lastShownChapterTitle = verse.chapter;
-          titlesCount++;
+          titlesCount++; 
         }
       
-        var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr) ;
-        htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
+
+        var verseText = DATA.getVerseText(verse);
+        var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr);
+        var jumpBtn = '<a href="javascript:void(0)" onclick="UI.jumpToVerse(DATA.verses['+i+'])" class="btn small" title="'+this.getText('Jump to this verse in the text.')+'">'+verse.chapter+':'+verse.nr+'</a>';
+        var verseWithButtons = verseText.replace(/<\/p>$/,likeBtn+'</p>');
+        verseWithButtons = verseWithButtons.replace(/<p>/,'<p>'+jumpBtn);
+        
+        htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verseWithButtons + '</div>';
         if(lang2 && DATA.verses2.length > i) {
           var verse2=DATA.verses2[i];
-          htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verse2.verseText + '</div>';
+          var verseText2 = DATA.getVerseText(verse2);
+          //verseText2 = verseText2.replace(/<p>/,'<p>'+jumpBtn);
+          htmlCode+='<div class="verse '+cssClass2+'" lang="'+lang2+'" id="verse'+verse.totalNr+'b">' + verseText2 + '</div>';
         }
         if(lang3 && DATA.verses3.length > i) {
           var verse3=DATA.verses3[i];
-          htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verse3.verseText + '</div>';
+          var verseText3 = DATA.getVerseText(verse3);
+          //verseText3 = verseText3.replace(/<p>/,'<p>'+jumpBtn);
+          htmlCode+='<div class="verse '+cssClass3+'" lang="'+lang3+'" id="verse'+verse.totalNr+'c">' + verseText3 + '</div>';
         }
         htmlCode += '<div class="verseSpacer"></div>';
       }
@@ -901,6 +918,7 @@ UI = {
     htmlCode+='</div>';
     var $favoritesTab = $('#favoritesTab');
     $favoritesTab.html(htmlCode);
+    $('#favoritesTab .btn').button();
     this.scrollElementToTop($favoritesTab[0]);
   },
     
