@@ -11,11 +11,11 @@
 
 .uilang-ar{direction: rtl;}
 #infoTab{direction:ltr;}
+.uilang-bo #infoTab p.bo{font-size:1.3em;}
 #uiLanguage-menu, #uiLanguage-button, #textLanguage-menu, #textLanguage-button, #textLanguage2-menu, #textLanguage2-button {direction: ltr;}
 #verseOfTheDay a{
  margin: 0.2em 0;
 }
-
 
 #verseOfTheDay .verse p {
  padding:0; 
@@ -217,7 +217,6 @@ body.dark {
 .footer .tabs{display:table; margin:auto;}
 .footer .tab{display:table-row}
 .footer .tab li{display:table-cell;width:auto}
- 
 
 .header{
  position:absolute;
@@ -368,6 +367,26 @@ body.dark {
  text-align:right;
 }
 
+.uilang-bo .header h1 {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight:normal;
+}
+
+.uilang-bo #homeTab .btn {
+  font-size:1.3em;
+}
+
+.uilang-bo .tab li a {
+  font-size: 1em;
+  padding: 1.9em 0.5em 0 0.5em;
+}
+
+.uilang-bo .tablinks {
+  background-size: 1.5em 1.5em;
+  font-weight:normal;
+}
+
 .center{
  text-align:center;
 }
@@ -395,6 +414,22 @@ body.dark {
  font-size:0.9em;
  color:#ccc;
  padding:0.3em 0 0.7em 0;
+}
+.bo .smallFormInfo{
+  font-size: 1.1em;
+}
+#settingsTab.bo {
+  font-size: 1.2em;
+}
+.bo legend{
+  font-size: 1.1em;
+}
+.bo label {
+  font-size: 1.2em;
+  font-weight: normal;
+}
+.bo legend{
+  font-size: 1.2em;
 }
 #settingsTab .ui-checkboxradio-label{
  padding-left:0.3em;    
@@ -624,6 +659,11 @@ body, .tabcontentWrap {
  }
 }
 
+@media only screen and (max-width: 650px) { 
+ .uilang-bo .tab, .uilang-bo .footer,.uilang-bo .tab .li{height:4em}
+ .uilang-bo .tab li a{height:4.3em; padding-left: 0.2em; padding-right: 0.1em; min-width:3em;}
+}
+
 @media only screen and (max-width: 400px) { 
 /* workaround for Android 4.4  bug */
  .android4 #settingsTab table, .android4 #settingsTab fieldset, .android4 #settingsTab form, .android4 #settingsTab div{  
@@ -663,6 +703,15 @@ body, .tabcontentWrap {
  #verseOfTheDay .verse.ru {
   font-size:1.25em;
  }
+ 
+ .uilang-bo .tab li a {
+  font-size: 0.9em;
+  padding: 1.9em 0.5em 0 0.5em;
+ } 
+
+ .uilang-bo .header h1 {font-size: 1.15em;line-height:1.1em;}
+ .uilang-bo .tab, .uilang-bo .footer,.uilang-bo .tab .li{height:4.5em}
+ .uilang-bo .tab li a{height:4.8em; padding-left: 0.2em; padding-right: 0.1em; min-width:3em;} 
 }
 
 @media only screen and (max-width: 300px) {

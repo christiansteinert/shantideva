@@ -206,7 +206,7 @@ LANG['en']={
   "24:00":"12 pm (24:00)",   
   "Settings":"Set&shy;tings",
   
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center"  lang="en" class="en">'+LOGO+'<p>'
     + LANG_ABOUT_EN
     +'</p>'
     + LANG_TRANSLATIONS
@@ -223,7 +223,7 @@ LANG['en']={
 
 LANG_ABOUT_RU = 'Приложение каждый день показывает по одной строфе из текста Шантидевы «Вступая на путь поведения бодхисаттвы» («Бохисаттва-чарья-аватара»), а также в нём можно прочитать весь текст. «Вступая на путь поведения бодхисаттвы» – крайне практичный и вдохновляющий буддийский текст, в котором рассматриваются все аспекты буддийского пути. Шантидева был выдающимся индийским буддийским мастером 8-го века. Сохранились два его текста – «Бодхичарья-аватара», которому посвящено это приложение, и «Шикша-самуччая» («Собрание практик»). Оба текста по-прежнему широко используются, особенно «Бодхичарья-аватара», ставший одним из самых ценных и часто преподаваемых текстов тибетской традиции.'
     +'</p>'
-    +'<p><strong>Вы можете найти '
+    +'<p lang="ru" class="ru"><strong>Вы можете найти '
     +'<a href="https://studybuddhism.com/ru/tibetskiy-buddizm/klassicheskie-teksty/teksty-sutry/vstupaya-na-put-povedeniya-bodhisattvy" target="_blank" onclick="window.open(\'https://studybuddhism.com/ru/tibetskiy-buddizm/klassicheskie-teksty/teksty-sutry/vstupaya-na-put-povedeniya-bodhisattvy\',\'_system\');return false;">'
     +'этот текст'
     +'</a> '
@@ -231,7 +231,7 @@ LANG_ABOUT_RU = 'Приложение каждый день показывает
     +'<a href="https://studybuddhism.com/ru" target="_blank" onclick="window.open(\'https://studybuddhism.com/ru\',\'_system\');return false;">'
     +'studybuddhism.com'
     +'</a></strong></p>'
-    +'<p>'
+    +'<p lang="ru" class="ru">'
     +'Studybuddhism.com – портал, посвящённый всестороннему изучению буддизма и доступный на 31 языке. Если это приложение показалось вам полезным, пожалуйста, рассмотрите возможность пожертвования на нужды сайта studybuddhism.com, чтобы поддержать его работу.';
 
 LANG['ru']={
@@ -277,7 +277,7 @@ LANG['ru']={
 "Shantideva Translations":"Переводы Шантидевы",
 "Commentaries on Shantideva":"Комментарии к текстам Шантидевы",
   
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center" lang="ru" class="ru">'+LOGO+'<p lang="ru" class="ru">'
     + LANG_ABOUT_RU
     +'</p>'
     + LANG_TRANSLATIONS
@@ -289,7 +289,7 @@ LANG['ru']={
 
 LANG_ABOUT_PT = 'Este aplicativo exibe um verso por dia do texto de Shantideva "Engajando-se no Comportamento do Bodhisattva" (Bodhisattvacharyavatara) e permite a leitura de todo o texto. "Engajando-se no Comportamento do Bodhisattva" (alt. O Caminho do Bodisatva) é um texto extremamente prático e inspirador que cobre todos os aspectos do caminho budista. Shantideva foi um grande mestre indiano que viveu durante o século VIII dC. Dois de seus textos sobreviveram - o Bodhicharyavatara (exibido neste aplicativo) e o Shikshasamuccaya ("Compêndio de Treinamentos"). Ambos são usados até hoje, e e o Bodhicharyavatara é um dos textos mais estimados e mais ensinados na tradição tibetana.'
     +'</p>'
-    +'<p><strong>Você encontra '
+    +'<p lang="pt" class="pt"><strong>Você encontra '
     +'<a href="https://studybuddhism.com/pt/budismo-tibetano/textos-originais/textos-dos-sutras/engajando-se-no-comportamento-de-um-bodhisattva" target="_blank" onclick="window.open(\'https://studybuddhism.com/pt/budismo-tibetano/textos-originais/textos-dos-sutras/engajando-se-no-comportamento-de-um-bodhisattva\',\'_system\');return false;">'
     +'este'
     +'</a> '
@@ -297,7 +297,7 @@ LANG_ABOUT_PT = 'Este aplicativo exibe um verso por dia do texto de Shantideva "
     +'<a href="https://studybuddhism.com/pt" target="_blank" onclick="window.open(\'https://studybuddhism.com/pt\',\'_system\');return false;">'
     +'studybuddhism.com'
     +'</a></strong>, em diversos idiomas.</p>'
-    +'<p>'
+    +'<p lang="pt" class="pt">'
     +'Studybuddhism.com é um site que disponibiliza um vasto material sobre budismo em 31 idiomas. Se você achar este aplicativo útil, por favor, considere fazer uma doação no site studybuddhism.com para apoiar nossos extensos esforços.';
 
 LANG['pt']={
@@ -343,7 +343,7 @@ LANG['pt']={
 "Shantideva Translations":"Traduções de Shantideva",
 "Commentaries on Shantideva":"Comentários sobre Shantideva",
   
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center" lang="pt" class="pt">'+LOGO+'<p lang="pt" class="pt">'
     + LANG_ABOUT_PT
     +'</p>'
     + LANG_TRANSLATIONS
@@ -356,7 +356,7 @@ LANG['pt']={
 
 LANG_ABOUT_ES = 'Esta App muestra un verso cada día del texto de Shantideva “Involucrarse en el comportamiento del bodisatva” (Bodhisattvacharyavatara) y permite la lectura del texto completo. “Involucrarse en el comportamiento del bodisatva” es un texto budista increíblemente práctico e inspirador que cubre todos los aspectos del camino budista. Shantideva fue un gran maestro budista indio que vivió durante el siglo VIII e. c. Sobreviven dos de sus textos: el Bodhicharyavatara (el texto que se muestra en esta app) y el Shikshasamuccaya (“Compendio de entrenamientos”). Ambos textos han seguido en uso hasta el presente, en especial el Bochicharyavatara, que es uno de los textos de la tradición tibetana más atesorados y más frecuentemente usados en las enseñanzas.'
     +'</p>'
-    +'<p><strong>Se puede encontrar '
+    +'<p lang="es" class="es"><strong>Se puede encontrar '
     +'<a href="https://studybuddhism.com/en/tibetan-buddhism/original-texts/sutra-texts/engaging-in-bodhisattva-behavior" target="_blank" onclick="window.open(\'https://studybuddhism.com/en/tibetan-buddhism/original-texts/sutra-texts/engaging-in-bodhisattva-behavior\',\'_system\');return false;">'
     +'este texto'
     +'</a> '
@@ -364,7 +364,7 @@ LANG_ABOUT_ES = 'Esta App muestra un verso cada día del texto de Shantideva “
     +'<a href="https://studybuddhism.com/es" target="_blank" onclick="window.open(\'https://studybuddhism.com/es\',\'_system\');return false;">'
     +'studybuddhism.com'
     +'</a></strong></p>'
-    +'<p>'
+    +'<p lang="es" class="es">'
     +'Studybuddhism.com es un sitio web que pone a su disposición material completo sobre budismo en 31 idiomas. Si encuentra útil esta app, por favor considere la posibilidad de hacer una donación al sitio web studybuddhism.com como apoyo a sus vastos esfuerzos.';
 
 LANG['es']={
@@ -434,7 +434,7 @@ LANG['es']={
 "23:00":"11 p. m. (23:00)",
 "24:00":"12 p. m. (24:00) ",
   
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center" lang="es" class="es">'+LOGO+'<p lang="es" class="es">'
     + LANG_ABOUT_ES
     +'</p>'
     + LANG_TRANSLATIONS
@@ -521,7 +521,7 @@ LANG['ar']={
   "23:00":"11 pm (23:00)",
   "24:00":"12 pm (24:00)",
     
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center"  lang="ar" class="ar">'+LOGO+'<p lang="ar" class="ar">'
     + LANG_ABOUT_AR
     +'</p>'
     + LANG_TRANSLATIONS
@@ -563,14 +563,14 @@ LANG['de']={
     "Notifications can only be displayed you when you are online.":"Benachrichtigungen werden nur angezeigt, während Sie online sind.",
     "Cancel":"Abbrechen",
     "Save":"Speichern",
-    "About_Text":'<div style="text-align:center">'+LOGO+'</p>'
-    +'<p>Diese App zeigt täglich einen Vers aus Shantideva\'s buddhistischem Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text. Dieser inspirierede und überaus praktische Text beleuchtet alle Aspekte des buddhistischen Pfades.'
+    "About_Text":'<div style="text-align:center" lang="de" class="de">'+LOGO+'</p>'
+    +'<p lang="de" class="de">Diese App zeigt täglich einen Vers aus Shantideva\'s buddhistischem Text "Eintritt in das Verhalten eines Bodhisattvas" (Bodhisattvacharyavatara) und bietet Zugriff auf den gesamten Text. Dieser inspirierede und überaus praktische Text beleuchtet alle Aspekte des buddhistischen Pfades.'
     +'Shantideva war ein großer buddhistischer Meister, der während des 8. Jahrhunderts unserer Zeitrechnung in Indien lebte. Zwei seiner Texte sind erhalten geblieben - das Bodhicharyavatara (der Text, welcher in dieser App enthalten ist) sowie das '
     +'Shikshasamuccaya ("Kompendium der Schulungen"). Beide Texte werden bis zum heutigen Tag gelesen und studiert und insbesondere das Bodhicharyavatara ist einer der am häufigsten gelehrten ' 
     +'Texte innerhalb der tibetisch-buddhistischen Tradition.'
     +'</p>'
-    +'<p><strong><a href="https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes" target="_blank" onclick="window.open(\'https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes\',\'_system\');return false;">Dieser Text</a> und umfangreichere weitere Materialien sind in zahlreichen Sprachen auf <a href="https://studybuddhism.com/de" target="_blank" onclick="window.open(\'https://studybuddhism.com/de\',\'_system\');return false;">studybuddhism.com</a> verfügbar.</strong></p>'
-    +'<p>Studybuddhism.com ist eine Website, die umfassendes buddhistisches Material Buddhism in 31 verschiedenen Sprachen zur Verfügung stellt. Falls Sie diese App hilfreich finden, dann erwägen Sie bitte eine Spende auf der Website von studybuddhism.com um dieses umfangreiche Projekt zu unterstützen.</p>'
+    +'<p lang="de" class="de"><strong><a href="https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes" target="_blank" onclick="window.open(\'https://studybuddhism.com/de/tibetischer-buddhismus/originaltexte/sutra-texte/eintritt-in-das-verhalten-eines-bodhisattvas/die-vorzuege-des-erleuchtungsgeistes\',\'_system\');return false;">Dieser Text</a> und umfangreichere weitere Materialien sind in zahlreichen Sprachen auf <a href="https://studybuddhism.com/de" target="_blank" onclick="window.open(\'https://studybuddhism.com/de\',\'_system\');return false;">studybuddhism.com</a> verfügbar.</strong></p>'
+    +'<p lang="de" class="de">Studybuddhism.com ist eine Website, die umfassendes buddhistisches Material Buddhism in 31 verschiedenen Sprachen zur Verfügung stellt. Falls Sie diese App hilfreich finden, dann erwägen Sie bitte eine Spende auf der Website von studybuddhism.com um dieses umfangreiche Projekt zu unterstützen.</p>'
     +LANG_TRANSLATIONS
     +'<hr />'
     + LANG_FONTS
@@ -581,13 +581,13 @@ LANG['de']={
 
 LANG_ABOUT_BO= 'བཀོལ་སྤྱོད་མཉེན་ཆས་འདིས་སློབ་དཔོན་ཆེན་པོ་ཞི་བ་ལྷས་མཛད་པའི་ “བྱང་ཆུབ་སེམས་དཔའི་སྤྱོད་པ་ལ་འཇུག་པ་”ཞེས་པའི་གཞུང་ནས་ཉིན་རེ་བཞིན་ཚིགས་སུ་བཅད་པ་གཅིག་སྟོན་པའི་སྒོ་ནས་གཞུང་ཆ་ཚང་བ་ཀློག་ཏུ་འཇུག་གི་ཡོད། སྤྱོད་འཇུག་ལྟ་བུར་མཚོན་ན། ཁྱད་པར་དུ་འཕགས་ཤིང་ཁ་ཡོད་ལག་ཡོད་ཀྱི་ཉམས་ལེན་དང་བློ་སྤོབས་སྤེལ་བའི་ནང་པའི་ལམ་གྱི་རིམ་པའི་ཁྱད་རྣམ་ཆ་ཚང་བའི་གཞུང་ལུགས་ཤིག་ཡིན་པ་རེད། ཞི་བ་ལྷ་ནི་རྒྱ་གར་གྱི་སློབ་དཔོན་ཆེན་པོ་ཞིག་ཡིན་པ་དང་ཁོང་དུས་རབས་ ༨ པའི་ནང་བྱོན། ད་ལྟ་ང་ཚོས་མཇལ་རྒྱུ་ཡོད་པའི་ཁོང་གི་གཞུང་ལུགས་གཉིས་ཏེ། བཀོལ་སྤྱོད་མཉེན་ཆས་འདིའི་ནང་བསྟན་པའི་སྤྱོད་འཇུག་དང་བསླབ་པ་ཀུན་ལས་བཏུས་པ་རེད། གཞུང་དེ་གཉིས་ཀ་ད་ལྟའང་སློབ་གཉེར་བྱེད་ཀྱི་ཡོད་པ་དང་དམིགས་བསལ་སྤྱོད་འཇུག་ནི་བོད་ཀྱི་སྲོལ་རྒྱུན་གྱི་ནང་གཙིགས་ཆེ་ཤོས་བརྩི་བ་དང་ཡང་ནས་ཡང་དུ་སློབ་འཁྲིད་བྱས་དང་བྱེད་མུས་ཀྱི་གཞུང་ལུགས་ནང་གི་གཅིག་ཆགས་ཀྱི་ཡོད།'
     +'</p>'
-    +'<p><strong>ཁྱེད་ཀྱིས་“'
+    +'<p lang="bo" class="bo"><strong>ཁྱེད་ཀྱིས་“'
     +'<a href="https://studybuddhism.com/bo/bod-kyi-nang-chos/ma-dpe-khag/mdo-i-dpe-cha/byang-chub-sems-dp-i-spyod-pa-la-jug-pa" target="_blank" onclick="window.open(\'https://studybuddhism.com/bo/bod-kyi-nang-chos/ma-dpe-khag/mdo-i-dpe-cha/byang-chub-sems-dp-i-spyod-pa-la-jug-pa\',\'_system\');return false;">'
     +'ནང་ཆོས་སྦྱོངས་ (studybuddhism.com)'
     +'</a>'
     +'“ཞེས་པའི་དྲྭ་ཚིགས་བརྒྱུད་ནས་གཞུང་འདི་དང་སྐད་རིགས་སྣ་ཚོགས་པའི་ནང་ནང་པའི་རྒྱུ་ཆའི་རིགས་ཧ་ཅང་མང་པོ་རག་ཐུབ།'
-    +'</p>'
-    +'<p>'
+    +'</strong></p>'
+    +'<p lang="bo" class="bo">'
     +'“ནང་ཆོས་སྦྱོངས་ (studybuddhism.com)“ཞེས་པ་ནི་སྐད་རིགས་མི་འདྲ་བ་ ༣༡ ཚང་བའི་ནང་ཆོས་ཀྱི་སྐོར་ལ་རྒྱུ་ཆ་ཕུན་སུམ་ཚོགས་པ་མ་ཚང་བ་མེད་པའི་དྲྭ་ཚིགས་ཤིག་ཡིན་པ་རེད། གལ་ཏེ་ཁྱེད་ཀྱིས་བཀོལ་སྤྱོད་མཉེན་ཆས་འདི་ཕན་ཐོགས་ཅན་དུ་མཐོང་ན། ཁོང་ཚོའི་རྒྱ་ཆེ་བའི་རྩོལ་བར་རྒྱབ་སྐྱོར་མཚོན་ཆེད་དྲྭ་ཚིགས་འདིར་ཞལ་འདེབས་གནང་རོགས་ཞུ།';
 
 LANG['bo']={
@@ -656,7 +656,7 @@ LANG['bo']={
 "22:00":"10 pm (22:00)",
 "23:00":"11 pm (23:00)",
 "24:00":"12 pm (24:00) ",
-  "About_Text":'<div style="text-align:center">'+LOGO+'<p>'
+  "About_Text":'<div style="text-align:center" lang="bo" class="bo">'+LOGO+'<p lang="bo" class="bo">'
     + LANG_ABOUT_BO
     +'</p>'
     + LANG_TRANSLATIONS
