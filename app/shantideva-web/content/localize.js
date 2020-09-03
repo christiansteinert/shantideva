@@ -599,7 +599,7 @@ LANG['bo']={
 "About":"ང་ཚོའི་སྐོར།",
 "Settings":"སྒྲིག་སྟངས།",
 "Full Text":"གཞུང་ཆ་ཚང་།",
-"Chapter %1, Verse %2":"ལེའུ་ ༡། ཚིགས་བཅད། ༢",
+"Chapter %1, Verse %2":"ལེའུ་ %1། ཚིགས་བཅད་ %2།",
 "About This App":"བཀོལ་སྤྱོད་མཉེན་ཆས་འདིའི་སྐོར།",
 "Jump to this verse in the text.":"ཚིགས་བཅད་འདི་ལ་ཐད་ཀར་གཟིགས།",
 "Language of Shantideva's text":"སློབ་དཔོན་ཞི་བ་ལྷའི་གཞུང་གི་སྐད་ཡིག",
