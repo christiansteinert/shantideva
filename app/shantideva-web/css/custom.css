@@ -374,7 +374,9 @@ body.dark {
 }
 
 .uilang-bo #homeTab .btn {
-  font-size:1.3em;
+  font-size: 1.3em;
+  line-height: 120%;
+  padding-top: 0;
 }
 
 .uilang-bo .tab li a {
@@ -662,6 +664,9 @@ body, .tabcontentWrap {
 @media only screen and (max-width: 650px) { 
  .uilang-bo .tab, .uilang-bo .footer,.uilang-bo .tab .li{height:4em}
  .uilang-bo .tab li a{height:4.3em; padding-left: 0.2em; padding-right: 0.1em; min-width:3em;}
+ #settingsTab td {min-width:35vw;}
+ #settingsTab td *{max-width:45vw;}
+ #settingsTab select{width:45vw;}
 }
 
 @media only screen and (max-width: 400px) { 
@@ -683,7 +688,6 @@ body, .tabcontentWrap {
   
   #settingsTab .ui-button{padding-left:0.1em;padding-right:0.1em;}
     
-  #settingsTab td * { max-width:45vw; }
 
   #homeTabTitle {
     padding-top:0.2em;   
