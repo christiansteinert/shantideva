@@ -42,12 +42,18 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <icon src="apple_icon180.png" />
+        <icon height="120" src="apple_icon120.png" width="120" />
+        <icon height="152" src="apple_icon152.png" width="152" />
+        <icon height="167" src="apple_icon167.png" width="167" />
+        <icon height="180" src="apple_icon180.png" width="180" />
+
         <!--<preference name="SplashScreenDelay" value="0" />-->
         <feature name="SplashScreen">
             <param name="ios-package" value="CDVSplashScreen" />
         </feature>        
         <splash src="www/content/info-logo.png" />
+
+        
     </platform>
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />

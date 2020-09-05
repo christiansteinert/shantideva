@@ -39,7 +39,10 @@
     <allow-intent href="geo:*" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
-    <icon src="apple_icon180.png" />
+    <icon height="120" src="apple_icon120.png" width="120" />
+    <icon height="152" src="apple_icon152.png" width="152" />
+    <icon height="167" src="apple_icon167.png" width="167" />
+    <icon height="180" src="apple_icon180.png" width="180" />
     <splash src="www/content/info-logo.png" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
@@ -56,7 +59,5 @@
     <preference name="PaginationMode" value="unpaginated" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
-    <feature name="DailyVersesPlugin">
-        <param name="ios-package" value="DailyVersesPlugin" />
-    </feature>
+    <preference name="AndroidXEnabled" value="true" />
 </widget>
