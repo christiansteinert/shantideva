@@ -9,7 +9,10 @@
   font-style: normal;
 }
 
-.uilang-ar{direction: rtl;}
+.uilang-ar{direction: rtl}
+.uilang-ar #footer, .uilang-ar #header{font-size:1.2em}
+.uilang-ar #settingsTab, .uilang-ar #settingsTab .smallFormInfo, #infoTab .ar{font-size:1.1em}
+
 #infoTab{direction:ltr;}
 .uilang-bo #infoTab p.bo{font-size:1.3em;}
 #uiLanguage-menu, #uiLanguage-button, #textLanguage-menu, #textLanguage-button, #textLanguage2-menu, #textLanguage2-button {direction: ltr;}
