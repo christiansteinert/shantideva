@@ -787,10 +787,29 @@ UI = {
       htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
     }
     
+    if(localStorage.getItem('developer')) {
+      htmlCode += '<p style="height:500px;">';
+      htmlCode += '<p><input id="setVerseNr" /><a href="#" onclick=\'location.href=location.pathname+"?verse="+$("#setVerseNr").val()\'>Go to Verse</p>';
+    }
+    
     htmlCode += '</div></div></div>';
     $('#homeTab').html(htmlCode);
     
     $('#homeTab a.btn').button();
+    
+    $('#homeTabTitle h1').on('click', function(){ UI.titleClick() });
+  },
+  
+  titleClick:function() {
+    if(!UI._clicked )
+      UI._clicked = 1;
+    else 
+      UI._clicked += 1;
+    
+    if(UI._clicked >= 10) {
+      localStorage.setItem('developer', 'true');
+      window.location.reload();
+    }
   },
 
   showChapter:function(chapterNr) {
@@ -829,7 +848,7 @@ UI = {
           var verse=DATA.verses[i];
           if(verse.chapter == chapterNr) {
             var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr);
-            
+             
             htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
             if(lang2 && DATA.verses2.length > i) {
               var verse2=DATA.verses2[i];
