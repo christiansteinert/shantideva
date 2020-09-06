@@ -8,5 +8,25 @@
             </intent-filter>
         </activity>
         <meta-data android:name="ic_notify" android:resource="@drawable/ic_notify" />
+        <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.BootupReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver">
+            <intent-filter>
+                <action android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
+    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:xlargeScreens="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 </manifest>
