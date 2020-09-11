@@ -8,110 +8,135 @@ if ( cordova.platformId == 'ios' ) {
     
     exports.testNotification = function(success, error) {
         // do nothing 
+        console.log('testNotification');
     };  
 
     exports.setAlarm = function(settings, success, error) {
-      setTimeout(function() {
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
         var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
+        var pushRegistrationId = localStorage.getItem("apnsId")|| ''; // get last known apns ID
         var appMessageEnabled = settings.messageEnabled;
         var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
+        var payload = {};
+        var payloadStr = '';
+        var url = '';
 
         if( !cloudMessageEnabled && !settings.messageEnabled ) {
             // Push message is turned off and the cloud knows that.
             // We can abort here without having to request a push message token because we don't care whether the token or anything else has changed
             return;
         }
-        
-        // use the phonegup-plugin-push plugin to activate the push functionality of ios and request a push token for this device
-        var push = PushNotification.init({
-            ios: {
-                alert: "true",
-                badge: "false",
-                sound: "false"
+
+        if(settings.messageEnabled) {
+            // messages are enabled. Subscribe this device to our service.                    
+            url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/register';
+            var timezoneOffset = (new Date).getTimezoneOffset();
+            var notificationTimeGmt = settings.messageHour * 60 + settings.messageMinute + timezoneOffset;
+            
+            if ( notificationTimeGmt >= ( 24 * 60 )  )
+                notificationTimeGmt = notificationTimeGmt - ( 24 * 60 );
+            
+            if ( notificationTimeGmt < 0  )
+                notificationTimeGmt = notificationTimeGmt + ( 24 * 60 );
+
+            payload = {
+                "devicetoken": pushRegistrationId,
+                "timezone_offset": String(-timezoneOffset),
+                "notification_time": String(notificationTimeGmt),
+                "language": settings.textLanguage,
+                "ui_language": settings.uiLanguage
+            };
+            payloadStr = JSON.stringify(payload);
+            
+            if( payloadStr === cloudSettings ) {
+                // -> the current push settings are already known to the cloud. We do not need to send a subscription / unsubsription request 
+                return;
             }
-        });
+            
+        } else {
+            // messages are disabled. Unsubscribe this device from our service
+            url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/unregister';
+            payload = {
+                "devicetoken": pushRegistrationId
+            };
+            payloadStr = JSON.stringify(payload);
+        }
 
-        push.on('registration', function(data) {
-            // -> the message enablement setting or the device token has changed. Notify the cloud about this
-            var callSuccessful = false;
-            var url;
-            var payload;
-            var payloadStr;
- 
-            if(settings.messageEnabled) {
-                // messages are enabled. Subscribe this device to our service.                    
-                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/register';
-                var timezoneOffset = (new Date).getTimezoneOffset();
-                var notificationTimeGmt = settings.messageHour * 60 + settings.messageMinute + timezoneOffset;
-                
-                if ( notificationTimeGmt >= ( 24 * 60 )  )
-                    notificationTimeGmt = notificationTimeGmt - ( 24 * 60 );
-                
-                if ( notificationTimeGmt < 0  )
-                    notificationTimeGmt = notificationTimeGmt + ( 24 * 60 );
-                
-
-                payload = {
-                    "devicetoken":data.registrationId,
-                    "timezone_offset" : String(-timezoneOffset),
-                    "notification_time" : String(notificationTimeGmt),
-                    "language": settings.textLanguage,
-                    "ui_language": settings.uiLanguage
-                };
-                payloadStr = JSON.stringify(payload);
-                
-                if( payloadStr === cloudSettings ) {
-                    // -> the current push settings are already known to the cloud. We do not need to send a subscription / unsubsription request 
-                    return;
-                }
-                            
-                
-            } else {
-                // messages are disabled. Unsubscribe this device from our service
-                url = 'https://skbmk395bj.execute-api.eu-central-1.amazonaws.com/v1/device/unregister';
-                payload = {
-                    "devicetoken": data.registrationId
-                };
-                payloadStr = JSON.stringify(payload);
-            }
-
-            // -> send a request to the device registration service
+        if(pushRegistrationId){
+            // do an immediate config update on the server with the last known push registration ID
+            // this saves time in case the user closes the app right after.
+            console.log('sending preliminary config update.');
             $.ajax({
                 method:'POST',
                 url:url, 
                 data: payloadStr,
                 contentType: 'application/json',
                 async: false
-            }).done(function() {
-                // Call was successful. Remember that this configuration is the one that was also sent to the cloud
-                localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
-                localStorage.setItem("cloudSettings", payloadStr);
-                if(success) {
-                    success();
-                }
-            }).fail(function() {
-                // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
-                window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
-                if(error) {
-                    error();
+            });
+            console.log('done.');
+        }
+
+        setTimeout(function() {
+            // use the phonegup-plugin-push plugin to activate the push functionality of ios and request a push token for this device
+            var push = PushNotification.init({
+                ios: {
+                    alert: "true",
+                    badge: "false",
+                    sound: "false"
                 }
             });
-        });
-      },10000);
+
+            // Then get the latest push registration ID in case it has changed and do another call 
+            // asynchronously to the server just in case.
+            push.on('registration', function(data) {
+
+                // -> the message enablement setting or the device token has changed. Notify the cloud about this
+                var callSuccessful = false;
+                localStorage.setItem("apnsId", data.registrationId);
+                payload.devicetoken = data.registrationId;
+                payloadStr = JSON.stringify(payload);
+                
+                console.log(url);
+                console.log(payloadStr);
+                console.log('sending actual config update');
+
+                // -> send a request to the device registration service
+                $.ajax({
+                    method:'POST',
+                    url:url, 
+                    data: payloadStr,
+                    contentType: 'application/json',
+                    async: true
+                }).done(function() {
+                    // Call was successful. Remember that this configuration is the one that was also sent to the cloud
+                    localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
+                    localStorage.setItem("cloudSettings", payloadStr);
+                    console.log('success');
+                    if(success) {
+                        success();
+                    }
+                }).fail(function() {
+                    // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
+                    console.log('error');
+                    window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
+                    if(error) {
+                        error();
+                    }
+                });
+            });
+        }, 1000);
     };
 
     exports.testTimer = function(success, error) {
         // do nothing 
+        console.log('testTimer');
+
     };
 
     exports.saveSettings = function(settings, success, error) {
         localStorage.getItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
-        exports.setAlarm(settings); // register again with the server
-        if(success) {
-            success();
-        }
+        exports.setAlarm(settings, success, error); // register again with the server
     };
 
     exports.loadSettings = function(success, error) {

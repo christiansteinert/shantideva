@@ -53,14 +53,18 @@ CONFIG = {
   },
   
   isIOS:function() {
+    if(window.cordova && window.cordova.platformId === 'ios')
+      return true;
+
     if ( (/(iPad|iPhone|iPod)/g.test(navigator.platform)) ||
          (/Mac/g.test(navigator.userAgent) && "ontouchend" in document) )
        return true;
         
     if(/(iPad|iPhone|iPod)/g.test(navigator.userAgent))        
       return true;
-       
-    return false
+    
+    return false;
+
   },
 
   /** get UI language */
@@ -315,13 +319,13 @@ CONFIG = {
   /* save all settings  
    * attributes of the settings object: {messageEnabled:true, messageHour:'10', messageMinute:00, uiLanguage:'en', textLanguage:'en', textLanguage2:''}
    */ 
-  saveSettings:function(settings) {
+  saveSettings:function(settings, success, error) {
     for(var setting in settings) {
       // save all configuration properties
       localStorage.setItem(setting, settings[setting] );
     }
     
-    this.getCordovaPlugin().saveSettings(settings);
+    this.getCordovaPlugin().saveSettings(settings, success, error);
     
     // update locally cached settings in this class as well
     this._language = settings.uiLanguage;
@@ -599,7 +603,7 @@ UI = {
   
   btnSave:function() {
     var settings = this.getSettingsFromUI();
-    CONFIG.saveSettings( settings );
+    CONFIG.saveSettings(settings);
     location.reload();
   },
 
@@ -1328,7 +1332,7 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
         
         <fieldset class="hideForWeb">
         <legend>{{Notification Messages}}</legend>
-        <p class="smallFormInfo">{{Enable the options below the see the verse of the day as a notification message.}}</p>
+        <p class="smallFormInfo">{{Enable the options below to see the verse of the day as a notification message.}}</p>
         <form>
         <table width="100%">
         <tr>

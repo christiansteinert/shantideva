@@ -46,6 +46,26 @@
         <icon height="152" src="apple_icon152.png" width="152" />
         <icon height="167" src="apple_icon167.png" width="167" />
         <icon height="180" src="apple_icon180.png" width="180" />
+        <icon height="1024" src="apple_icon1024.png" width="1024" />
+
+        <icon height="20" width="20" src="apple_icon20.png" />
+        <icon height="29" width="29" src="apple_icon29.png" />
+        <icon height="40" width="40" src="apple_icon40.png" />
+        <icon height="50" width="50" src="apple_icon50.png" />
+        <icon height="55" width="55" src="apple_icon55.png" />
+        <icon height="57" width="57" src="apple_icon57.png" />
+        <icon height="58" width="58" src="apple_icon58.png" />
+        <icon height="60" width="60" src="apple_icon60.png" />
+        <icon height="76" width="76" src="apple_icon76.png" />
+        <icon height="80" width="80" src="apple_icon80.png" />
+        <icon height="87" width="87" src="apple_icon87.png" />
+        <icon height="88" width="88" src="apple_icon88.png" />
+
+        <icon height="100" width="100" src="apple_icon100.png" />
+        <icon height="114" width="114" src="apple_icon114.png" />
+        <icon height="172" width="172" src="apple_icon172.png" />
+        <icon height="196" width="196" src="apple_icon196.png" />
+        <icon height="216" width="216" src="apple_icon216.png" />
 
         <!--<preference name="SplashScreenDelay" value="0" />-->
         <feature name="SplashScreen">

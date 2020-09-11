@@ -26,7 +26,7 @@
   "de.christiansteinert.dailyversesplugin": {
     "source": {
       "type": "local",
-      "path": "/home/christian/OWN/programmierung/javascript/Shantideva2/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
+      "path": "/Users/christian/Desktop/Shantideva/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
     },
     "is_top_level": true,
     "variables": {}

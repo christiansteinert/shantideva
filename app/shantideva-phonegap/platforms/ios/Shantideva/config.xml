@@ -22,6 +22,9 @@
     <feature name="PushNotification">
         <param name="ios-package" value="PushPlugin" />
     </feature>
+    <feature name="DailyVersesPlugin">
+        <param name="ios-package" value="DailyVersesPlugin" />
+    </feature>
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -43,6 +46,24 @@
     <icon height="152" src="apple_icon152.png" width="152" />
     <icon height="167" src="apple_icon167.png" width="167" />
     <icon height="180" src="apple_icon180.png" width="180" />
+    <icon height="1024" src="apple_icon1024.png" width="1024" />
+    <icon height="20" src="apple_icon20.png" width="20" />
+    <icon height="29" src="apple_icon29.png" width="29" />
+    <icon height="40" src="apple_icon40.png" width="40" />
+    <icon height="50" src="apple_icon50.png" width="50" />
+    <icon height="55" src="apple_icon55.png" width="55" />
+    <icon height="57" src="apple_icon57.png" width="57" />
+    <icon height="58" src="apple_icon58.png" width="58" />
+    <icon height="60" src="apple_icon60.png" width="60" />
+    <icon height="76" src="apple_icon76.png" width="76" />
+    <icon height="80" src="apple_icon80.png" width="80" />
+    <icon height="87" src="apple_icon87.png" width="87" />
+    <icon height="88" src="apple_icon88.png" width="88" />
+    <icon height="100" src="apple_icon100.png" width="100" />
+    <icon height="114" src="apple_icon114.png" width="114" />
+    <icon height="172" src="apple_icon172.png" width="172" />
+    <icon height="196" src="apple_icon196.png" width="196" />
+    <icon height="216" src="apple_icon216.png" width="216" />
     <splash src="www/content/info-logo.png" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
