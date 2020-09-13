@@ -1,3 +1,4 @@
 {
-    "PushKit.framework": 1
+    "PushKit.framework": 1,
+    "WebKit.framework": 2
 }

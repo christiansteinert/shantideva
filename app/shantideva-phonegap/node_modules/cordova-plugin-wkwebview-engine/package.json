@@ -1,0 +1,47 @@
+{
+  "_from": "cordova-plugin-wkwebview-engine@1.0.2",
+  "_id": "cordova-plugin-wkwebview-engine@1.0.2",
+  "_inBundle": false,
+  "_integrity": "sha1-QUNxNrr12ZhQq6HHehJWVhgLc+8=",
+  "_location": "/cordova-plugin-wkwebview-engine",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-wkwebview-engine@1.0.2",
+    "name": "cordova-plugin-wkwebview-engine",
+    "escapedName": "cordova-plugin-wkwebview-engine",
+    "rawSpec": "1.0.2",
+    "saveSpec": null,
+    "fetchSpec": "1.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-wkwebview-engine/-/cordova-plugin-wkwebview-engine-1.0.2.tgz",
+  "_shasum": "41437136baf5d99850aba1c77a125656180b73ef",
+  "_spec": "cordova-plugin-wkwebview-engine@1.0.2",
+  "_where": "/Users/christian/Desktop/Shantideva/app/shantideva-phonegap",
+  "author": {
+    "name": "Apache Cordova"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "The official Apache Cordova WKWebView Engine Plugin",
+  "keywords": [
+    "cordova",
+    "wkwebview"
+  ],
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "name": "cordova-plugin-wkwebview-engine",
+  "repository": {
+    "type": "git",
+    "url": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-wkwebview-engine.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.2"
+}

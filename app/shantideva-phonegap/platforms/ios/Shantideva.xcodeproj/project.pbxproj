@@ -8,19 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
+		0219AD16A580431A9E496A55 /* CDVWKWebViewFileXhr.m in Sources */ = {isa = PBXBuildFile; fileRef = D3C48033BFDE462388039BD5 /* CDVWKWebViewFileXhr.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		2C67CEE6D5BA40AAA0226082 /* PushPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 150D74214FD64602B84CD912 /* PushPlugin.m */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
-		4909824FEE064CD8B21008FF /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1735EE4B78D346698F787C96 /* DailyVersesPlugin.m */; };
+		4302EC4F7B454A1AA5CF6B61 /* CDVWKWebViewEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 57E246DCBD4A4E13BB27752C /* CDVWKWebViewEngine.m */; };
+		45D4F04D430F40D1918E6B16 /* CDVWKWebViewUIDelegate+Open.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */; };
 		526091E582385D22E118B397 /* libPods-Shantideva.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
+		6CAEF70F9E69417CA8501FF5 /* CDVWKWebViewUIDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E72D74B2A83471D95ADBD70 /* CDVWKWebViewUIDelegate.m */; };
+		923DE5C366944B74A91BC80A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3881F38826FF437291BBBFC4 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		AAD0686D24CB84F8000C02FF /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686C24CB84F8000C02FF /* FirebaseCore.framework */; };
 		AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */; };
 		AAD0687124CB8530000C02FF /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */; };
 		AAD0687324CB8558000C02FF /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */; };
+		B1D13E85AADD4060831ABD99 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */; };
+		D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE026B71F014E33BF36F660 /* CDVWKProcessPoolFactory.m */; };
 		FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +92,8 @@
 /* Begin PBXFileReference section */
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Shantideva/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		150D74214FD64602B84CD912 /* PushPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = PushPlugin.m; path = "phonegap-plugin-push/PushPlugin.m"; sourceTree = "<group>"; };
-		1735EE4B78D346698F787C96 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
+		17C19015A23446A9A3CFBD5C /* CDVWKWebViewEngine.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVWKWebViewEngine.h; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewEngine.h"; sourceTree = "<group>"; };
+		19669A36E5144EBD89C10492 /* CDVWKWebViewFileXhr.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVWKWebViewFileXhr.h; path = "cordova-plugin-wkwebview-file-xhr/CDVWKWebViewFileXhr.h"; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Shantideva.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shantideva.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,11 +107,20 @@
 		3047A5101AB8059700498E2A /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "build-release.xcconfig"; path = "cordova/build-release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* Shantideva-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Shantideva-Prefix.pch"; sourceTree = "<group>"; };
+		358160BB79ED48368484EF7B /* CDVWKWebViewUIDelegate.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVWKWebViewUIDelegate.h; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewUIDelegate.h"; sourceTree = "<group>"; };
+		3881F38826FF437291BBBFC4 /* WebKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		4AE026B71F014E33BF36F660 /* CDVWKProcessPoolFactory.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKProcessPoolFactory.m; path = "cordova-plugin-wkwebview-engine/CDVWKProcessPoolFactory.m"; sourceTree = "<group>"; };
+		57E246DCBD4A4E13BB27752C /* CDVWKWebViewEngine.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewEngine.m; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewEngine.m"; sourceTree = "<group>"; };
+		690913E1369C41558A0D6867 /* CDVWKProcessPoolFactory.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVWKProcessPoolFactory.h; path = "cordova-plugin-wkwebview-engine/CDVWKProcessPoolFactory.h"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = Shantideva/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		6E72D74B2A83471D95ADBD70 /* CDVWKWebViewUIDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewUIDelegate.m; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewUIDelegate.m"; sourceTree = "<group>"; };
 		71C4CFB672B74FEFBCF0AF62 /* PushPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = PushPlugin.h; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; };
+		8A563C6920A4432DB8911885 /* CDVWKWebViewUIDelegate+Open.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "CDVWKWebViewUIDelegate+Open.h"; path = "zestia-cordova-plugin-wkwebview-engine-windowopen/CDVWKWebViewUIDelegate+Open.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Shantideva-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Shantideva-Info.plist"; path = "Shantideva/Shantideva-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "CDVWKWebViewUIDelegate+Open.m"; path = "zestia-cordova-plugin-wkwebview-engine-windowopen/CDVWKWebViewUIDelegate+Open.m"; sourceTree = "<group>"; };
 		9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; };
+		96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
 		A19BAC01E88A84204E83AA2C /* Pods-Shantideva.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.release.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.release.xcconfig"; sourceTree = "<group>"; };
 		A80B6CC8C1B572EDAB9C3F17 /* Pods-Shantideva.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.debug.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.debug.xcconfig"; sourceTree = "<group>"; };
 		AA094EA724CDE6BD00FBEBC0 /* libGoogleToolboxForMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleToolboxForMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +132,7 @@
 		AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
 		B07BB09DEB7A4577A9874C0D /* AppDelegate+notification.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+notification.h"; path = "phonegap-plugin-push/AppDelegate+notification.h"; sourceTree = "<group>"; };
+		D3C48033BFDE462388039BD5 /* CDVWKWebViewFileXhr.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewFileXhr.m; path = "cordova-plugin-wkwebview-file-xhr/CDVWKWebViewFileXhr.m"; sourceTree = "<group>"; };
 		E21C0BE264C9461B89C14974 /* PushKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
@@ -134,6 +151,7 @@
 				AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */,
 				AAD0686D24CB84F8000C02FF /* FirebaseCore.framework in Frameworks */,
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
+				923DE5C366944B74A91BC80A /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +233,7 @@
 				AAD0686724CB83E6000C02FF /* GoogleToolboxForMac */,
 				8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */,
 				E21C0BE264C9461B89C14974 /* PushKit.framework */,
+				3881F38826FF437291BBBFC4 /* WebKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -245,7 +264,17 @@
 				150D74214FD64602B84CD912 /* PushPlugin.m */,
 				B07BB09DEB7A4577A9874C0D /* AppDelegate+notification.h */,
 				71C4CFB672B74FEFBCF0AF62 /* PushPlugin.h */,
-				1735EE4B78D346698F787C96 /* DailyVersesPlugin.m */,
+				57E246DCBD4A4E13BB27752C /* CDVWKWebViewEngine.m */,
+				6E72D74B2A83471D95ADBD70 /* CDVWKWebViewUIDelegate.m */,
+				4AE026B71F014E33BF36F660 /* CDVWKProcessPoolFactory.m */,
+				17C19015A23446A9A3CFBD5C /* CDVWKWebViewEngine.h */,
+				358160BB79ED48368484EF7B /* CDVWKWebViewUIDelegate.h */,
+				690913E1369C41558A0D6867 /* CDVWKProcessPoolFactory.h */,
+				D3C48033BFDE462388039BD5 /* CDVWKWebViewFileXhr.m */,
+				19669A36E5144EBD89C10492 /* CDVWKWebViewFileXhr.h */,
+				96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */,
+				91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */,
+				8A563C6920A4432DB8911885 /* CDVWKWebViewUIDelegate+Open.h */,
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
@@ -461,7 +490,12 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */,
 				2C67CEE6D5BA40AAA0226082 /* PushPlugin.m in Sources */,
-				4909824FEE064CD8B21008FF /* DailyVersesPlugin.m in Sources */,
+				4302EC4F7B454A1AA5CF6B61 /* CDVWKWebViewEngine.m in Sources */,
+				6CAEF70F9E69417CA8501FF5 /* CDVWKWebViewUIDelegate.m in Sources */,
+				D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */,
+				0219AD16A580431A9E496A55 /* CDVWKWebViewFileXhr.m in Sources */,
+				B1D13E85AADD4060831ABD99 /* DailyVersesPlugin.m in Sources */,
+				45D4F04D430F40D1918E6B16 /* CDVWKWebViewUIDelegate+Open.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +571,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Debug;
 		};
@@ -604,6 +639,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Release;
 		};
@@ -646,7 +682,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.christian_steinert.shantideva_verses;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				WK_WEB_VIEW_ONLY = 0;
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Debug;
 		};
@@ -687,7 +723,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.christian_steinert.shantideva_verses;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				WK_WEB_VIEW_ONLY = 0;
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Release;
 		};

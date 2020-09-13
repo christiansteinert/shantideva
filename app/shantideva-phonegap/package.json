@@ -13,9 +13,11 @@
     }
   },
   "dependencies": {
+    "@zestia/cordova-plugin-wkwebview-engine-windowopen": "^1.0.1",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
+    "cordova-plugin-wkwebview-engine": "^1.0.2",
     "cordova-support-google-services": "^1.3.2",
     "de-christian_steinert-shantideva_verses": "file:../../src/phonegap-plugin/DailyVersesPlugin",
     "phonegap-plugin-multidex": "^1.0.0"

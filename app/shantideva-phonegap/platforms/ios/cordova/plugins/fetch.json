@@ -14,5 +14,29 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-wkwebview-engine": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-wkwebview-engine"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-wkwebview-file-xhr": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-wkwebview-file-xhr"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+    "source": {
+      "type": "registry",
+      "id": "@zestia/cordova-plugin-wkwebview-engine-windowopen"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

@@ -12,7 +12,14 @@
     },
     "de.christiansteinert.dailyversesplugin": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    }
+  }
 }

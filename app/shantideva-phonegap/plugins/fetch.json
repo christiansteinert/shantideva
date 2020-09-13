@@ -30,5 +30,21 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+    "source": {
+      "type": "registry",
+      "id": "@zestia/cordova-plugin-wkwebview-engine-windowopen@1.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-wkwebview-engine": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-wkwebview-engine@1.0.2"
+    },
+    "is_top_level": false,
+    "variables": {}
   }
 }

@@ -64,6 +64,12 @@
     },
     "de.christiansteinert.dailyversesplugin": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     }
   },
   "dependent_plugins": {},
@@ -79,6 +85,8 @@
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.1",
-    "de.christiansteinert.dailyversesplugin": "0.0.1"
+    "de.christiansteinert.dailyversesplugin": "0.0.1",
+    "cordova-plugin-wkwebview-engine": "1.0.2",
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1"
   }
 }

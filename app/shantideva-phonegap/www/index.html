@@ -2,7 +2,8 @@
 <html class="no-js">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
+  <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />-->
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <link rel="stylesheet" type="text/css" href="css/custom.css" />
     <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1.custom/jquery-ui.min.css" />
 
@@ -993,16 +994,21 @@ DATA = {
   chaptersSizes:[],
   chaptersSizes2:[],
   chaptersSizes3:[],
+  languageCount:0,
+  languagesInitialized:0,
 
   loadVerses:function(settings) {
-    $.ajax({url:CONFIG.getTextUrl(), async: false, success:$.proxy(this.parseVerses1,this)});
+    DATA.languageCount++;
+    $.ajax({url:CONFIG.getTextUrl(), async: true, success:$.proxy(DATA.parseVerses1,DATA)});
     
     if(CONFIG.getTextLang2()) {
-      $.ajax({url:CONFIG.getTextUrl2(), async: false, success:$.proxy(this.parseVerses2,this)});
+      DATA.languageCount++;
+      $.ajax({url:CONFIG.getTextUrl2(), async: true, success:$.proxy(DATA.parseVerses2,DATA)});
     }
 
     if(CONFIG.getTextLang3()) {
-      $.ajax({url:CONFIG.getTextUrl3(), async: false, success:$.proxy(this.parseVerses3,this)});
+      DATA.languageCount++;
+      $.ajax({url:CONFIG.getTextUrl3(), async: true, success:$.proxy(DATA.parseVerses3,DATA)});
     }
   },
   
@@ -1019,6 +1025,10 @@ DATA = {
   },
 
   parseVerses:function(text, langNum) {
+    if(!text.indexOf('***') === 0) {
+        return;
+    }
+
     var data = [],
         lines=text.split('\n'),
         count=lines.length,
@@ -1081,6 +1091,12 @@ DATA = {
     } else if(langNum===3) {        
       this.verses3 = data;
     }    
+
+    this.languagesInitialized++;
+
+    if(this.languagesInitialized === this.languageCount) {
+      run();
+    }
   },
     
    /**
@@ -1171,7 +1187,6 @@ function finalInit() {
 
 /* initialize the UI */
 function run() { 
-  DATA.loadVerses();
   UI.localizeText();
   UI.init();
 
@@ -1209,7 +1224,7 @@ function run() {
     $('#settingsTabBtn').hide();
   }
     
-  if(navigator.userAgent.indexOf('Android 4')) {
+  if(navigator.userAgent.indexOf('Android 4') >=4) {
     // add a class to the body on Android 4 to allow CSS workarounds
     $("body").addClass("android4");
   }
@@ -1228,11 +1243,12 @@ function cordovaReady() {
   // Cordova is ready now.
   // do the UI initialization if it has not been done yet already:
   $("body").addClass("mobile"); 
+  $("body").addClass("cordova"); 
   
   if(!CONFIG.isInitialized()) {
     // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
     CONFIG.loadSettings(function() {    
-      $(run);
+      DATA.loadVerses();
       CONFIG.getCordovaPlugin().setAlarm( CONFIG.getSettingsFromConfig() );
     });
   } else {
@@ -1248,18 +1264,19 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
   // running inside the browser
   // We do not need Cordova. Initialize the UI as soon as jQuery is ready
   $(function() {
-    run();
+    DATA.loadVerses();
     finalInit();
   });
 } else {
   // running inside cordova
-  if(!CONFIG.isSettingsMigrationNeeded()) {
+  /*if(!CONFIG.isSettingsMigrationNeeded()) {
     // We do not need to adjust an old or empty configuration.
     // This means that we do not need to immediately communicate with the Java part to show the IO
     // Therefore we can initialize the UI before Corova is ready, as soon as jQuery is available.
     // Cordova-specific stuff will run later when Cordova sends a deviceready event
     $(run);
   }
+  */
   
   // add handler to do the rest of the initialization when Cordova is ready
   document.addEventListener("deviceready", function() { $(cordovaReady) });  

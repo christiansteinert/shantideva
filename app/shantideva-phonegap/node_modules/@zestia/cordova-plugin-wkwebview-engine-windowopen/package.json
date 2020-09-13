@@ -1,0 +1,60 @@
+{
+  "_from": "@zestia/cordova-plugin-wkwebview-engine-windowopen@1.0.1",
+  "_id": "@zestia/cordova-plugin-wkwebview-engine-windowopen@1.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-YR0a21AP9vt7CSLZ+/K7d+Myn3iMBgYlhzSlLytxwsjFwD9dXJR5WL26wvAYj5M87TbhqSBfdV7ipcctwybDsg==",
+  "_location": "/@zestia/cordova-plugin-wkwebview-engine-windowopen",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@zestia/cordova-plugin-wkwebview-engine-windowopen@1.0.1",
+    "name": "@zestia/cordova-plugin-wkwebview-engine-windowopen",
+    "escapedName": "@zestia%2fcordova-plugin-wkwebview-engine-windowopen",
+    "scope": "@zestia",
+    "rawSpec": "1.0.1",
+    "saveSpec": null,
+    "fetchSpec": "1.0.1"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@zestia/cordova-plugin-wkwebview-engine-windowopen/-/cordova-plugin-wkwebview-engine-windowopen-1.0.1.tgz",
+  "_shasum": "8b1b8938d738b165ec598adb35c5ea6e525f8422",
+  "_spec": "@zestia/cordova-plugin-wkwebview-engine-windowopen@1.0.1",
+  "_where": "/Users/christian/Desktop/Shantideva/app/shantideva-phonegap",
+  "bugs": {
+    "url": "https://github.com/zestia/zestia-cordova-plugin-wkwebview-engine-windowopen/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "zestia-cordova-plugin-wkwebview-engine-windowopen",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova plugin to add support for `window.open` to `WKWebView`.",
+  "engines": {
+    "cordovaDependencies": {
+      "1.0.0": {
+        "cordova-ios": ">4.0.0"
+      }
+    }
+  },
+  "homepage": "https://github.com/zestia/zestia-cordova-plugin-wkwebview-engine-windowopen#readme",
+  "keywords": [
+    "cordova",
+    "wkwebview",
+    "window.open",
+    "cordova-ios"
+  ],
+  "license": "MIT",
+  "name": "@zestia/cordova-plugin-wkwebview-engine-windowopen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zestia/zestia-cordova-plugin-wkwebview-engine-windowopen.git"
+  },
+  "version": "1.0.1"
+}

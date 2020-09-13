@@ -3,6 +3,7 @@
 @font-face {
   font-family: 'DDC Uchen';
   src: local('DDC Uchen'),
+       url('DDC_Uchen-webfont.woff') format('woff2'),
        url('DDC_Uchen-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
@@ -205,7 +206,19 @@ body.dark {
  background-color: #136AA6;
  color:#fff;
 }
-
+/*
+body.cordova.ios {
+  position:relative;
+  border-top: constant(safe-area-inset-top) solid #136AA6;
+  border-top: env(safe-area-inset-top) solid #136AA6;
+  border-bottom: constant(safe-area-inset-bottom) solid #136AA6;
+  border-bottom: env(safe-area-inset-bottom) solid #136AA6;
+  padding-left: constant(safe-area-inset-left); 
+  padding-left: env(safe-area-inset-left);
+  padding-right: constant(safe-area-inset-right); 
+  padding-right: env(safe-area-inset-right);
+}
+*/
 .footer{
  position:absolute;
  bottom:0;

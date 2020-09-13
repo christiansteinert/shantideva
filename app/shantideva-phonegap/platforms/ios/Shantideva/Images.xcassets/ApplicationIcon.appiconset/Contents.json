@@ -115,13 +115,13 @@
       "size" : "50x50"
     },
     {
-      "filename" : "icon-72.png",
+      "filename" : "apple_icon72.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "72x72"
     },
     {
-      "filename" : "icon-72@2x.png",
+      "filename" : "apple_icon144.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "72x72"
