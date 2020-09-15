@@ -29,6 +29,9 @@
         <param name="ios-package" value="CDVWKWebViewFileXhr" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="WKWebViewWindowOpen">
+        <param name="ios-package" value="WKWebViewWindowOpen" />
+    </feature>
     <feature name="DailyVersesPlugin">
         <param name="ios-package" value="DailyVersesPlugin" />
     </feature>
@@ -90,7 +93,4 @@
     <preference name="AndroidXEnabled" value="true" />
     <preference name="WKWebViewOnly" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
-    <feature name="WKWebViewWindowOpen">
-        <param name="ios-package" value="WKWebViewWindowOpen" />
-    </feature>
 </widget>

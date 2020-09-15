@@ -10,10 +10,10 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
-    "de.christiansteinert.dailyversesplugin": {
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+    "de.christiansteinert.dailyversesplugin": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     }
   },
