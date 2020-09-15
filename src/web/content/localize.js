@@ -47,7 +47,9 @@ var LANG_LIST={
     //'es':' Español (Spanish)',
     //'pt','Português (Portuguese)'
     'ru':'Русский (Russian)',
-    'bo':'བོད་ཡིག་ (Tibetan)'
+    'bo':'བོད་ཡིག་ (Tibetan)',
+    'zh-cn':'简体中文 (Simplified Chinese)',
+    'zh-tw':'繁體中文 (Traditional Chinese)'
 };
 
 var LANG=[];
@@ -285,6 +287,117 @@ LANG['ru']={
     + LANG_FONTS
 }
 
+
+
+
+
+LANG_ABOUT_ZH_CN = '这个应用程序每天从 寂天菩薩造(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中显示一节经文，并允许阅读全文。 “参与菩萨行为”是一本非常实用且鼓舞人心的佛教经文，涵盖了佛教之路的所有方面。 寂天菩薩造(Shantideva)是一位伟大的印度大师，生于公元8世纪。他的两个文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此应用程序中显示的文本）和“ 大乘集菩萨学论”（Shikshasamuccaya）。两种文字至今仍被人们使用，特别是菩提心经是藏族传统中最珍贵，最常传授的文字之一';
+
+LANG['zh-cn']={
+"App_Title":"寂天菩薩造",
+"Android App":"Android程序（App）",
+"iOS App":"IOS程序（App）",
+"Online App":"在线程序 （App）",
+"Verse of the Day":"今日经文",
+"About":"关于",
+"Settings":"设置",
+"Full Text":"全文",
+"Chapter %1, Verse %2":"第%1章，第%2节 ",
+"About This App":"关于应用程序",
+"Jump to this verse in the text.":"跳至这段经文",
+"Language of Shantideva's text":"寂天菩萨经文的语言选择",
+"Language of the App":"程序语言",
+"You can show the text in up to three different languages at the same time in order to compare different translations.":"您可以同时以三种不同的语言显示文本，以便比较不同的翻译",
+"Text Language":"文字语言一",
+"Text Language 2":"文字语言二",
+"Text Language 3":"文字语言三",
+"Display Settings":"屏幕设置",
+"App Language":"程序语言",
+"Font Size":"字体大小",
+"Text color":"字体颜色",
+"Black text on white background":"黑字白底",
+"White text on black background":"白字黑底",
+"Notification Messages":"提醒通知（信息）",
+"Time":"时间",
+"Daily Message":"每日信息",
+"Show Messages":"显示信息",
+"Enable the options below to see the verse of the day as a notification message.":"启用显示“今日经文”为提醒通知选项",
+"You need to be online when you save the notification settings.":"您必须在线提醒通知设置",
+"Notifications can only be displayed you when you are online.":"提醒通知只有在线时显示",
+"Favorite Verses":"收藏经文",
+"Mark verse as favorite":"标记为收藏经文",
+"This verse was marked as a favorite":"经文已经标记为收藏",
+"This verse was removed from your favorites":"这段经文已经删除收藏标记",
+"Cancel":"取消",
+"Save":"保存",
+"Historical Context of Shantideva's life":"寂天菩萨一生的历史记叙（背景）",
+"Historical Context":"历史背景",
+"Translations & Commentaries":"广译与评论",
+"Shantideva Translations":"寂天菩萨广译",
+"Commentaries on Shantideva":"寂天菩萨经文的评论",
+  
+  "About_Text":'<div style="text-align:center" lang="zh-CN" class="zh">'+LOGO+'<p lang="zh-CN" class="zh">'
+    + LANG_ABOUT_ZH_CN
+    +'</p>'
+    + LANG_TRANSLATIONS
+    +'<hr />'
+    + LANG_FONTS
+}
+
+
+
+LANG_ABOUT_ZH_TW = '這個應用程序每天從 寂天菩薩造(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中顯示一節經文，並允許閱讀全文。 “參與菩薩行為”是一本非常實用且鼓舞人心的佛教經文，涵蓋了佛教之路的所有方面。寂天菩薩造(Shantideva)是一位偉大的印度大師，生於公元8世紀。他的兩個文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此應用程序中顯示的文本）和“ 大乘集菩薩學論”（Shikshasamuccaya）。兩種文字至今仍被人們使用，特別是菩提心經是藏族傳統中最珍貴，最常傳授的文字之一';
+
+LANG['zh-tw']={
+"App_Title":"寂天菩薩造",
+"Android App":"Android程序（App）",
+"iOS App":"IOS程序（App）",
+"Online App":"在線程序 （App）",
+"Verse of the Day":"今日經文",
+"About":"關於",
+"Settings":"設置",
+"Full Text":"全文",
+"Chapter %1, Verse %2":"第%1章，第%2節 ",
+"About This App":"關於應用程序",
+"Jump to this verse in the text.":"跳至這段經文",
+"Language of Shantideva's text":"寂天菩薩經文的語言選擇",
+"Language of the App":"程序語言",
+"You can show the text in up to three different languages at the same time in order to compare different translations.":"您可以同時以三種不同的語言顯示文本，以便比較不同的翻譯",
+"Text Language":"文字語言一",
+"Text Language 2":"文字語言二",
+"Text Language 3":"文字語言三",
+"Display Settings":"屏幕設置",
+"App Language":"程序語言",
+"Font Size":"字體大小",
+"Text color":"字體顏色",
+"Black text on white background":"黑字白底",
+"White text on black background":"白字黑底",
+"Notification Messages":"提醒通知（信息）",
+"Time":"時間",
+"Daily Message":"每日信息",
+"Show Messages":"顯示信息",
+"Enable the options below to see the verse of the day as a notification message.":"啟用顯示“今日經文”為提醒通知選項",
+"You need to be online when you save the notification settings.":"您必須在線提醒通知設置",
+"Notifications can only be displayed you when you are online.":"提醒通知只有在線時顯示",
+"Favorite Verses":"收藏經文",
+"Mark verse as favorite":"標記為收藏經文",
+"This verse was marked as a favorite":"經文已經標記為收藏",
+"This verse was removed from your favorites":"這段經文已經刪除收藏標記",
+"Cancel":"取消",
+"Save":"保存",
+"Historical Context of Shantideva's life":"寂天菩薩一生的歷史記敘（背景）",
+"Historical Context":"歷史背景",
+"Translations & Commentaries":"廣譯與評論",
+"Shantideva Translations":"寂天菩薩廣譯",
+"Commentaries on Shantideva":"寂天菩薩經文的評論",
+  
+  "About_Text":'<div style="text-align:center" lang="zh-TW" class="zh">'+LOGO+'<p lang="zh-TW" class="zh">'
+    + LANG_ABOUT_ZH_TW
+    +'</p>'
+    + LANG_TRANSLATIONS
+    +'<hr />'
+    + LANG_FONTS
+}
 
 
 LANG_ABOUT_PT = 'Este aplicativo exibe um verso por dia do texto de Shantideva "Engajando-se no Comportamento do Bodhisattva" (Bodhisattvacharyavatara) e permite a leitura de todo o texto. "Engajando-se no Comportamento do Bodhisattva" (alt. O Caminho do Bodisatva) é um texto extremamente prático e inspirador que cobre todos os aspectos do caminho budista. Shantideva foi um grande mestre indiano que viveu durante o século VIII dC. Dois de seus textos sobreviveram - o Bodhicharyavatara (exibido neste aplicativo) e o Shikshasamuccaya ("Compêndio de Treinamentos"). Ambos são usados até hoje, e e o Bodhicharyavatara é um dos textos mais estimados e mais ensinados na tradição tibetana.'
