@@ -25,6 +25,6 @@ echo xxxxxxxx|jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore ./
 zipalign -v 4 ShantidevaVerses.apk ShantidevaVerses-aligned.apk
 mv ShantidevaVerses-aligned.apk ShantidevaVerses.apk
 
-APP_VERSION=`cat app/shantideva-phonegap/config.xml |grep '<widget' | sed  's#.*version="\([^"]*\)".*#\1#'`
+APP_VERSION=`cat app/shantideva-phonegap/config.xml |grep '<widget' | sed  's#.* version="\([^"]*\)".*#\1#'`
 cp ShantidevaVerses.apk "android_releases/New versions (Android 4.4 and higher)/ShantidevaVerses_${APP_VERSION}.apk"
 

@@ -3,18 +3,20 @@
 @font-face {
   font-family: 'DDC Uchen';
   src: local('DDC Uchen'),
-       url('DDC_Uchen-webfont.woff2') format('woff2'),
+       url('DDC_Uchen-webfont.woff') format('woff2'),
        url('DDC_Uchen-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 .uilang-ar{direction: rtl}
-.uilang-ar #footer, .uilang-ar #header{font-size:1.2em}
+.uilang-ar #footer, .uilang-ar #header h1{font-size:1.2em}
 .uilang-ar #settingsTab, .uilang-ar #settingsTab .smallFormInfo, #infoTab .ar{font-size:1.1em}
+.uilang-zh-cn #footer, .uilang-zh-tw #footer, .uilang-zh-cn #header h1, .uilang-zh-tw #header h1{font-size:1.25em; line-height:1em;}
 
 #infoTab{direction:ltr;}
 .uilang-bo #infoTab p.bo{font-size:1.3em;}
+#infoTab p.zh{font-size:1.2em;}
 #uiLanguage-menu, #uiLanguage-button, #textLanguage-menu, #textLanguage-button, #textLanguage2-menu, #textLanguage2-button {direction: ltr;}
 #verseOfTheDay a{
  margin: 0.2em 0;
@@ -206,7 +208,19 @@ body.dark {
  background-color: #136AA6;
  color:#fff;
 }
-
+/*
+body.cordova.ios {
+  position:relative;
+  border-top: constant(safe-area-inset-top) solid #136AA6;
+  border-top: env(safe-area-inset-top) solid #136AA6;
+  border-bottom: constant(safe-area-inset-bottom) solid #136AA6;
+  border-bottom: env(safe-area-inset-bottom) solid #136AA6;
+  padding-left: constant(safe-area-inset-left); 
+  padding-left: env(safe-area-inset-left);
+  padding-right: constant(safe-area-inset-right); 
+  padding-right: env(safe-area-inset-right);
+}
+*/
 .footer{
  position:absolute;
  bottom:0;
@@ -382,6 +396,11 @@ body.dark {
   padding-top: 0;
 }
 
+.uilang-zh-cn #homeTab .btn, .uilang-zh-tw #homeTab .btn {
+  font-size: 1.3em;
+}
+
+
 .uilang-bo .tab li a {
   font-size: 1em;
   padding: 1.9em 0.5em 0 0.5em;
@@ -420,13 +439,13 @@ body.dark {
  color:#ccc;
  padding:0.3em 0 0.7em 0;
 }
-.bo .smallFormInfo{
+.bo .smallFormInfo, #settingsTab.zh-cn .smallFormInfo,#settingsTab.zh-tw .smallFormInfo{
   font-size: 1.1em;
 }
-#settingsTab.bo {
+#settingsTab.bo, #settingsTab.zh-cn, #settingsTab.zh-tw {
   font-size: 1.2em;
 }
-.bo legend{
+.bo legend, #settingsTab.zh-cn legend,#settingsTab.zh-tw legend{
   font-size: 1.1em;
 }
 .bo label {

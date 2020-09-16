@@ -1,8 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="de.christian_steinert.shantideva_verses" version="2.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="202001" id="de.christian_steinert.shantideva_verses" version="2.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="DailyVersesPlugin">
+        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
     </feature>
     <name>Shantideva</name>
     <description>
@@ -45,7 +48,4 @@
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="29" />
     <preference name="AndroidXEnabled" value="true" />
-    <feature name="DailyVersesPlugin">
-        <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
-    </feature>
 </widget>

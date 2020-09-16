@@ -23,14 +23,6 @@
     "is_top_level": false,
     "variables": {}
   },
-  "de.christiansteinert.dailyversesplugin": {
-    "source": {
-      "type": "local",
-      "path": "/Users/christian/Desktop/Shantideva/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "zestia-cordova-plugin-wkwebview-engine-windowopen": {
     "source": {
       "type": "registry",
@@ -45,6 +37,14 @@
       "id": "cordova-plugin-wkwebview-engine@1.0.2"
     },
     "is_top_level": false,
+    "variables": {}
+  },
+  "de.christiansteinert.dailyversesplugin": {
+    "source": {
+      "type": "local",
+      "path": "/home/christian/OWN/programmierung/javascript/Shantideva2/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
+    },
+    "is_top_level": true,
     "variables": {}
   }
 }

@@ -63,7 +63,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "phonegap-plugin-push": "2.3.0",
     "cordova-plugin-wkwebview-engine": "1.2.1",
     "cordova-plugin-wkwebview-file-xhr": "3.0.0",
-    "de.christiansteinert.dailyversesplugin": "0.0.1",
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1"
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1",
+    "de.christiansteinert.dailyversesplugin": "0.0.1"
   };
 });

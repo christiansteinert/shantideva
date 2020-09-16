@@ -25,9 +25,9 @@
 		AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */; };
 		AAD0687124CB8530000C02FF /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */; };
 		AAD0687324CB8558000C02FF /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */; };
-		B1D13E85AADD4060831ABD99 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */; };
 		D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE026B71F014E33BF36F660 /* CDVWKProcessPoolFactory.m */; };
 		FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */; };
+		3EC4994CB5B94891AAE968C7 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD0B8ABA2447F1A00EDD6B /* DailyVersesPlugin.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,7 +120,6 @@
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "CDVWKWebViewUIDelegate+Open.m"; path = "zestia-cordova-plugin-wkwebview-engine-windowopen/CDVWKWebViewUIDelegate+Open.m"; sourceTree = "<group>"; };
 		9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+notification.m"; path = "phonegap-plugin-push/AppDelegate+notification.m"; sourceTree = "<group>"; };
-		96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
 		A19BAC01E88A84204E83AA2C /* Pods-Shantideva.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.release.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.release.xcconfig"; sourceTree = "<group>"; };
 		A80B6CC8C1B572EDAB9C3F17 /* Pods-Shantideva.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shantideva.debug.xcconfig"; path = "Target Support Files/Pods-Shantideva/Pods-Shantideva.debug.xcconfig"; sourceTree = "<group>"; };
 		AA094EA724CDE6BD00FBEBC0 /* libGoogleToolboxForMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleToolboxForMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +137,7 @@
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = Shantideva/config.xml; sourceTree = "<group>"; };
+		ABFD0B8ABA2447F1A00EDD6B /* DailyVersesPlugin.m */ = {isa = PBXFileReference; name = "DailyVersesPlugin.m"; path = "de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,9 +272,9 @@
 				690913E1369C41558A0D6867 /* CDVWKProcessPoolFactory.h */,
 				D3C48033BFDE462388039BD5 /* CDVWKWebViewFileXhr.m */,
 				19669A36E5144EBD89C10492 /* CDVWKWebViewFileXhr.h */,
-				96BF80541658454CB8AB9787 /* DailyVersesPlugin.m */,
 				91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */,
 				8A563C6920A4432DB8911885 /* CDVWKWebViewUIDelegate+Open.h */,
+				ABFD0B8ABA2447F1A00EDD6B /* DailyVersesPlugin.m */,
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
@@ -494,8 +494,8 @@
 				6CAEF70F9E69417CA8501FF5 /* CDVWKWebViewUIDelegate.m in Sources */,
 				D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */,
 				0219AD16A580431A9E496A55 /* CDVWKWebViewFileXhr.m in Sources */,
-				B1D13E85AADD4060831ABD99 /* DailyVersesPlugin.m in Sources */,
 				45D4F04D430F40D1918E6B16 /* CDVWKWebViewUIDelegate+Open.m in Sources */,
+				3EC4994CB5B94891AAE968C7 /* DailyVersesPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

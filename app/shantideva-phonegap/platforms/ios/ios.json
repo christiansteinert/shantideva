@@ -25,11 +25,11 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"DailyVersesPlugin\"><param name=\"ios-package\" value=\"DailyVersesPlugin\" /></feature>",
+              "xml": "<feature name=\"WKWebViewWindowOpen\"><param name=\"ios-package\" value=\"WKWebViewWindowOpen\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"WKWebViewWindowOpen\"><param name=\"ios-package\" value=\"WKWebViewWindowOpen\" /></feature>",
+              "xml": "<feature name=\"DailyVersesPlugin\"><param name=\"ios-package\" value=\"DailyVersesPlugin\" /></feature>",
               "count": 1
             }
           ]
@@ -83,10 +83,10 @@
     "cordova-plugin-wkwebview-file-xhr": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "de.christiansteinert.dailyversesplugin": {
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
+    "de.christiansteinert.dailyversesplugin": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
@@ -155,7 +155,7 @@
     "phonegap-plugin-push": "2.3.0",
     "cordova-plugin-wkwebview-engine": "1.2.1",
     "cordova-plugin-wkwebview-file-xhr": "3.0.0",
-    "de.christiansteinert.dailyversesplugin": "0.0.1",
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1"
+    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1",
+    "de.christiansteinert.dailyversesplugin": "0.0.1"
   }
 }
