@@ -29,6 +29,15 @@
         <param name="ios-package" value="CDVWKWebViewFileXhr" />
         <param name="onload" value="true" />
     </feature>
+<<<<<<< HEAD
+=======
+    <feature name="WKWebViewWindowOpen">
+        <param name="ios-package" value="WKWebViewWindowOpen" />
+    </feature>
+    <feature name="DailyVersesPlugin">
+        <param name="ios-package" value="DailyVersesPlugin" />
+    </feature>
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -87,10 +96,13 @@
     <preference name="AndroidXEnabled" value="true" />
     <preference name="WKWebViewOnly" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+<<<<<<< HEAD
     <feature name="WKWebViewWindowOpen">
         <param name="ios-package" value="WKWebViewWindowOpen" />
     </feature>
     <feature name="DailyVersesPlugin">
         <param name="ios-package" value="DailyVersesPlugin" />
     </feature>
+=======
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
 </widget>

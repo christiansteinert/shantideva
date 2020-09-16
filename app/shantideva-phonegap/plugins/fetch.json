@@ -42,7 +42,11 @@
   "de.christiansteinert.dailyversesplugin": {
     "source": {
       "type": "local",
+<<<<<<< HEAD
       "path": "/home/christian/OWN/programmierung/javascript/Shantideva2/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
+=======
+      "path": "/users/christian/Desktop/Shantideva/app/shantideva-phonegap/node_modules/de-christian_steinert-shantideva_verses"
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
     },
     "is_top_level": true,
     "variables": {}

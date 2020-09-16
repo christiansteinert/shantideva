@@ -25,6 +25,10 @@
 		AAD0686F24CB8515000C02FF /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0686E24CB8515000C02FF /* FirebaseMessaging.framework */; };
 		AAD0687124CB8530000C02FF /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687024CB8530000C02FF /* FirebaseInstanceID.framework */; };
 		AAD0687324CB8558000C02FF /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD0687224CB8558000C02FF /* FirebaseAnalytics.framework */; };
+<<<<<<< HEAD
+=======
+		C21FFF8330E945C89FA37D20 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B0B7CE225842E5BE19287B /* DailyVersesPlugin.m */; };
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
 		D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE026B71F014E33BF36F660 /* CDVWKProcessPoolFactory.m */; };
 		FEE5776DDDDA4C5FBF74ECA4 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9516EDD2467A4DA58F39D552 /* AppDelegate+notification.m */; };
 		3EC4994CB5B94891AAE968C7 /* DailyVersesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD0B8ABA2447F1A00EDD6B /* DailyVersesPlugin.m */; };
@@ -115,6 +119,7 @@
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = Shantideva/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		6E72D74B2A83471D95ADBD70 /* CDVWKWebViewUIDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewUIDelegate.m; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewUIDelegate.m"; sourceTree = "<group>"; };
 		71C4CFB672B74FEFBCF0AF62 /* PushPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = PushPlugin.h; path = "phonegap-plugin-push/PushPlugin.h"; sourceTree = "<group>"; };
+		76B0B7CE225842E5BE19287B /* DailyVersesPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = DailyVersesPlugin.m; path = de.christiansteinert.dailyversesplugin/DailyVersesPlugin.m; sourceTree = "<group>"; };
 		8A563C6920A4432DB8911885 /* CDVWKWebViewUIDelegate+Open.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "CDVWKWebViewUIDelegate+Open.h"; path = "zestia-cordova-plugin-wkwebview-engine-windowopen/CDVWKWebViewUIDelegate+Open.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Shantideva-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Shantideva-Info.plist"; path = "Shantideva/Shantideva-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
 		8EADB5BB395584202DFE29BC /* libPods-Shantideva.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Shantideva.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -274,7 +279,11 @@
 				19669A36E5144EBD89C10492 /* CDVWKWebViewFileXhr.h */,
 				91F02927F2BB455699EF9CE2 /* CDVWKWebViewUIDelegate+Open.m */,
 				8A563C6920A4432DB8911885 /* CDVWKWebViewUIDelegate+Open.h */,
+<<<<<<< HEAD
 				ABFD0B8ABA2447F1A00EDD6B /* DailyVersesPlugin.m */,
+=======
+				76B0B7CE225842E5BE19287B /* DailyVersesPlugin.m */,
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
 			);
 			name = Plugins;
 			path = Shantideva/Plugins;
@@ -495,7 +504,11 @@
 				D79CD1F573D241FB8AF2B91D /* CDVWKProcessPoolFactory.m in Sources */,
 				0219AD16A580431A9E496A55 /* CDVWKWebViewFileXhr.m in Sources */,
 				45D4F04D430F40D1918E6B16 /* CDVWKWebViewUIDelegate+Open.m in Sources */,
+<<<<<<< HEAD
 				3EC4994CB5B94891AAE968C7 /* DailyVersesPlugin.m in Sources */,
+=======
+				C21FFF8330E945C89FA37D20 /* DailyVersesPlugin.m in Sources */,
+>>>>>>> ba94138651e0e7c588b5cbb0fb98124ee7c9edd5
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
