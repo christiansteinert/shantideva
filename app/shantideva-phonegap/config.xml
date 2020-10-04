@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget version="2.2.1" 
-     android-versionCode="202001"
+<widget version="2.2.2" 
+     android-versionCode="202002"
      id="de.christian_steinert.shantideva_verses" 
      xmlns="http://www.w3.org/ns/widgets" 
      xmlns:android="http://schemas.android.com/apk/res/android" 

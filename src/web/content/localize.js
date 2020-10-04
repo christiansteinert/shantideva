@@ -2,7 +2,7 @@
 simplified Chinese:
 "Chinese Translation": 中文翻译
 Text title: 入菩萨行论
-Shantideva: 寂天菩萨造
+Shantideva: 寂天菩萨
 "Translated by master Jiqun": 如石法师译
 
 Chinese Translation by Master Jiqun  / 如石法师 (www.putishuyuan.com , www.bodhiacademy.org)
@@ -16,7 +16,7 @@ traditional Chinese
 
 Text title: 入菩薩行論 
 
-Shantideva:寂天菩薩造  
+Shantideva:寂天菩薩  
 "Translated by master Jiqun": 如石法師譯
 
 http://www.putishuyuan.com/index.php?app=@article&ac=show&id=13409
@@ -291,10 +291,10 @@ LANG['ru']={
 
 
 
-LANG_ABOUT_ZH_CN = '这个应用程序每天从 寂天菩薩造(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中显示一节经文，并允许阅读全文。 “参与菩萨行为”是一本非常实用且鼓舞人心的佛教经文，涵盖了佛教之路的所有方面。 寂天菩薩造(Shantideva)是一位伟大的印度大师，生于公元8世纪。他的两个文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此应用程序中显示的文本）和“ 大乘集菩萨学论”（Shikshasamuccaya）。两种文字至今仍被人们使用，特别是菩提心经是藏族传统中最珍贵，最常传授的文字之一';
+LANG_ABOUT_ZH_CN = '这个应用程序每天从 寂天菩萨(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中显示一节经文，并允许阅读全文。 “参与菩萨行为”是一本非常实用且鼓舞人心的佛教经文，涵盖了佛教之路的所有方面。 寂天菩萨(Shantideva)是一位伟大的印度大师，生于公元8世纪。他的两个文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此应用程序中显示的文本）和“ 大乘集菩萨学论”（Shikshasamuccaya）。两种文字至今仍被人们使用，特别是菩提心经是藏族传统中最珍贵，最常传授的文字之一';
 
 LANG['zh-cn']={
-"App_Title":"寂天菩薩造",
+"App_Title":"寂天菩萨",
 "Android App":"Android程序（App）",
 "iOS App":"IOS程序（App）",
 "Online App":"在线程序 （App）",
@@ -346,10 +346,10 @@ LANG['zh-cn']={
 
 
 
-LANG_ABOUT_ZH_TW = '這個應用程序每天從 寂天菩薩造(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中顯示一節經文，並允許閱讀全文。 “參與菩薩行為”是一本非常實用且鼓舞人心的佛教經文，涵蓋了佛教之路的所有方面。寂天菩薩造(Shantideva)是一位偉大的印度大師，生於公元8世紀。他的兩個文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此應用程序中顯示的文本）和“ 大乘集菩薩學論”（Shikshasamuccaya）。兩種文字至今仍被人們使用，特別是菩提心經是藏族傳統中最珍貴，最常傳授的文字之一';
+LANG_ABOUT_ZH_TW = '這個應用程序每天從 寂天菩薩(Shantideva)的文本“入菩薩行論”（Bodhisattvacharyavatara）中顯示一節經文，並允許閱讀全文。 “參與菩薩行為”是一本非常實用且鼓舞人心的佛教經文，涵蓋了佛教之路的所有方面。寂天菩薩(Shantideva)是一位偉大的印度大師，生於公元8世紀。他的兩個文本得以保存- “入菩薩行論”(Bodhicharyavatara, 此應用程序中顯示的文本）和“ 大乘集菩薩學論”（Shikshasamuccaya）。兩種文字至今仍被人們使用，特別是菩提心經是藏族傳統中最珍貴，最常傳授的文字之一';
 
 LANG['zh-tw']={
-"App_Title":"寂天菩薩造",
+"App_Title":"寂天菩薩",
 "Android App":"Android程序（App）",
 "iOS App":"IOS程序（App）",
 "Online App":"在線程序 （App）",
