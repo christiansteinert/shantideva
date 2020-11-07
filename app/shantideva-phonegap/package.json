@@ -19,11 +19,11 @@
     "cordova-ios": "^5.1.1",
     "cordova-plugin-wkwebview-engine": "^1.0.2",
     "cordova-support-google-services": "^1.3.2",
-    "de-christian_steinert-shantideva_verses": "file:../../src/phonegap-plugin/DailyVersesPlugin",
     "phonegap-plugin-multidex": "^1.0.0"
   },
   "devDependencies": {
     "cordova-plugin-whitelist": "1",
+    "de-christian_steinert-shantideva_verses": "file:../../../../../../own/programmierung/javascript/Shantideva2/src/phonegap-plugin/DailyVersesPlugin",
     "ios": "0.0.1"
   }
 }
