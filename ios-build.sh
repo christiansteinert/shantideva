@@ -16,6 +16,7 @@ rm app/shantideva-phonegap/www/favicon*.png
 cd app/shantideva-phonegap
 
 cordova plugin remove de.christiansteinert.dailyversesplugin
+rm node_modules/de-christian_steinert-shantideva_verses
 cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin
 
 cordova build ios --release

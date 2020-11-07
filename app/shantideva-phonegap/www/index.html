@@ -637,6 +637,7 @@ UI = {
       /* language dropdowns for text language */
       this._setDropdownValues('uiLanguage', LANG_LIST, CONFIG.getUILang());      
 
+
       $("#saveBtn").click(function( event ) { UI.btnSave(); }); 
       $("#cancelBtn").click(function( event ) { UI.btnCancel(); }); 
       
@@ -1429,7 +1430,7 @@ if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost'
       </fieldset>        
       <br />
       <div class="center buttons">
-        <button id="cancelBtn">{{Cancel}}</button><button id="saveBtn">{{Save}}</button>
+        <a href="#" id="cancelBtn">{{Cancel}}</a><a href="#" id="saveBtn">{{Save}}</a>
       </div>
       </div></div>
       
