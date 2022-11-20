@@ -17,5 +17,7 @@ These scripts are written for linux. The ndroid build process requires an instal
 * webapp-build.sh generates the content for the single-page web application. The output folder is app/shantideva-phonegap/
 * android_build.sh triggers the build process of the Android application
 * android_run.sh triggers the build process of the Android application and then runs the app in the Android emulator
+* ios_build.sh triggers the build process of the iOS application
+* ios_run.sh triggers the build process of the iOS application and then runs the app in the iOS Simulator
 
 

@@ -2,12 +2,11 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-from __future__ import absolute_import, division, print_function
 
-from enum import Enum
+from cryptography import utils
 
 
-class _Reasons(Enum):
+class _Reasons(utils.Enum):
     BACKEND_MISSING_INTERFACE = 0
     UNSUPPORTED_HASH = 1
     UNSUPPORTED_CIPHER = 2

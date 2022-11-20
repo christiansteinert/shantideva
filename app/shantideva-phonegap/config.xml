@@ -1,10 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget version="2.2.2" 
-     android-versionCode="202002"
-     id="de.christian_steinert.shantideva_verses" 
-     xmlns="http://www.w3.org/ns/widgets" 
-     xmlns:android="http://schemas.android.com/apk/res/android" 
-     xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="202003" id="de.christian_steinert.shantideva_verses" version="2.2.3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -14,12 +9,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
+
     <platform name="android">
         <icon density="mdpi" height="48" src="icon48.png" width="48" />
         <icon density="hdpi" height="72" src="icon72.png" width="72" />
@@ -39,12 +30,15 @@
         <resource-file src="strings-tw.xml" target="app/src/main/res/values-zh-rMO/strings.xml" />
         <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+HK/strings.xml" />
         <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+MO/strings.xml" />
+
         <allow-intent href="market:*" />
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
             <meta-data android:name="ic_notify" android:resource="@drawable/ic_notify" />
         </config-file>
+
     </platform>
     <platform name="ios">
+        <splash src="www/content/info-logo.png" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="120" src="apple_icon120.png" width="120" />
@@ -52,43 +46,40 @@
         <icon height="167" src="apple_icon167.png" width="167" />
         <icon height="180" src="apple_icon180.png" width="180" />
         <icon height="1024" src="apple_icon1024.png" width="1024" />
-
-        <icon height="20" width="20" src="apple_icon20.png" />
-        <icon height="29" width="29" src="apple_icon29.png" />
-        <icon height="40" width="40" src="apple_icon40.png" />
-        <icon height="50" width="50" src="apple_icon50.png" />
-        <icon height="55" width="55" src="apple_icon55.png" />
-        <icon height="57" width="57" src="apple_icon57.png" />
-        <icon height="58" width="58" src="apple_icon58.png" />
-        <icon height="60" width="60" src="apple_icon60.png" />
-        <icon height="76" width="76" src="apple_icon76.png" />
-        <icon height="80" width="80" src="apple_icon80.png" />
-        <icon height="87" width="87" src="apple_icon87.png" />
-        <icon height="88" width="88" src="apple_icon88.png" />
-
-        <icon height="100" width="100" src="apple_icon100.png" />
-        <icon height="114" width="114" src="apple_icon114.png" />
-        <icon height="172" width="172" src="apple_icon172.png" />
-        <icon height="196" width="196" src="apple_icon196.png" />
-        <icon height="216" width="216" src="apple_icon216.png" />
-
-        <!--<preference name="SplashScreenDelay" value="0" />-->
+        <icon height="20" src="apple_icon20.png" width="20" />
+        <icon height="29" src="apple_icon29.png" width="29" />
+        <icon height="40" src="apple_icon40.png" width="40" />
+        <icon height="50" src="apple_icon50.png" width="50" />
+        <icon height="55" src="apple_icon55.png" width="55" />
+        <icon height="57" src="apple_icon57.png" width="57" />
+        <icon height="58" src="apple_icon58.png" width="58" />
+        <icon height="60" src="apple_icon60.png" width="60" />
+        <icon height="76" src="apple_icon76.png" width="76" />
+        <icon height="80" src="apple_icon80.png" width="80" />
+        <icon height="87" src="apple_icon87.png" width="87" />
+        <icon height="88" src="apple_icon88.png" width="88" />
+        <icon height="100" src="apple_icon100.png" width="100" />
+        <icon height="114" src="apple_icon114.png" width="114" />
+        <icon height="172" src="apple_icon172.png" width="172" />
+        <icon height="196" src="apple_icon196.png" width="196" />
+        <icon height="216" src="apple_icon216.png" width="216" />
         <feature name="SplashScreen">
             <param name="ios-package" value="CDVSplashScreen" />
-        </feature>        
-        <splash src="www/content/info-logo.png" />
-
+        </feature>
         <preference name="WKWebViewOnly" value="true" />
-
         <feature name="CDVWKWebViewEngine">
             <param name="ios-package" value="CDVWKWebViewEngine" />
         </feature>
-
-        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />        
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     </platform>
-    <preference name="android-minSdkVersion" value="19" />
-    <preference name="android-targetSdkVersion" value="29" />
+    <preference name="android-minSdkVersion" value="21" />
+    <preference name="android-targetSdkVersion" value="33" />
     <preference name="AndroidXEnabled" value="true" />
+    <preference name="GradlePluginGoogleServicesEnabled" value="false" />
 
-    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <!-- Switched protocol for loading the web page to file:// to allow accessing old data in localStorage. -->
+    <!-- This can be removed in a future release of the app since the app will now also redundantly store 
+         data in the App's SharedPreferences in the latest version. -->
+    <preference name="AndroidInsecureFileModeEnabled" value="true" />
+
 </widget>

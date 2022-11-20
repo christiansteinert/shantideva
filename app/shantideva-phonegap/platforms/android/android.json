@@ -5,22 +5,22 @@
   },
   "config_munge": {
     "files": {
-      "res/xml/config.xml": {
+      "AndroidManifest.xml": {
         "parents": {
-          "/*": [
+          "/manifest/application": [
             {
-              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<meta-data android:name=\"ic_notify\" android:resource=\"@drawable/ic_notify\" />",
+              "count": 269
+            },
+            {
+              "xml": "<receiver android:enabled=\"true\" android:exported=\"false\" android:name=\"de.christiansteinert.dailyversesplugin.BootupReceiver\" android:permission=\"android.permission.RECEIVE_BOOT_COMPLETED\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter><intent-filter><action android:name=\"android.intent.action.PACKAGE_REPLACED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></receiver>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"DailyVersesPlugin\"><param name=\"android-package\" value=\"de.christiansteinert.dailyversesplugin.DailyVersesPlugin\" /></feature>",
+              "xml": "<receiver android:enabled=\"true\" android:exported=\"false\" android:name=\"de.christiansteinert.dailyversesplugin.AlarmReceiver\"><intent-filter><action android:name=\"de.christiansteinert.dailyversesplugin.AlarmReceiver\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></receiver>",
               "count": 1
             }
-          ]
-        }
-      },
-      "AndroidManifest.xml": {
-        "parents": {
+          ],
           "/*": [
             {
               "xml": "<supports-screens android:anyDensity=\"true\" android:largeScreens=\"true\" android:normalScreens=\"true\" android:resizeable=\"true\" android:smallScreens=\"true\" android:xlargeScreens=\"true\" />",
@@ -38,31 +38,26 @@
               "xml": "<uses-permission android:name=\"android.permission.BROADCAST_STICKY\" />",
               "count": 1
             }
-          ],
-          "/manifest/application": [
+          ]
+        }
+      },
+      "res/xml/config.xml": {
+        "parents": {
+          "/*": [
             {
-              "xml": "<meta-data android:name=\"ic_notify\" android:resource=\"@drawable/ic_notify\" />",
-              "count": 632
-            },
-            {
-              "xml": "<receiver android:enabled=\"true\" android:name=\"de.christiansteinert.dailyversesplugin.BootupReceiver\" android:permission=\"android.permission.RECEIVE_BOOT_COMPLETED\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter><intent-filter><action android:name=\"android.intent.action.PACKAGE_REPLACED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></receiver>",
-              "count": 1
-            },
-            {
-              "xml": "<receiver android:enabled=\"true\" android:name=\"de.christiansteinert.dailyversesplugin.AlarmReceiver\"><intent-filter><action android:name=\"de.christiansteinert.dailyversesplugin.AlarmReceiver\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></receiver>",
+              "xml": "<feature name=\"DailyVersesPlugin\"><param name=\"android-package\" value=\"de.christiansteinert.dailyversesplugin.DailyVersesPlugin\" /></feature>",
               "count": 1
             }
-          ],
-          "/manifest": []
+          ]
         }
       }
     }
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
-    "cordova-plugin-wkwebview-engine": {
+    "phonegap-plugin-multidex": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
     "zestia-cordova-plugin-wkwebview-engine-windowopen": {
@@ -84,8 +79,8 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-whitelist": "1.3.1",
     "cordova-plugin-wkwebview-engine": "1.0.2",
+    "phonegap-plugin-multidex": "1.0.0",
     "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1",
     "de.christiansteinert.dailyversesplugin": "0.0.1"
   }

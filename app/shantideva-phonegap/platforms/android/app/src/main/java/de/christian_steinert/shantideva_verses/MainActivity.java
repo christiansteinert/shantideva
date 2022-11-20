@@ -20,10 +20,17 @@
 package de.christian_steinert.shantideva_verses;
 
 import android.os.Bundle;
+
 import org.apache.cordova.*;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class MainActivity extends CordovaActivity
 {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

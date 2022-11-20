@@ -15,7 +15,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: python3.7
+  runtime: python3.8
 
   stage: prd           #stage-ID
   region: eu-central-1 #AWS region to deploy to

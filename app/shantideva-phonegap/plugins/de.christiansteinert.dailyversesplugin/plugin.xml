@@ -17,9 +17,8 @@
             <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
             <uses-permission android:name="android.permission.BROADCAST_STICKY" />
         </config-file>
-
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.BootupReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <receiver android:enabled="true" android:exported="false" android:name="de.christiansteinert.dailyversesplugin.BootupReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
                 <intent-filter>
                     <action android:name="android.intent.action.BOOT_COMPLETED" />
                     <category android:name="android.intent.category.DEFAULT" />
@@ -29,20 +28,21 @@
                     <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
             </receiver>
-            <receiver android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver">
+            <receiver android:exported="false" android:enabled="true" android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver">
                 <intent-filter>
                     <action android:name="de.christiansteinert.dailyversesplugin.AlarmReceiver" />
                     <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
             </receiver>            
         </config-file>            
-
-        <source-file src="src/android/DailyVersesPlugin.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
         <source-file src="src/android/AlarmReceiver.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
         <source-file src="src/android/BootupReceiver.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
-        <source-file src="src/android/ConfigUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
-        <source-file src="src/android/ThreadUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
         <source-file src="src/android/Chapter.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/ConfigController.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/DailyVersesPlugin.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/VerseAccess.java" target-dir="src/de/christiansteinert/dailyversesplugin/" />
+        <source-file src="src/android/util/AlarmUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/util/" />
+        <source-file src="src/android/util/ThreadUtil.java" target-dir="src/de/christiansteinert/dailyversesplugin/util/" />
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml"><feature name="DailyVersesPlugin"><param name="ios-package" value="DailyVersesPlugin" /></feature></config-file>

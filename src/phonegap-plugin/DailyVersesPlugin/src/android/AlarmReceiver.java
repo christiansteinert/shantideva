@@ -1,18 +1,8 @@
 package de.christiansteinert.dailyversesplugin;
 
-import static de.christiansteinert.dailyversesplugin.ThreadUtil.runInMainThread;
+import static de.christiansteinert.dailyversesplugin.util.ThreadUtil.runInMainUiThread;
 
-
-import de.christiansteinert.dailyversesplugin.*;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.GregorianCalendar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -22,98 +12,83 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.NotificationCompat;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import de.christian_steinert.shantideva_verses.MainActivity;
+import de.christian_steinert.shantideva_verses.R;
+import de.christiansteinert.dailyversesplugin.util.AlarmUtil;
+
 import android.util.Log;
 import android.os.Build;
 import android.text.TextUtils;
 
 /**
- * This class receives a timer event and handles it.
+ * Receives a timer event and shows the verse of the day as Android notification message.
  */
-public class AlarmReceiver extends BroadcastReceiver {
+public final class AlarmReceiver extends BroadcastReceiver {
 
-	int NOTIFICATION_TYPE_VERSE_OF_THE_DAY = 1;
-    static final String NOTIFICATION_CHANNEL_ID = "verseOfTheDay";
+    private static final int NOTIFICATION_TYPE_VERSE_OF_THE_DAY = 1;
+    private static final String NOTIFICATION_CHANNEL_ID = "verseOfTheDay";
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		String[] verse = ConfigUtil.readVerseOfTheDay(context, DailyVersesPlugin.getPreferences(context));
-		final String verseText = TextUtils.join("\n", verse);
-		final Context ctx = context;
-		Calendar now;
+    @Override
+    public void onReceive(final Context context, final Intent intent) {
+        final String[] verse = VerseAccess.getVerseOfTheDay(context);
+        final String verseText = TextUtils.join("\n", verse);
 
-		try{
-			now = Calendar.getInstance();
-		} catch(Exception e) {
-			now = new GregorianCalendar();;
-		}
+        new ConfigController(context).saveLastMessageTime(new Date());
 
-		SharedPreferences prefs = context.getSharedPreferences(
-				DailyVersesPlugin.class.getName(), Context.MODE_PRIVATE);
+        Log.i(this.getClass().getName(), "=> showing notification");
 
-		ConfigUtil.saveLastMessageTime(prefs, new Date());
-
-		StringBuilder date = new StringBuilder();
-		date.append(now.get(Calendar.YEAR));
-		date.append('-');
-		date.append(now.get(Calendar.MONTH));
-		date.append('-');
-		date.append(now.get(Calendar.DATE));
-
-		Log.i(this.getClass().getName(), "=> showing notification");
-		
-        // show the notification; do so in the UI thread
-        runInMainThread(new Runnable() {
-            @Override
-            public void run() {
-                showNotification(ctx, verseText);
-            }
+        runInMainUiThread(() -> {
+            showNotification(context, verseText);
+            scheduleNextNotification(context);
         });
-	}
+    }
 
-	private void showNotification(Context context, String verseText) {
+    private void scheduleNextNotification(final Context context) {
+        AlarmUtil.setNextAlarm(context);
+    }
+
+    private void showNotification(final Context context, final String verseText) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        JSONObject settings = ConfigUtil.readSettings(context, DailyVersesPlugin.getPreferences(context));
-        String verseOfTheDayTxt;
-        
-        try {
-          verseOfTheDayTxt = settings.getString(ConfigUtil.CFG_VERSE_OF_THE_DAY_TXT);
-        } catch (JSONException e) {
-          verseOfTheDayTxt = ConfigUtil.VERSE_OF_THE_DAY_TXT_DEFAULT;
-        }
+        final String verseOfTheDayTxt = new ConfigController(context).getVerseOfTheDayTxt();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, verseOfTheDayTxt, NotificationManager.IMPORTANCE_LOW);
-            
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(NotificationManager.class);
+            final NotificationChannel channel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    verseOfTheDayTxt,
+                    NotificationManager.IMPORTANCE_LOW);
+
+            // Starting with Android 26 each notification must be associated with a notification
+            // channel. If the channel does not exist yet we need to create it before sending
+            // the notification
+            final NotificationManager notificationManager =
+                    context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-        }                
+        }
 
-        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle().setBigContentTitle(verseOfTheDayTxt + ":").bigText(verseText);
-		NotificationCompat.Builder builder = (new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID))
-            .setContentTitle(verseOfTheDayTxt + ":")
-            .setContentText(verseText)
-            .setPriority(Notification.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, de.christian_steinert.shantideva_verses.MainActivity.class), PendingIntent.FLAG_ONE_SHOT))
-            .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
-            //.setSmallIcon(de.christian_steinert.shantideva_verses.R.mipmap.ic_launcher)
-            .setSmallIcon(de.christian_steinert.shantideva_verses.R.drawable.ic_notify)
-            .setColor(0xffff6600)
-            .setStyle(style);
-          
-        Notification notification = builder.build();
-		//Notification notification = new NotificationCompat.BigTextStyle(builder)
-		//		.setBigContentTitle(verseOfTheDayTxt + ":").bigText(verseText).build();
+        final int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            ? PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
+            : PendingIntent.FLAG_ONE_SHOT;
+        final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), flags);
+        final NotificationCompat.Builder notification = (new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID))
+                .setContentTitle(verseOfTheDayTxt + ":")
+                .setContentText(verseText)
+                .setPriority(Notification.PRIORITY_LOW)
+                .setSilent(true)
+                .setAutoCancel(true)
+                .setContentIntent(contentIntent)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                .setSmallIcon(R.drawable.ic_notify)
+                .setColor(0xffff6600)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(verseOfTheDayTxt + ":")
+                    .bigText(verseText)
+                );
 
-		NotificationManager nm = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_TYPE_VERSE_OF_THE_DAY, notification);
-
-		DailyVersesPlugin.setAlarm(context); // set next alarm
-
-	}
+        NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        nm.notify(NOTIFICATION_TYPE_VERSE_OF_THE_DAY, notification.build());
+    }
 }

@@ -140,16 +140,20 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.loadSettings = function(success, error) {
-        // Javascript-side settings are empty, otherwise this plugin would not have been called to read settings 
-        // in a platform specific way.
         // -> Return some default settings for iOS.
         defaultSettings = {
             messageHour: 10,
             messageMinute: 0,
-            messageEnabled: false                
+            messageEnabled: false
         };
         success( defaultSettings );
     };
+
+    exports.saveFavoriteVerses = function(favoriteVerses, success, error) {
+        if(success) {
+            success();
+        }        
+    }
     
     
 } else { //android
@@ -171,7 +175,16 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.loadSettings = function(success, error) {
-        exec(success, error, "DailyVersesPlugin", "loadConfig", []);
+        var successWrapper=function(callbackParams){success(callbackParams[0], callbackParams[1]);};
+        exec(successWrapper, error, "DailyVersesPlugin", "loadConfig", []);
+    };
+
+    exports.saveFavoriteVerses = function(favoriteVerses, success, error) {
+        exec(success, error, "DailyVersesPlugin", "saveFavoriteVerses", [favoriteVerses]);
+    };
+
+    exports.loadFavoriteVerses = function(success, error) {
+        exec(success, error, "DailyVersesPlugin", "loadFavoriteVerses", []);
     };
 
 }

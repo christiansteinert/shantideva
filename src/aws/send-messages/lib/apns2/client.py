@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 class APNsClient(object):
-    SANDBOX_SERVER = 'api.sandbox.push.apple.com'
+    SANDBOX_SERVER = 'api.development.push.apple.com'
     LIVE_SERVER = 'api.push.apple.com'
 
     DEFAULT_PORT = 443
@@ -117,7 +117,11 @@ class APNsClient(object):
                 inferred_push_type = NotificationType.Complication.value
             elif topic.endswith('.pushkit.fileprovider'):
                 inferred_push_type = NotificationType.FileProvider.value
-            elif any([notification.alert, notification.badge, notification.sound]):
+            elif any([
+                notification.alert is not None,
+                notification.badge is not None,
+                notification.sound is not None,
+            ]):
                 inferred_push_type = NotificationType.Alert.value
             else:
                 inferred_push_type = NotificationType.Background.value

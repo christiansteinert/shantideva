@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
-    },
     "zestia-cordova-plugin-wkwebview-engine-windowopen": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
@@ -19,6 +16,12 @@
   },
   "dependent_plugins": {
     "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "cordova-support-google-services": {
+      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
+    },
+    "phonegap-plugin-multidex": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     }
   }
