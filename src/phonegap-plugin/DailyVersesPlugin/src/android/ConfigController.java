@@ -314,7 +314,8 @@ public final class ConfigController {
     }
 
     public String getVerseOfTheDayTxt() {
-        return getPreferences().getString(CFG_VERSE_OF_THE_DAY_TXT, VERSE_OF_THE_DAY_TXT_DEFAULT);
+        final String text = getPreferences().getString(CFG_VERSE_OF_THE_DAY_TXT, VERSE_OF_THE_DAY_TXT_DEFAULT);
+        return text.replace("&nbsp;", " ");
     }
 
     public String getVerseLanguage() {
