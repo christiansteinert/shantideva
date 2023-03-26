@@ -783,6 +783,15 @@ UI = {
       UI.updateVerseOfTheDay();
     }
   },
+  
+  getTranslationCreditHtml:function(lang) {
+    var text = this.getText('Translation_Credit', lang);
+    if(text != 'Translation_Credit') {
+      return '<p lang="' + lang + '" class="' + lang + ' translationCredit">' + text + '</p>';
+    } else {
+      return '';
+    }    
+  },
 
   showChapter:function(chapterNr) {
     if(this.currentChapter != chapterNr) {
@@ -809,11 +818,14 @@ UI = {
         
         // show the chapter content on the "full text" tab
         var htmlCode = '<div class="textView"><div><h1 class="'+cssClass+'" lang="'+lang+'">'+DATA.chaptersNames[chapterNr] + '</h1></div>';
+        htmlCode += UI.getTranslationCreditHtml(lang);
         if(lang2 && DATA.chaptersNames2[chapterNr]) {
           htmlCode += '<div><h1 class="'+cssClass2+'" lang="'+lang2+'">'+DATA.chaptersNames2[chapterNr]+ '</h1></div>';
+          htmlCode += UI.getTranslationCreditHtml(lang2);
         }
         if(lang3 && DATA.chaptersNames3[chapterNr]) {
           htmlCode += '<div><h1 class="'+cssClass3+'" lang="'+lang3+'">'+DATA.chaptersNames3[chapterNr]+ '</h1></div>';
+          htmlCode += UI.getTranslationCreditHtml(lang3);
         }
         
         for(var i=0;i<DATA.verses.length;i++) {

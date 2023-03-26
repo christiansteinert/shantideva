@@ -261,6 +261,23 @@ body.cordova.ios {
  padding: 0.4em 1% 0.6em 1%;
 }
 
+.translationCredit {
+  padding: 0.3em 0 1.5em 0;
+  font-size: 1em;
+  text-align: center;
+  text-indent: 0;
+}
+
+.translationCredit a {
+  color: #0E5484;
+}
+
+.dark .translationCredit a {
+  color: #5DAADF;
+  text-decoration: underline;
+}
+
+
 
 /* Style the list */
 .tab{

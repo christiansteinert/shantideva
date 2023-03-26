@@ -28,6 +28,7 @@ var TEXT_LANG_LIST={
     'ar':'العربية (Arabic)',
     'de':'Deutsch (German)',
     //'es':' Español (Spanish)',
+    'nl':'Nederlands (Dutch)',
     //'pt','Português (Portuguese)'
     'ru':'Русский (Russian)',
     'zh-cn':'简体中文 (Simplified Chinese)',
@@ -45,6 +46,7 @@ var LANG_LIST={
     'ar':'العربية (Arabic)',
     'de':'Deutsch (German)',
     //'es':' Español (Spanish)',
+    'nl':'Nederlands (Dutch)',
     //'pt','Português (Portuguese)'
     'ru':'Русский (Russian)',
     'bo':'བོད་ཡིག་ (Tibetan)',
@@ -152,6 +154,7 @@ var LANG_TRANSLATIONS = '<p><ul style="text-align:left;"><li>English translation
     +'<li>Russian translation / Русский перевод: Евгений Бузиатов. studybuddhism.com</li>'
     +'<li>Tibetan edition:  studybuddhism.com<br /></li>'
     +'</ul></p><hr /><p>The following translations are not affiliated with studybuddhism.com. Many thanks go to the translators / editors of these editions of the text: <ul style="text-align:left;">'
+    +'<li>Dutch tranlation by Hans van den Bogaert. Gepubliceerd met vriendelijke toestemming van Maitreya Instituut. Een gedrukte editie van deze vertaling is verkrijgbaar bij boeddhaboeken.nl</li>'
     +'<li>Chinese translation by master Jiqun / 如石法师译 / 如石法師譯. '
     +'<a href="https://www.putishuyuan.com" target="_blank" onclick="window.open(\'https://www.putishuyuan.com\',\'_system\');return false;">www.putishuyuan.com</a>, '
     +'<a href="https://www.bodhiacademy.org" target="_blank" onclick="window.open(\'https://www.bodhiacademy.org\',\'_system\');return false;">www.bodhiacademy.org</a>'
@@ -522,31 +525,7 @@ LANG['es']={
 "Translations & Commentaries":"Traducciones y comentarios",
 "Shantideva Translations":"Traducciones de Shantideva",
 "Commentaries on Shantideva":"Comentarios sobre Shantideva",
-"1:00":"1 a. m. (1:00)",
-"2:00":"2 a. m. (2:00)",
-"3:00":"3 a. m. (3:00)",
-"4:00":"4 a. m. (4:00)",
-"5:00":"5 a. m. (5:00)",
-"6:00":"6 a. m. (6:00)",
-"7:00":"7 a. m. (7:00)",
-"8:00":"8 a. m. (8:00)",
-"9:00":"9 a. m. (9:00)",
-"10:00":"10 a. m. (10:00)",
-"11:00":"11 a. m. (11:00)",
-"12:00":"12 a. m. (12:00)",
-"13:00":"1 p. m. (13:00)",
-"14:00":"2 p. m. (14:00)",
-"15:00":"3 p. m. (15:00)",
-"16:00":"4 p. m. (16:00)",
-"17:00":"5 p. m. (17:00)",
-"18:00":"6 p. m. (18:00)",
-"19:00":"7 p. m. (19:00)",
-"20:00":"8 p. m. (20:00)",
-"21:00":"9 p. m. (21:00)",
-"22:00":"10 p. m. (22:00)",
-"23:00":"11 p. m. (23:00)",
-"24:00":"12 p. m. (24:00) ",
-  
+
   "About_Text":'<div style="text-align:center" lang="es" class="es">'+LOGO+'<p lang="es" class="es">'
     + LANG_ABOUT_ES
     +'</p>'
@@ -554,6 +533,73 @@ LANG['es']={
     +'<hr />'
     + LANG_FONTS
 }
+
+
+
+
+LANG_ABOUT_NL = 'Deze app toont één vers per dag uit Shantideva\'s tekst “Het pad van de bodhisattva-krijger” (Bodhisattvacharyavatara) en maakt het mogelijk om de hele tekst door te lezen. “Het pad van de bodhisattva-krijger” is een buitengewoon praktische en inspirerende boeddhistische tekst die alle aspecten van het boeddhistische pad bestrijkt. Shantideva was een grote Indiase boeddhistische meester die leefde in de 8e eeuw na Christus. Twee van zijn teksten zijn bewaard gebleven - de Bodhicharyavatara (de tekst die in deze app wordt weergegeven) en de Shikshasamuccaya (“Compendium van Trainingen”). Beide teksten worden tot op de dag van vandaag nog gebruikt en vooral de Bodhicharyavatara is een van de meest gekoesterde en meest onderwezen teksten in de Tibetaanse traditie.'
+    +'</p>'
+    +'<p lang="nl" class="nl">Nederlandse versie vertaald door Hans van den Bogaert. Gepubliceerd met vriendelijke toestemming van '
+    +'<a href="https://www.maitreya.nl/" target="_blank" onclick="window.open(\'https://www.maitreya.nl/\');return false;">Maitreya Instituut</a>. '
+    +'Een gedrukte editie van deze vertaling is verkrijgbaar bij <a href="https://www.boeddhaboeken.nl/pad-van-de-bodhisattva-krijger"  target="_blank" onclick="window.open(\'https://www.boeddhaboeken.nl/pad-van-de-bodhisattva-krijger\');return false;">boeddhaboeken.nl</a>.<hr />'
+    +'<p>You can find a lot of Buddhist material in many languages at: '
+    +'<a href="https://studybuddhism.com" target="_blank" onclick="window.open(\'https://studybuddhism.com\',\'_system\');return false;">'
+    +'studybuddhism.com'
+    +'</a></p>'
+    +'<p>'
+    +'Studybuddhism.com is a website that makes comprehensive material about Buddhism available in 31 languages. If you find this app helpful then please consider making a donation at the website of studybuddhism.com to support their extensive efforts.';
+
+LANG['nl']={
+    "Translation_Credit": 'Nederlandse versie vertaald door Hans van den Bogaert. Gepubliceerd met vriendelijke toestemming van '
+    +'<a href="https://www.maitreya.nl/" target="_blank" onclick="window.open(\'https://www.maitreya.nl/\');return false;">Maitreya Instituut</a>. '
+    +'Een gedrukte editie van deze vertaling is verkrijgbaar bij <a href="https://www.boeddhaboeken.nl/pad-van-de-bodhisattva-krijger"  target="_blank" onclick="window.open(\'https://www.boeddhaboeken.nl/pad-van-de-bodhisattva-krijger\');return false;">boeddhaboeken.nl</a>.',
+	"App_Title": "Shantideva",
+	"Shantideva App": "Shantideva-app",
+	"Android App": "Android-app",
+	"iOS App": "iOS-app",
+	"Online App": "Online App",
+	"Verse of the Day": "Vers van de dag",
+	"About": "Over ",
+	"Settings": "Instellingen",
+	"Full Text": "Volledige tekst",
+	"Chapter %1, Verse %2": "Hoofdstuk %1, Vers %2",
+	"About This App": "Over deze app",
+	"Jump to this verse in the text.": "Spring naar dit vers in de tekst.",
+	"Language of Shantideva's text": "Taal van Shantideva's tekst",
+	"Language of the App": "Taal van de App",
+	"You can show the text in up to three different languages at the same time in order to compare different translations.": "U kunt de tekst in maximaal drie verschillende talen tegelijk weergeven om verschillende vertalingen te vergelijken.",
+	"Text Language": "Tekst taal",
+	"Text Language 2": "Tekst taal 2",
+	"Text Language 3": "Tekst taal 3",
+	"Display Settings": "Weergave-instellingen",
+	"App Language": "Taal van de app",
+	"Font Size": "Lettergrootte",
+	"Text color": "Tekstkleur",
+	"Black text on white background": "Zwarte tekst op witte achtergrond",
+	"White text on black background": "Witte tekst op zwarte achtergrond",
+	"Notification Messages": "Berichten met meldingen",
+	"Time": "Tijd",
+	"Daily Message": "Dagelijks bericht",
+	"Show Messages": "Berichten weergeven",
+	"Enable the options below the see the verse of the day as a notification message.": "Schakel de onderstaande opties in om het vers van de dag als een meldingsbericht te bekijken.",
+	"You need to be online when you save the notification settings.": "U moet online zijn wanneer u de meldingsinstellingen opslaat.",
+	"Notifications can only be displayed you when you are online.": "Meldingen kunnen alleen worden weergegeven als u online bent.",
+	"Favorite Verses": "Favoriete verzen",
+	"Mark verse as favorite": "Markeer vers als favoriet",
+	"This verse was marked as a favorite": "Dit vers werd gemarkeerd als een favoriet",
+	"This verse was removed from your favorites": "Dit vers is verwijderd uit uw favorieten",
+	"Cancel": "Annuleren",
+	"Save": "Bewaren",
+
+  "About_Text":'<div style="text-align:center" lang="nl" class="nl">'+LOGO+'<p lang="nl" class="nl">'
+    + LANG_ABOUT_NL
+    +'</p>'
+    + LANG_TRANSLATIONS
+    +'<hr />'
+    + LANG_FONTS
+}
+
+
 
 
 
