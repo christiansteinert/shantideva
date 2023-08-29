@@ -27,6 +27,7 @@ const check_reqs = require('../check_reqs');
 const PackageType = require('../PackageType');
 const { compareByAll } = require('../utils');
 const { createEditor } = require('properties-parser');
+const CordovaGradleConfigParserFactory = require('../config/CordovaGradleConfigParserFactory');
 
 const MARKER = 'YOUR CHANGES WILL BE ERASED!';
 const SIGNING_PROPERTIES = '-signing.properties';
@@ -84,7 +85,13 @@ class ProjectBuilder {
     }
 
     getArgs (cmd, opts) {
-        let args;
+        let args = [
+            '-b', path.join(this.root, 'build.gradle')
+        ];
+        if (opts.extraArgs) {
+            args = args.concat(opts.extraArgs);
+        }
+
         let buildCmd = cmd;
         if (opts.packageType === PackageType.BUNDLE) {
             if (cmd === 'release') {
@@ -92,8 +99,6 @@ class ProjectBuilder {
             } else if (cmd === 'debug') {
                 buildCmd = ':app:bundleDebug';
             }
-
-            args = [buildCmd, '-b', path.join(this.root, 'build.gradle')];
         } else {
             if (cmd === 'release') {
                 buildCmd = 'cdvBuildRelease';
@@ -101,14 +106,12 @@ class ProjectBuilder {
                 buildCmd = 'cdvBuildDebug';
             }
 
-            args = [buildCmd, '-b', path.join(this.root, 'build.gradle')];
-
             if (opts.arch) {
                 args.push('-PcdvBuildArch=' + opts.arch);
             }
         }
 
-        args.push.apply(args, opts.extraArgs);
+        args.push(buildCmd);
 
         return args;
     }
@@ -145,19 +148,6 @@ class ProjectBuilder {
         };
     }
 
-    extractRealProjectNameFromManifest () {
-        const manifestPath = path.join(this.root, 'app', 'src', 'main', 'AndroidManifest.xml');
-        const manifestData = fs.readFileSync(manifestPath, 'utf8');
-        const m = /<manifest[\s\S]*?package\s*=\s*"(.*?)"/i.exec(manifestData);
-        if (!m) {
-            throw new CordovaError('Could not find package name in ' + manifestPath);
-        }
-
-        const packageName = m[1];
-        const lastDotIndex = packageName.lastIndexOf('.');
-        return packageName.substring(lastDotIndex + 1);
-    }
-
     // Makes the project buildable, minus the gradle wrapper.
     prepBuildFiles () {
         // Update the version of build.gradle in each dependent library.
@@ -184,7 +174,11 @@ class ProjectBuilder {
                 checkAndCopy(subProjects[i], this.root);
             }
         }
-        const projectName = this.extractRealProjectNameFromManifest();
+
+        // get project name cdv-gradle-config.
+        const cdvGradleConfig = CordovaGradleConfigParserFactory.create(this.root);
+        const projectName = cdvGradleConfig.getProjectNameFromPackageName();
+
         // Remove the proj.id/name- prefix from projects: https://issues.apache.org/jira/browse/CB-9149
         const settingsGradlePaths = subProjects.map(function (p) {
             const realDir = p.replace(/[/\\]/g, ':');
@@ -325,6 +319,8 @@ class ProjectBuilder {
     async build (opts) {
         const wrapper = path.join(this.root, 'gradlew');
         const args = this.getArgs(opts.buildType === 'debug' ? 'debug' : 'release', opts);
+
+        events.emit('verbose', `Running Gradle Build: ${wrapper} ${args.join(' ')}`);
 
         try {
             return await execa(wrapper, args, { stdio: 'inherit', cwd: path.resolve(this.root) });

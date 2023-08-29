@@ -23,6 +23,7 @@ const build = require('./build');
 const PackageType = require('./PackageType');
 const AndroidManifest = require('./AndroidManifest');
 const { CordovaError, events } = require('cordova-common');
+const CordovaGradleConfigParserFactory = require('./config/CordovaGradleConfigParserFactory');
 
 /**
  * Builds a target spec from a runOptions object
@@ -78,6 +79,53 @@ module.exports.run = async function (runOptions = {}) {
     }
 
     const manifest = new AndroidManifest(this.locations.manifest);
+    const cordovaGradleConfigParser = CordovaGradleConfigParserFactory.create(this.locations.root);
 
-    return target.install(resolvedTarget, { manifest, buildResults });
+    return target.install(resolvedTarget, { manifest, buildResults, cordovaGradleConfigParser });
+};
+
+module.exports.listDevices = async function () {
+    events.emit('log', `\nAvailable ${this.platform} devices:`);
+
+    const { list } = require('./target');
+
+    await list().then(targets => {
+        const deviceIds = targets
+            .filter(({ type }) => type === 'device')
+            .map(({ id }) => id);
+
+        console.log(deviceIds.join('\n'));
+    }, function (err) {
+        console.error('ERROR: ' + err);
+        process.exit(2);
+    });
+};
+
+module.exports.listEmulators = async function () {
+    events.emit('log', `\nAvailable ${this.platform} virtual devices:`);
+    const emulators = require('./emulator');
+
+    await emulators.list_images().then(function (emulator_list) {
+        emulator_list && emulator_list.forEach(function (emu) {
+            console.log(emu.name);
+        });
+    }, function (err) {
+        console.error('ERROR: ' + err);
+        process.exit(2);
+    });
+};
+
+module.exports.runListDevices = async function (options = {}) {
+    const { options: cliArgs = {} } = options;
+
+    if (cliArgs?.device) {
+        await module.exports.listDevices.call(this);
+    } else if (cliArgs?.emulator) {
+        await module.exports.listEmulators.call(this);
+    } else {
+        await module.exports.listDevices.call(this);
+        await module.exports.listEmulators.call(this);
+    }
+
+    return true;
 };

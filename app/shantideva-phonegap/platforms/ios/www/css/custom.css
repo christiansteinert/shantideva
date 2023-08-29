@@ -198,11 +198,13 @@ body.dark {
 .light #infoTab a{
  color:#b00;
 }
-
 .dark #infoTab a{
  color:#f55;
 }
-
+input {
+  background-color:#fff;
+  color:#000;
+}
 
 .header, .footer {
  background-color: #136AA6;
@@ -258,6 +260,23 @@ body.cordova.ios {
  height: 1em;
  padding: 0.4em 1% 0.6em 1%;
 }
+
+.translationCredit {
+  padding: 0.3em 0 1.5em 0;
+  font-size: 1em;
+  text-align: center;
+  text-indent: 0;
+}
+
+.translationCredit a {
+  color: #0E5484;
+}
+
+.dark .translationCredit a {
+  color: #5DAADF;
+  text-decoration: underline;
+}
+
 
 
 /* Style the list */

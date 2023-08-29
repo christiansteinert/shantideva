@@ -3,3 +3,5 @@ _internal
 .kateproject
 ShantidevaVerses.apk
 .serverless
+ShantidevaVerses-aligned.apk.idsig
+.DS_Store

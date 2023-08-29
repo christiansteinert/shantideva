@@ -2,6 +2,8 @@ export ANDROID_HOME=~/Android/Sdk
 export ANDROID_SDK_ROOT=$ANDROID_HOME
 export PATH=$ANDROID_HOME/platform-tools:$PATH 
 export PATH=$ANDROID_HOME/tools:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/build-tools/33.0.2:$PATH
 
 export ANDROID_TOOLS_VERSION=`ls -1 $ANDROID_HOME/build-tools/ |tail -n 1 `
 export ANDROID_TOOLS_PATH="$ANDROID_HOME/build-tools/$ANDROID_TOOLS_VERSION"
@@ -36,5 +38,5 @@ echo xxxxxxxx|$ANDROID_TOOLS_PATH/apksigner sign --verbose --ks "./_internal/my-
 mv ShantidevaVerses-aligned.apk ShantidevaVerses.apk
 
 APP_VERSION=`cat app/shantideva-phonegap/config.xml |grep '<widget' | sed  's#.* version="\([^"]*\)".*#\1#'`
-cp ShantidevaVerses.apk "android_releases/New versions (Android 5.0 and higher)/ShantidevaVerses_${APP_VERSION}.apk"
+cp ShantidevaVerses.apk "android_releases/New versions (Android 7.0 and higher)/ShantidevaVerses_${APP_VERSION}.apk"
 

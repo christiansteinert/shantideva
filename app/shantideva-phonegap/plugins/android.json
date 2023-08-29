@@ -18,9 +18,6 @@
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
-    "cordova-support-google-services": {
-      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
-    },
     "phonegap-plugin-multidex": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     }

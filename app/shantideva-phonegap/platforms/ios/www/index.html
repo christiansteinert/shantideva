@@ -24,33 +24,17 @@
 <script>
 
 CONFIG = {
-  _language:null,
-  _textLanguage:null,
-  _textLanguage2:null,
-  _textLanguage3:null,
-  _messageEnabled:null,
-  _messageHour:null,
-  _colorTheme:null,
-  _fontSize:null,
+  _settings:{},
   _favoriteVerses:{},
     
   isInitialized:function() {
-    if(this._language) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!this._settings.uiLanguage;
   },
   
-  isSettingsMigrationNeeded:function() {
-    var cfgSetting = localStorage.getItem("uiLanguage");
-    if(!cfgSetting) {
-      // ui language is not set. Configuration must be adjusted
-      return true;
-    } else {
-      // ui language is set. Configuration has the latest format and need not be migrated
-      return false;
-    }
+  isSettingsMigrationNeeded:function(cordovaSettings) {
+    // if we don't have cordova settings forthe colorTheme  then we need to persist old settings from the localStorage;
+    // if we don't have a uiLanguage in the frontend then we have no settings whatsoever
+    return !cordovaSettings.colorTheme || !localStorage.getItem("uiLanguage");
   },
   
   isIOS:function() {
@@ -70,155 +54,95 @@ CONFIG = {
 
   /** get UI language */
   getUILang:function() {
-    if(this._language === null) {
-      // get ui language from configuration
-      var cfgSetting = localStorage.getItem("uiLanguage");
-      if(cfgSetting) {
-        this._language = cfgSetting;
-      } 
-    
-      // check if any of the user's preferred language is supported by the app
-      if(!this._language) {
-        if(navigator.languages) {
-            for(var i in navigator.languages) {
-                var locale = navigator.languages[i].toLowerCase(); // full locale, e.g. zh-CN
-                var lang   = locale.substring(0,2); // language, e.g. zh or en
-                
-                if(lang == 'zh') {
-                  if(locale.indexOf('hans')) {
-                    lang = "zh-cn"; // simplified chinese, specified explicitly
-                  } if(locale.indexOf('hant')||locale.indexOf('tw')||locale.indexOf('hk')||locale.indexOf('mo')) {
-                    lang = "zh-tw"; // traditional chinese
-                  } else {
-                    lang = "zh-cn"; // simplified chinese
-                  }
-                }
-                
-                if(LANG_LIST[lang]) {
-                    this._language = lang;
-                    break;
-                }
-            }
+    return this._settings.uiLanguage;
+  },
+
+  getPreferredUserLanguage:function() {
+    // check if any of the user's preferred language is supported by the app
+    if(navigator.languages) {
+      for(var i in navigator.languages) {
+        var locale = navigator.languages[i].toLowerCase(); // full locale, e.g. zh-CN
+        var lang   = locale.substring(0,2); // language, e.g. zh or en
+        
+        if(lang === 'zh') {
+          if(locale.indexOf('hans')) {
+            lang = "zh-cn"; // simplified chinese, specified explicitly
+          } if(locale.indexOf('hant')||locale.indexOf('tw')||locale.indexOf('hk')||locale.indexOf('mo')) {
+            lang = "zh-tw"; // traditional chinese
+          } else {
+            lang = "zh-cn"; // simplified chinese
+          }
+        }
+        
+        if(LANG_LIST[lang]) {
+          return lang;
         }
       }
-
-      if(!this._language) {
-        if (navigator.language && LANG_LIST[navigator.language]) {
-            this._language = navigator.language;
-        }
-      }
-
-      if(!this._language)
-        this._language = 'en';
     }
-    return this._language;
+
+    // check if the browser language is supported by the app
+    if (navigator.language && LANG_LIST[navigator.language]) {
+      return navigator.language;
+    }
+
+    // fall back to English as default
+    return 'en';
   },
   
   getMessageEnabled:function() {
-    if(this._messageEnabled === null) {
-      var cfgSetting = localStorage.getItem("messageEnabled");
-      if(cfgSetting === false || cfgSetting === "false"  ) {
-        this._messageEnabled = false; // user has deactivated notifications  
-      } else {
-        this._messageEnabled = true;  // user not deactivated notifications (default behavior or explicit activation)
-      }
-    }
-    return this._messageEnabled;
+    return this._settings.messageEnabled;
   },
 
   getMessageHour:function() {
-    if(this._messageHour === null) {
-      var cfgSetting = localStorage.getItem("messageHour");
-      if(cfgSetting || (cfgSetting == 0)) {
-        this._messageHour = Number( cfgSetting ); // configured notification hour
-      } else {
-        this._messageHour = 10; // default notification hour
-      }
-    }
-    return this._messageHour;
+    return this._settings.messageHour;
   },
 
   getFontSize:function() {
-    if(this._fontSize === null) {
-      var cfgSetting = localStorage.getItem("fontSize");
-      
-      if(cfgSetting && parseInt(cfgSetting) >= 50) {
-        this._fontSize = parseInt(cfgSetting); // configured font size
-      } else {
-        this._fontSize = 100; // default font size
-      }
-    }
-    return this._fontSize;
+    return parseInt(this._settings.fontSize, 10);
   },
 
   getColorTheme:function() {
-    if(this._colorTheme === null) {
-      var cfgSetting = localStorage.getItem("colorTheme");
-      if(cfgSetting) {
-        // the user has saved a setting for the color theme. Use it
-        this._colorTheme = cfgSetting;
-      } else { // color theme has not been configured yet. Return default setting
-        this._colorTheme = 'light'; // standard behavior is light theme.
-        if((window.matchMedia)) {        
-          var prefersDarkScheme = window.matchMedia('(prefers-color-scheme:dark)');
-          if(prefersDarkScheme.matches) {
-            this._colorTheme = 'dark'; // The browser says that the user prefers a dark theme. Use it.
-          }
-        }
-      }
-    }
-    return this._colorTheme;
+    return this._settings.colorTheme;
   },  
 
+  getPreferredColorTheme:function() {
+    var prefersDarkScheme = window.matchMedia('(prefers-color-scheme:dark)');
+    if(prefersDarkScheme.matches) {
+      return 'dark'; // The browser says that the user prefers a dark theme. Use it.
+    } else {
+      return 'light';
+    }
+  },
+
   /** get current text language */
-  getTextLang:function( ) {
-    if(this._textLanguage === null) {
-      var cfgSetting = localStorage.getItem("textLanguage");
-      if(cfgSetting) {
-        this._textLanguage = cfgSetting;
-      } else {
-        var uiLang = this.getUILang();
-        if(TEXT_LANG_LIST[uiLang]) {
-          this._textLanguage = uiLang;
-        } else {
-          this._textLanguage = 'en';
-        }
-      }
-    }
-    return this._textLanguage;
+  getTextLang:function() {
+    return this._settings.textLanguage;
   },
 
-  getTextLang2:function( ) {
-    if(this._textLanguage2 === null) {
-      var cfgSetting = localStorage.getItem("textLanguage2");
-      if(cfgSetting) {
-        this._textLanguage2 = cfgSetting;
-      } else {
-        this._textLanguage2 = ''; // default value is that 2nd text language is deactivated
-      }
-    }
-    return this._textLanguage2;
+  getPreferredTextLanguage:function() {
+    var uiLang = this.getPreferredUserLanguage();
+    if(TEXT_LANG_LIST[uiLang]) {
+      return uiLang;
+    } else {
+      return 'en';
+    }    
   },
 
-  getTextLang3:function( ) {
-    if(this._textLanguage3 === null) {
-      var cfgSetting = localStorage.getItem("textLanguage3");
-      if(cfgSetting) {
-        this._textLanguage3 = cfgSetting;
-      } else {
-        this._textLanguage3 = ''; // default value is that 3rd text language is deactivated
-      }
-    }
-    return this._textLanguage3;
+  getTextLang2:function() {
+    return this._settings.textLanguage2;
+  },
+
+  getTextLang3:function() {
+    return this._settings.textLanguage3;
   },
   
   /* get the CSS class or classes to be used for a language */
   getCssClassForLang:function(lang) {    
-    if ( lang == 'bo' || lang == 'ru' || lang == 'ar' || lang == 'zh-cn' || lang == 'zh-tw')
+    if ( lang === 'bo' || lang === 'ru' || lang === 'ar' || lang === 'zh-cn' || lang === 'zh-tw')
       return lang;
-    else if (lang == 'sa-devanagari') 
+    else if (lang === 'sa-devanagari') 
       return lang;
-    else if (lang == 'bo-wylie') 
+    else if (lang === 'bo-wylie') 
       return 'latin ' + lang;
     else 
       return 'latin ' + this.getLangCode( lang );
@@ -245,20 +169,18 @@ CONFIG = {
     return 'content/text_'+this.getTextLang3()+'.txt';
   },
   
-  getSettingsFromConfig:function() {
-    var uiLang = this.getUILang();
+  getSettingsFromLocalStorage:function() {
     var verseOfTheDayTxt = UI.getText("Verse of the Day");
-    
     var settings = {
-      uiLanguage: uiLang,
-      fontSize: this.getFontSize(),
-      colorThemeSize: this.getColorTheme(),
-      textLanguage: this.getTextLang(),
-      textLanguage2: this.getTextLang2(),
-      textLanguage3: this.getTextLang3(),
-      messageEnabled: this.getMessageEnabled(),
-      messageHour: this.getMessageHour(),
+      uiLanguage: localStorage.getItem("uiLanguage") || this.getPreferredUserLanguage(),
+      textLanguage: localStorage.getItem("textLanguage") || this.getPreferredTextLanguage(),
+      textLanguage2: localStorage.getItem("textLanguage2") || '',
+      textLanguage3: localStorage.getItem("textLanguage3") || '',
+      messageEnabled: localStorage.getItem("messageEnabled") === false ? false : true,
+      messageHour: localStorage.getItem("messageHour") != null ? localStorage.getItem("messageHour") : 10,
       messageMinute: 0,
+      fontSize: localStorage.getItem("fontSize") || 100,
+      colorTheme: localStorage.getItem("colorTheme") || this.getPreferredColorTheme(),
       verseOfTheDay: verseOfTheDayTxt
     };
     
@@ -270,53 +192,89 @@ CONFIG = {
    */
   mixSettings:function(cordovaSettings, jsSettings) {
     var settings = jsSettings;
+    var cordovaSettingsExist = (Object.keys(cordovaSettings).length > 0);
+    var jsSettingsExist = !!localStorage.getItem("uiLanguage");
 
-    if(Object.keys(cordovaSettings).length > 0) {
-      // settings from cordova - especially locale settings - are more reliable. Prefer them if they are present
-      if(cordovaSettings.uiLanguage) {
-        settings.uiLanguage = cordovaSettings.uiLanguage;
-        
-        // localized texts come only from UI layer. So always get the text "Verse of the Day" from Javascript
-        settings.verseOfTheDay = UI.getText("Verse of the Day", settings.uiLanguage);
+    if(cordovaSettingsExist && !jsSettingsExist) {
+      // we have settings in Cordova but settings in localStorage were lost. Prefer cordova settings in most cases
+      settings = cordovaSettings;
+      if (!cordovaSettings.colorTheme) {
+        settings.colorTheme = jsSettings.colorTheme;
       }
 
-      if(cordovaSettings.textLanguage) {
+    } else if(jsSettingsExist && !cordovaSettingsExist) {
+      // we have settings in localStorage but cordova does not return anything. Prefer localStorage settings 
+      settings = jsSettings;
+    } else {
+      settings = jsSettings; 
+
+      // mix settings from localStorage and cordova. Prefer cordova settings where available.
+      if('uiLanguage' in cordovaSettings) {
+        settings.uiLanguage = cordovaSettings.uiLanguage;
+      }
+      
+      if('textLanguage' in cordovaSettings) {
         settings.textLanguage = cordovaSettings.textLanguage;    
         settings.textLanguage2 = cordovaSettings.textLanguage2;    
         settings.textLanguage3 = cordovaSettings.textLanguage3;    
       }
-      
+
       if ('messageHour' in cordovaSettings) {
+        settings.messageEnabled = cordovaSettings.messageEnabled;
         settings.messageHour = cordovaSettings.messageHour;
         settings.messageMinute = cordovaSettings.messageMinute;
-        settings.messageEnabled = cordovaSettings.messageEnabled;
       }
-      
-      this.saveSettings(settings);
+
+      if ('colorTheme' in cordovaSettings && cordovaSettings.colorTheme) {
+        settings.colorTheme = cordovaSettings.colorTheme;
+        settings.fontSize = parseInt(cordovaSettings.fontSize, 10);
+      } else {
+        settings.fontSize = parseInt(settings.fontSize, 10);
+      }
     }
+
+    // localized texts come only from UI layer. So always get the text "Verse of the Day" from Javascript
+    settings.verseOfTheDay = UI.getText("Verse of the Day", settings.uiLanguage);
+
+    this.saveSettings(settings);
+    return settings;
   },
-  
+
   /* load all settings */
-  loadSettings:function(callbackFunc) {
-    // Load settings from the cordova plugin if there are any.
-    // Then mix this with additional default settings. 
-    // If necessary then we will save the settings back again so that the 
-    // Java code has a new clean state
-    if(this.isSettingsMigrationNeeded()) {
-      this.getCordovaPlugin().loadSettings(
-        function(cordovaSettings) {
-          CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromConfig());
+  loadCordovaSettings:function(callbackFunc) {
+    this.getCordovaPlugin().loadSettings(
+      function(cordovaSettings, favoriteVerseSettings) {
+        // user favorite verses and deviceID from cordova if available
+        if(favoriteVerseSettings) {
+          favoriteVersesCordova = JSON.parse(favoriteVerseSettings);
+          if(favoriteVersesCordova.favorite_verses && '1' in favoriteVersesCordova.favorite_verses) {
+            CONFIG._favoriteVerses = favoriteVersesCordova.favorite_verses;
+            if(!localStorage.getItem('deviceUUID')) {
+              localStorage.setItem('deviceUUID', favoriteVersesCordova.device_id);
+            }
+          }
+        }
+
+        if(CONFIG.isSettingsMigrationNeeded(cordovaSettings)) {
+          // Load settings from the cordova plugin if there are any.
+          // Then mix this with additional default settings. 
+          // If necessary then we will save the settings back again so that the 
+          // Java code has a new clean state
+          CONFIG._settings = CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromLocalStorage());
+          callbackFunc();
+        } else {
+          //we already have the settings that we need on the cordova side and do not need to mix settings from localStorage
+          CONFIG._settings = cordovaSettings;
           callbackFunc();
         }
-      );
-    } else {
-      //we already have the settings that we need
-      //no need to do a config migration or wait for Cordova to start up.
-      //we can run directly with the settings that are stored on the Javascript side
-      callbackFunc();
-    }
+      }
+    );
   },
-  
+
+  loadSettings:function() {
+    this._settings = CONFIG.getSettingsFromLocalStorage();
+  },
+
   /* save all settings  
    * attributes of the settings object: {messageEnabled:true, messageHour:'10', messageMinute:00, uiLanguage:'en', textLanguage:'en', textLanguage2:''}
    */ 
@@ -338,7 +296,7 @@ CONFIG = {
   },
   
   /* get the object of our native cordova plugin */
-  getCordovaPlugin:function(settings) {
+  getCordovaPlugin:function() {
     if(window.cordova && cordova.plugins && cordova.plugins.DailyVersesPlugin ) {
       // we are running inside of cordova - return the native plugin
       return cordova.plugins.DailyVersesPlugin;
@@ -349,8 +307,9 @@ CONFIG = {
         setAlarm: function(success, error) {},
         testTimer: function(success, error) {},
         saveSettings:function(settings, success, error) {},
-        loadSettings:function(success, error) {success({}); }
-      }
+        loadSettings:function(success, error) {success({}); },
+        saveFavoriteVerses:function(success, error) {success()}
+      };
     }
   },
   
@@ -379,7 +338,7 @@ CONFIG = {
           this._favoriteVerses[String(chapterNr)] = {};
         }
       }
-      return this._favoriteVerses
+      return this._favoriteVerses;
     }
   },
   
@@ -394,22 +353,20 @@ CONFIG = {
     // this information is not personalized but could be used later to develop additional features 
     // if we know which verses are particularly popular.
     localStorage.setItem('favoriteVersesForCloud', JSON.stringify(favoriteVerses));
-    
+
+    this.saveFavoriteVersesToCordova(favoriteVerses);
     this.saveFavoriteVersesToCloud();
   },
-  
-  getPlatform:function() {
-    if(window.cordova) {
-      if(this.isIOS()) {
-        return "ios";
-      } else {
-        return "android";      
-      }
-    } else {
-      return "web";
-    }
+
+  saveFavoriteVersesToCordova:function(favoriteVerses) {
+    var cordovaVerseInfo = {
+      "device_id":this._getDeviceUUID(),
+      "favorite_verses": favoriteVerses,
+    };
+    CONFIG.getCordovaPlugin().saveFavoriteVerses(JSON.stringify(cordovaVerseInfo));
+
   },
-  
+
   saveFavoriteVersesToCloud:function() {
     var versesToSave = localStorage.getItem('favoriteVersesForCloud');
     
@@ -438,6 +395,18 @@ CONFIG = {
     }
   },
   
+  getPlatform:function() {
+    if(window.cordova) {
+      if(this.isIOS()) {
+        return "ios";
+      } else {
+        return "android";      
+      }
+    } else {
+      return "web";
+    }
+  },
+  
   /**
    * toggle the state whether a verse is currently a favorite and save that change.
    * @param chapter
@@ -463,7 +432,7 @@ CONFIG = {
    * the information is simply used to get an idea which verses are particulaly popular; this may help with developing new features in the future.
    */
   _createUUID:function() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) { var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) { var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
   },
   
   _getDeviceUUID:function() {
@@ -472,12 +441,10 @@ CONFIG = {
       deviceId = this._createUUID();
       localStorage.setItem('deviceUUID', deviceId);    
     }
-    
+
     return deviceId;
   }
-    
-}
-
+};
 
 UI = {
   currentChapter: -1,
@@ -488,7 +455,7 @@ UI = {
   _setDropdownValues:function(dropdownId, options, selectedOption ) {
       var optHtml='';
       for(var opt in options) {
-        optHtml += '<option value="'+ opt +'">'+ options[opt] +'</option>'
+        optHtml += '<option value="'+ opt +'">'+ options[opt] +'</option>';
       }
       var $dropdown = $('#'+dropdownId);
       $dropdown.html( $dropdown.html() + optHtml );      
@@ -505,13 +472,13 @@ UI = {
     verseOfTheDayTxt = verseOfTheDayTxt.replace(/&[^;]*;/g, ' '); // replace any HTML entities with spaces
     var settings = {
       uiLanguage: uiLang,
-      fontSize: $('#fontSize').val(),
+      fontSize: parseInt($('#fontSize').val(), 10),
       colorTheme: $('#colorTheme').val(),
       textLanguage: $('#textLanguage').val(),
       textLanguage2: $('#textLanguage2').val(),
       textLanguage3: $('#textLanguage3').val(),
       messageEnabled: $('#messageEnabled').is(":checked"),
-      messageHour: parseInt($('#messageHour').val(),10),
+      messageHour: parseInt($('#messageHour').val(), 10),
       messageMinute: 0,
       verseOfTheDay: verseOfTheDayTxt
     };
@@ -580,7 +547,7 @@ UI = {
   
 
   onResume:function() {
-    if(this._activeTab == 'homeTab') {
+    if(this._activeTab === 'homeTab') {
       // Refresh the content of the home tab when the app was in background to make sure 
       // that the home tab definitely shows the current verse of the day even after a date rollover.
       // If a tab other than the home tab is active at the moment then we don't need to do anything 
@@ -647,15 +614,15 @@ UI = {
   
   /* activate a given tab and initialize the state of that tab beforehand if needed */
   openTab:function(tabName) {
-    if(tabName == 'homeTab') {
+    if(tabName === 'homeTab') {
       this.updateVerseOfTheDay();
-    } else if(tabName == 'textTab') {
-      if(this.currentChapter == -1) {
+    } else if(tabName === 'textTab') {
+      if(this.currentChapter === -1) {
         this.showChapter(1);
       }
-    } else if(tabName == 'favoritesTab') {
+    } else if(tabName === 'favoritesTab') {
       this.initFavoriteVersesTab();      
-    } else if(tabName == 'settingsTab') {
+    } else if(tabName === 'settingsTab') {
       this.initSettingsTab();
     }
     
@@ -705,7 +672,7 @@ UI = {
 
   /*localize all texts within the initial page*/
   localizeText:function() {
-    var htmlCode = $('body').html();
+    var htmlCode = $('#bodyContent').html();
     if (window.LANG && LANG[CONFIG.getUILang()]) {
       for(var txtid in LANG[CONFIG.getUILang()]) {
         var textVal = LANG[CONFIG.getUILang()][txtid];
@@ -714,10 +681,10 @@ UI = {
     }
     htmlCode = this._replaceAll(htmlCode,"{{","");
     htmlCode = this._replaceAll(htmlCode,"}}","");
-    $('body').html(htmlCode);
+    $('#bodyContent').html(htmlCode);
     
     var lang = CONFIG.getLangCode( CONFIG.getUILang() );    
-    $('body').attr('lang',lang);
+    $('#bodyContent').attr('lang',lang);
 
     $('.header,.footer').addClass( CONFIG.getCssClassForLang(CONFIG.getUILang()) );
   },
@@ -748,7 +715,6 @@ UI = {
     this.scrollElementIntoView($('#textTab')[0], verseDom[0], -8);
   },
 
-  
   updateVerseOfTheDay:function() {
     var verseInfo = DATA.getVerseOfTheDay(1);
     var verseInfo2 = DATA.getVerseOfTheDay(2);
@@ -772,24 +738,24 @@ UI = {
     htmlCode = '<div id="verseOfTheDayCont" class="vcenterContainer"><div id="verseOfTheDay" class="vcenter">';
     htmlCode += '<div id="verseOfTheDayNarrow">';
 
-    htmlCode += '<div class="verse '+cssClass+'" lang="'+lang+'">'
+    htmlCode += '<div class="verse '+cssClass+'" lang="'+lang+'">';
     htmlCode += verseText;
     
-    htmlCode += '</div>'
+    htmlCode += '</div>';
 
     htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
 
     if(verseText2) {
-      htmlCode += '<div class="verse '+cssClass2+'" lang="'+lang2+'">'
+      htmlCode += '<div class="verse '+cssClass2+'" lang="'+lang2+'">';
       htmlCode += verseText2;
-      htmlCode += '</div>'
+      htmlCode += '</div>';
       htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
     }
 
     if(verseText3) {
-      htmlCode += '<div class="verse '+cssClass3+'" lang="'+lang3+'">'
+      htmlCode += '<div class="verse '+cssClass3+'" lang="'+lang3+'">';
       htmlCode += verseText3;
-      htmlCode += '</div>'
+      htmlCode += '</div>';
       htmlCode += '<p><a href="javascript:void(0)" onclick="UI.jumpToVerseOfTheDay()" class="btn" title="'+this.getText('Jump to this verse in the text.')+'">'+this.getText('Chapter %1, Verse %2', CONFIG.getUILang(), verseInfo.chapter, verseInfo.nr)+'</a></p>';
     }
     
@@ -803,7 +769,7 @@ UI = {
     
     $('#homeTab a.btn').button();
     
-    $('#homeTabTitle h1').on('touchend mouseup', function(){ UI.titleClick() });
+    $('#homeTabTitle h1').on('touchend mouseup', function(){ UI.titleClick(); });
   },
   
   titleClick:function() {
@@ -816,6 +782,15 @@ UI = {
       UI._developer = true;
       UI.updateVerseOfTheDay();
     }
+  },
+  
+  getTranslationCreditHtml:function(lang) {
+    var text = this.getText('Translation_Credit', lang);
+    if(text != 'Translation_Credit') {
+      return '<p lang="' + lang + '" class="' + lang + ' translationCredit">' + text + '</p>';
+    } else {
+      return '';
+    }    
   },
 
   showChapter:function(chapterNr) {
@@ -843,16 +818,19 @@ UI = {
         
         // show the chapter content on the "full text" tab
         var htmlCode = '<div class="textView"><div><h1 class="'+cssClass+'" lang="'+lang+'">'+DATA.chaptersNames[chapterNr] + '</h1></div>';
+        htmlCode += UI.getTranslationCreditHtml(lang);
         if(lang2 && DATA.chaptersNames2[chapterNr]) {
           htmlCode += '<div><h1 class="'+cssClass2+'" lang="'+lang2+'">'+DATA.chaptersNames2[chapterNr]+ '</h1></div>';
+          htmlCode += UI.getTranslationCreditHtml(lang2);
         }
         if(lang3 && DATA.chaptersNames3[chapterNr]) {
           htmlCode += '<div><h1 class="'+cssClass3+'" lang="'+lang3+'">'+DATA.chaptersNames3[chapterNr]+ '</h1></div>';
+          htmlCode += UI.getTranslationCreditHtml(lang3);
         }
         
         for(var i=0;i<DATA.verses.length;i++) {
           var verse=DATA.verses[i];
-          if(verse.chapter == chapterNr) {
+          if(verse.chapter === chapterNr) {
             var likeBtn = UI.createLikeButtonCode(verse.chapter, verse.nr);
              
             htmlCode+='<div class="verse '+cssClass+'" lang="'+lang+'" id="verse'+verse.totalNr+'">' + verse.verseText.replace(/<\/p>$/,likeBtn+'</p>') + '</div>';
@@ -953,11 +931,11 @@ UI = {
   },
   
   initChaptersDropdown:function() {
-    var htmlCode = '<select>'
+    var htmlCode = '<select>';
     for(var chapter in DATA.chaptersNames) {
-      htmlCode += '<option value="'+chapter+'">'+DATA.chaptersNames[chapter]+'</option>'
+      htmlCode += '<option value="'+chapter+'">'+DATA.chaptersNames[chapter]+'</option>';
     }
-    htmlCode += '</select>'
+    htmlCode += '</select>';
 
     var cssClass = CONFIG.getCssClassForLang(CONFIG.getTextLang());
     $('#chapterDropdown').addClass(cssClass);
@@ -969,7 +947,7 @@ UI = {
       UI.showChapter(Number($select.val()));
     });
     
-    if( CONFIG.getUILang() == 'ar') {
+    if( CONFIG.getUILang() === 'ar') {
      $('#btnBack').button({icon:'ui-icon ui-icon-caret-1-e'});
      $('#btnNext').button({icon:'ui-icon ui-icon-caret-1-w'});
     } else {
@@ -983,7 +961,7 @@ UI = {
     this.openTab('homeTab');
   }
 
-}
+};
 
 DATA = {
   verses:[],
@@ -1026,7 +1004,7 @@ DATA = {
   },
 
   parseVerses:function(text, langNum) {
-    if(!text.indexOf('***') === 0) {
+    if(text.indexOf('***') !== 0) {
         return;
     }
 
@@ -1041,48 +1019,48 @@ DATA = {
         currLine;
     
     for (var i = 0; i < count; i++) {
-        currLine = lines[i];
-        currLine = currLine.replace(/ །/,"&nbsp།"); // add non-breaking space before Tibetan shad
-        currLine = currLine.replace(/་/g,"་&#x200b;"); // add zero-width space after Tibetan tseg to allow line breaking
-        currLine = currLine.replace(/•/g,"&shy;"); // replace • with a soft hyphen to allow line breaking (for Sanskrit)
-        
-        if(currLine.indexOf('***')>=0) {
-            chapterNr++;
-            var chapterName = currLine.replace(/ *[*]+ ?/g,'');
-            if(langNum===1) {
-              this.chaptersNames[chapterNr] = chapterName;
-            } else if(langNum===2) {
-              this.chaptersNames2[chapterNr] = chapterName;
-            }  else if(langNum===3) {
-              this.chaptersNames3[chapterNr] = chapterName;
-            }
-            
-            if(verse!=='') {
-              data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id}});
-            }
+      currLine = lines[i];
+      currLine = currLine.replace(/ །/,"&nbsp།"); // add non-breaking space before Tibetan shad
+      currLine = currLine.replace(/་/g,"་&#x200b;"); // add zero-width space after Tibetan tseg to allow line breaking
+      currLine = currLine.replace(/•/g,"&shy;"); // replace • with a soft hyphen to allow line breaking (for Sanskrit)
+      
+      if(currLine.indexOf('***')>=0) {
+          chapterNr++;
+          var chapterName = currLine.replace(/ *[*]+ ?/g,'');
+          if(langNum===1) {
+            this.chaptersNames[chapterNr] = chapterName;
+          } else if(langNum===2) {
+            this.chaptersNames2[chapterNr] = chapterName;
+          }  else if(langNum===3) {
+            this.chaptersNames3[chapterNr] = chapterName;
+          }
+          
+          if(verse!=='') {
+            data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id;}});
+          }
 
-            verseNr=1;
+          verseNr=1;
+          verse='';
+          
+      } else if(currLine === '') {
+          if(verse!=='') {
+            data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id;}});
+          
+            verseNr++;
             verse='';
-            
-        } else if(currLine === '') {
-            if(verse!=='') {
-              data.push({id:chapterNr+'_'+verseNr, totalNr:i-1, chapter:chapterNr, nr:verseNr, verseText: verse, getId:function(){return id}});
-            
-              verseNr++;
-              verse='';
-            }
-        } else {
-            verse += '<p>'+ currLine+'</p>';
-            //verse += currLine+'<br>';
-        }
-        
-        if(langNum===1) {        
-          this.chaptersSizes[chapterNr] = verseNr - 1;
-        } else if(langNum===2)  {
-          this.chaptersSizes2[chapterNr] = verseNr - 1;
-        } else if(langNum===3)  {
-          this.chaptersSizes3[chapterNr] = verseNr - 1;
-        }
+          }
+      } else {
+          verse += '<p>'+ currLine+'</p>';
+          //verse += currLine+'<br>';
+      }
+      
+      if(langNum===1) {        
+        this.chaptersSizes[chapterNr] = verseNr - 1;
+      } else if(langNum===2)  {
+        this.chaptersSizes2[chapterNr] = verseNr - 1;
+      } else if(langNum===3)  {
+        this.chaptersSizes3[chapterNr] = verseNr - 1;
+      }
     }
     
     if(langNum===1) {        
@@ -1108,14 +1086,14 @@ DATA = {
     */
   getRandomIntWithSeed: function(seed,maxValue) {
     var randomNumber = Number("0." + (Math.sin(seed).toString().substring(7)));
-      return parseInt((maxValue+1)*randomNumber,10);
+      return parseInt((maxValue+1)*randomNumber, 10);
   },
   
   getVerseOfTheDay: function(langNum) {
     var now=new Date();
     while(true) {
       var verseInfo = this.doGetVerseOfTheDay(langNum, now);
-      if(verseInfo == null) {
+      if(verseInfo === null) {
         return null;
       } else if(this.isDummyVerse(verseInfo.verseText)) {
         // This verse does not exist in the  given language. Jump back one year to see if we have a reasonable verse there.
@@ -1135,16 +1113,17 @@ DATA = {
       return null; // don't return anything for the third language if it was not loaded
     }
     var totalVerseCount = this.verses.length;
+    var verseOfTheDayNr;
 
     if((location.href.indexOf('?verse=')>0)||(navigator.platform.indexOf('Simulator')>0)) {
         // demo mode - URL parameter ?verse=123
-        var verseOfTheDayNr = Number(location.href.replace(/.*\?verse=/g,''));
+        verseOfTheDayNr = Number(location.href.replace(/.*\?verse=/g,''));
     } else {
         // calculate a seed for the random number generator that will be stable for each day;
         //  then use it to get the random verse for today
         var now=day||new Date();
         var randSeedForTheDay = now.getFullYear()*400+now.getMonth()*31+now.getDate();
-        var verseOfTheDayNr = this.getRandomIntWithSeed(randSeedForTheDay, totalVerseCount - 1);
+        verseOfTheDayNr = this.getRandomIntWithSeed(randSeedForTheDay, totalVerseCount - 1);
     }
 
     if(langNum===1) {
@@ -1175,14 +1154,14 @@ DATA = {
     else
       return false;
   }
-}
+};
 
 
 /*** Initialization Stuff ***/
 /* do final initialization. On mobile devices this is run only after Cordova has been initialized. */
 function finalInit() {
   // push favorite verses to cloud if it has not happened yet.
-  CONFIG.saveFavoriteVersesToCloud()  
+  CONFIG.saveFavoriteVersesToCloud();
 }
 
 
@@ -1242,215 +1221,204 @@ function run() {
 /* Do cordova-specific initializations */
 function cordovaReady() {
   // Cordova is ready now.
-  // do the UI initialization if it has not been done yet already:
+  // do the UI initialization
   $("body").addClass("mobile"); 
   $("body").addClass("cordova"); 
   
-  if(!CONFIG.isInitialized()) {
-    // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
-    CONFIG.loadSettings(function() {    
-      DATA.loadVerses();
-      CONFIG.getCordovaPlugin().setAlarm( CONFIG.getSettingsFromConfig() );
-    });
-  } else {
-    CONFIG.getCordovaPlugin().setAlarm( CONFIG.getSettingsFromConfig() );
-  }
-  
-  // register for pause / resume events and make sure that the Java part initializes the timer for ther notification message 
-  document.addEventListener("pause", function() { UI.onPause(); });
-  document.addEventListener("resume", function() { window.setTimeout(function(){UI.onResume();}), 1 });  
+  // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
+  CONFIG.loadCordovaSettings(function() {    
+    DATA.loadVerses();
+    CONFIG.getCordovaPlugin().setAlarm();
+    
+    // register for pause / resume events and make sure that the Java part initializes the timer for the notification message 
+    document.addEventListener("pause", function() { UI.onPause(); });
+    document.addEventListener("resume", function() { window.setTimeout(function(){UI.onResume();}, 1); });
+  });
+
 }
 
-if((location.href.indexOf('https://') === 0)||(location.href.indexOf('localhost') > 0)) {
+if(location.href.indexOf('https://localhost') === 0 || location.href.indexOf('file://') === 0) {
+  // running inside cordova  
+  // add handler to do the rest of the initialization when Cordova is ready
+  document.addEventListener("deviceready", function() { $(cordovaReady); });  
+} else {
   // running inside the browser
   // We do not need Cordova. Initialize the UI as soon as jQuery is ready
   $(function() {
+    CONFIG.loadSettings();
     DATA.loadVerses();
     finalInit();
   });
-} else {
-  // running inside cordova
-  /*if(!CONFIG.isSettingsMigrationNeeded()) {
-    // We do not need to adjust an old or empty configuration.
-    // This means that we do not need to immediately communicate with the Java part to show the IO
-    // Therefore we can initialize the UI before Corova is ready, as soon as jQuery is available.
-    // Cordova-specific stuff will run later when Cordova sends a deviceready event
-    $(run);
-  }
-  */
-  
-  // add handler to do the rest of the initialization when Cordova is ready
-  document.addEventListener("deviceready", function() { $(cordovaReady) });  
 }
 
 </script>
 
 </head>
 <body>
+  <div id="bodyContent">
+    <div class="header" id="header">
+      <div class="tabtitle" id="homeTabTitle">
+        <h1>{{App_Title}} - {{Verse of the Day}}</h1>
+      </div>
+      <div class="tabtitle" id="textTabTitle">
+        <a href="javascript:void(0)" id="btnBack" onclick="UI.moveChapter(-1)"></a>
+        <span id="chapterDropdown"></span>
+        <a  href="javascript:void(0)" id="btnNext" onclick="UI.moveChapter(+1)"></a>
+      </div>
+      <div class="tabtitle" id="favoritesTabTitle">
+        <h1>{{Favorite Verses}}</h1>
+      </div>
+      <div class="tabtitle" id="settingsTabTitle">
+        <h1>{{Settings}}</h1>
+      </div>
+      <div class="tabtitle" id="infoTabTitle">
+        <h1>{{About This App}}</h1>
+      </div>  
+    </div>
 
-<div class="header" id="header">
-    <div class="tabtitle" id="homeTabTitle">
-      <h1>{{App_Title}} - {{Verse of the Day}}</h1>
-    </div>
-    <div class="tabtitle" id="textTabTitle">
-      <a href="javascript:void(0)" id="btnBack" onclick="UI.moveChapter(-1)"></a>
-      <span id="chapterDropdown"></span>
-      <a  href="javascript:void(0)" id="btnNext" onclick="UI.moveChapter(+1)"></a>
-    </div>
-    <div class="tabtitle" id="favoritesTabTitle">
-      <h1>{{Favorite Verses}}</h1>
-    </div>
-    <div class="tabtitle" id="settingsTabTitle">
-      <h1>{{Settings}}</h1>
-    </div>
-    <div class="tabtitle" id="infoTabTitle">
-      <h1>{{About This App}}</h1>
-    </div>
-    
-</div>
-
-<div class="tabcontentWrap">
-    <div id="homeTab" class="tabcontent">
-      <div class="vcenterContainer">
-        <div class="vcenter">
-          <img src="content/info-logo.png" style="max-width:60vmin;" width="300" />    
+    <div class="tabcontentWrap">
+      <div id="homeTab" class="tabcontent">
+        <div class="vcenterContainer">
+          <div class="vcenter">
+            <img src="content/info-logo.png" style="max-width:60vmin;" width="300" />    
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="textTab" class="tabcontent hiddenOnStartup">
-    </div>
+      <div id="textTab" class="tabcontent hiddenOnStartup">
+      </div>
 
-    <div id="favoritesTab" class="tabcontent hiddenOnStartup">
-    </div>
-    
-    <div id="settingsTab" class="tabcontent hiddenOnStartup">
-      <div class="vcenterContainer settings"><div class="vcenter">
+      <div id="favoritesTab" class="tabcontent hiddenOnStartup">
+      </div>
       
-        <fieldset>
-        <legend>{{Language of Shantideva's text}}</legend>
-        <form>
-        <p class="smallFormInfo">{{You can show the text in up to three different languages at the same time in order to compare different translations.}}</p>
-        <table width="100%">
-        <tr>
-          <td><label for="textLanguage" class="label">{{Text Language}}:</label></td>
-          <td><select id="textLanguage"></select></td>
-        </tr>
-        <tr>
-          <td><label for="textLanguage2" class="label">{{Text Language 2}}:</label></td>
-          <td><select id="textLanguage2"><option value=""> ---------------- </option></select></td>
-        </tr>
-        <tr>
-          <td><label for="textLanguage3" class="label">{{Text Language 3}}:</label></td>
-          <td><select id="textLanguage3"><option value=""> ---------------- </option></select></td>
-        </tr>
-        </table>
+      <div id="settingsTab" class="tabcontent hiddenOnStartup">
+        <div class="vcenterContainer settings"><div class="vcenter">
+        
+          <fieldset>
+          <legend>{{Language of Shantideva's text}}</legend>
+          <form>
+          <p class="smallFormInfo">{{You can show the text in up to three different languages at the same time in order to compare different translations.}}</p>
+          <table width="100%">
+          <tr>
+            <td><label for="textLanguage" class="label">{{Text Language}}:</label></td>
+            <td><select id="textLanguage"></select></td>
+          </tr>
+          <tr>
+            <td><label for="textLanguage2" class="label">{{Text Language 2}}:</label></td>
+            <td><select id="textLanguage2"><option value=""> ---------------- </option></select></td>
+          </tr>
+          <tr>
+            <td><label for="textLanguage3" class="label">{{Text Language 3}}:</label></td>
+            <td><select id="textLanguage3"><option value=""> ---------------- </option></select></td>
+          </tr>
+          </table>
+          </form>
+          </fieldset>
+          
+          <fieldset class="hideForWeb">
+          <legend>{{Notification Messages}}</legend>
+          <p class="smallFormInfo">{{Enable the options below to see the verse of the day as a notification message.}}</p>
+          <form>
+          <table width="100%">
+          <tr>
+              <td><span class="label">{{Daily Message}}:</span></td>
+              <td><label for="messageEnabled">{{Show Messages}}</label> <input type="checkbox" name="messageEnabled" id="messageEnabled"></td>
+          </tr>
+          <tr>
+              <td><label for="messageHour" class="label">{{Time}}:</label></td>
+              <td><select name="messageHour" id="messageHour">
+                <option value="1">{{1:00}}</option>
+                <option value="2">{{2:00}}</option>
+                <option value="3">{{3:00}}</option>
+                <option value="4">{{4:00}}</option>
+                <option value="5">{{5:00}}</option>
+                <option value="6">{{6:00}}</option>
+                <option value="7">{{7:00}}</option>
+                <option value="8">{{8:00}}</option>
+                <option value="9">{{9:00}}</option>
+                <option value="10">{{10:00}}</option>
+                <option value="11">{{11:00}}</option>
+                <option value="12">{{12:00}}</option>
+                <option value="13">{{13:00}}</option>
+                <option value="14">{{14:00}}</option>
+                <option value="15">{{15:00}}</option>
+                <option value="16">{{16:00}}</option>
+                <option value="17">{{17:00}}</option>
+                <option value="18">{{18:00}}</option>
+                <option value="19">{{19:00}}</option>
+                <option value="20">{{20:00}}</option>
+                <option value="21">{{21:00}}</option>
+                <option value="22">{{22:00}}</option>
+                <option value="23">{{23:00}}</option>
+                <option value="0">{{24:00}}</option>
+              </select></td>
+          </tr>
+          </table>
         </form>
         </fieldset>
-        
-        <fieldset class="hideForWeb">
-        <legend>{{Notification Messages}}</legend>
-        <p class="smallFormInfo">{{Enable the options below to see the verse of the day as a notification message.}}</p>
-        <form>
-        <table width="100%">
-        <tr>
-            <td><span class="label">{{Daily Message}}:</span></td>
-            <td><label for="messageEnabled">{{Show Messages}}</label> <input type="checkbox" name="messageEnabled" id="messageEnabled"></td>
-        </tr>
-        <tr>
-            <td><label for="messageHour" class="label">{{Time}}:</label></td>
-            <td><select name="messageHour" id="messageHour">
-              <option value="1">{{1:00}}</option>
-              <option value="2">{{2:00}}</option>
-              <option value="3">{{3:00}}</option>
-              <option value="4">{{4:00}}</option>
-              <option value="5">{{5:00}}</option>
-              <option value="6">{{6:00}}</option>
-              <option value="7">{{7:00}}</option>
-              <option value="8">{{8:00}}</option>
-              <option value="9">{{9:00}}</option>
-              <option value="10">{{10:00}}</option>
-              <option value="11">{{11:00}}</option>
-              <option value="12">{{12:00}}</option>
-              <option value="13">{{13:00}}</option>
-              <option value="14">{{14:00}}</option>
-              <option value="15">{{15:00}}</option>
-              <option value="16">{{16:00}}</option>
-              <option value="17">{{17:00}}</option>
-              <option value="18">{{18:00}}</option>
-              <option value="19">{{19:00}}</option>
-              <option value="20">{{20:00}}</option>
-              <option value="21">{{21:00}}</option>
-              <option value="22">{{22:00}}</option>
-              <option value="23">{{23:00}}</option>
-              <option value="0">{{24:00}}</option>
+          
+        <fieldset>
+        <form>      
+          <legend>{{Display Settings}}</legend>
+          <table width="100%">
+          <tr>
+            <td><label for="uiLanguage" class="label">{{App Language}}:</label></td>
+            <td><select id="uiLanguage"></select></td>
+          </tr>
+          <tr>
+            <td><label for="fontSize" class="label">{{Font Size}}:</label></td>
+            <td><select id="fontSize">
+              <option value="50">{{50%}}</option>
+              <option value="60">{{60%}}</option>
+              <option value="70">{{70%}}</option>
+              <option value="80">{{80%}}</option>
+              <option value="90">{{90%}}</option>
+              <option value="100">{{100%}}</option>
+              <option value="110">{{110%}}</option>
+              <option value="120">{{120%}}</option>
+              <option value="130">{{130%}}</option>
+              <option value="140">{{140%}}</option>
+              <option value="150">{{150%}}</option>
+              <option value="160">{{160%}}</option>
+              <option value="170">{{170%}}</option>
+              <option value="180">{{180%}}</option>
+              <option value="200">{{200%}}</option>
             </select></td>
-        </tr>
-        </table>
-      </form>
-      </fieldset>
+          </tr>
+          <tr>
+            <td><label for="colorTheme" class="label">{{Text color}}:</label></td>
+            <td><select id="colorTheme">
+              <option value="light">{{Black text on white background}}</option>
+              <option value="dark">{{White text on black background}}</option>
+            </select></td>
+          </tr>
+          </table>
+        </form>        
+        </fieldset>        
+        <br />
+        <div class="center buttons">
+          <a href="#" id="cancelBtn">{{Cancel}}</a><a href="#" id="saveBtn">{{Save}}</a>
+        </div>
+        </div></div>
         
-      <fieldset>
-      <form>      
-        <legend>{{Display Settings}}</legend>
-        <table width="100%">
-        <tr>
-          <td><label for="uiLanguage" class="label">{{App Language}}:</label></td>
-          <td><select id="uiLanguage"></select></td>
-        </tr>
-        <tr>
-          <td><label for="fontSize" class="label">{{Font Size}}:</label></td>
-          <td><select id="fontSize">
-            <option value="50">{{50%}}</option>
-            <option value="60">{{60%}}</option>
-            <option value="70">{{70%}}</option>
-            <option value="80">{{80%}}</option>
-            <option value="90">{{90%}}</option>
-            <option value="100">{{100%}}</option>
-            <option value="110">{{110%}}</option>
-            <option value="120">{{120%}}</option>
-            <option value="130">{{130%}}</option>
-            <option value="140">{{140%}}</option>
-            <option value="150">{{150%}}</option>
-            <option value="160">{{160%}}</option>
-            <option value="170">{{170%}}</option>
-            <option value="180">{{180%}}</option>
-            <option value="200">{{200%}}</option>
-          </select></td>
-        </tr>
-        <tr>
-          <td><label for="colorTheme" class="label">{{Text color}}:</label></td>
-          <td><select id="colorTheme">
-            <option value="light">{{Black text on white background}}</option>
-            <option value="dark">{{White text on black background}}</option>
-          </select></td>
-        </tr>
-        </table>
-      </form>        
-      </fieldset>        
-      <br />
-      <div class="center buttons">
-        <a href="#" id="cancelBtn">{{Cancel}}</a><a href="#" id="saveBtn">{{Save}}</a>
       </div>
-      </div></div>
-      
+      <div id="infoTab" class="tabcontent hiddenOnStartup">
+        {{About_Text}}
+      </div>
     </div>
-    <div id="infoTab" class="tabcontent hiddenOnStartup">
-      {{About_Text}}
-    </div>
-</div>
 
-<div id="footer" class="footer">
- <div class="tabs">
-  <ul class="tab hiddenOnStartup">
-   <li class="active"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('homeTab')" id="homeTabBtn">{{Verse of the Day}}</a>
-   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('textTab')" id="textTabBtn">{{Full Text}}</a>
-   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('favoritesTab')" id="favoritesTabBtn">{{Favorite Verses}}</a>
-   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('settingsTab')" id="settingsTabBtn">{{Settings}}</a>
-   </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('infoTab')" id="infoTabBtn">{{About}}</a></li>
-  </ul>
- </div> 
-</div>
+    <div id="footer" class="footer">
+      <div class="tabs">
+        <ul class="tab hiddenOnStartup">
+        <li class="active"><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('homeTab')" id="homeTabBtn">{{Verse of the Day}}</a>
+        </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('textTab')" id="textTabBtn">{{Full Text}}</a>
+        </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('favoritesTab')" id="favoritesTabBtn">{{Favorite Verses}}</a>
+        </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('settingsTab')" id="settingsTabBtn">{{Settings}}</a>
+        </li><li><a href="javascript:void(0)" class="tablinks" onclick="UI.openTab('infoTab')" id="infoTabBtn">{{About}}</a></li>
+        </ul>
+      </div> 
+    </div>
+  </div>
 
 
  <script src="cordova.js" charset="UTF-8"></script>

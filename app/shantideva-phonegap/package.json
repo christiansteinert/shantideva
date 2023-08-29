@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "android": "0.0.8",
-    "cordova-android": "^11.0.0",
+    "cordova-android": "^12.0.0",
     "de-christian_steinert-shantideva_verses": "file:../../../../../../own/programmierung/javascript/Shantideva2/src/phonegap-plugin/DailyVersesPlugin",
     "ios": "0.0.1"
   }

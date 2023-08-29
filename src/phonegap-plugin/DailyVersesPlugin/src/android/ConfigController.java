@@ -6,14 +6,26 @@ import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public final class ConfigController {
+    /**
+     * ID of the Android Notification channel for the verse of the day
+     */
+    public static final String NOTIFICATION_CHANNEL_ID = "verseOfTheDay";
+
     /**
      * languages in which the user interface is available
      */
@@ -149,8 +161,25 @@ public final class ConfigController {
             preferencesEditor.putInt(CFG_FONT_SIZE, settingsToSave.getInt(CFG_FONT_SIZE));
             preferencesEditor.putString(CFG_COLOR_THEME, settingsToSave.getString(CFG_COLOR_THEME));
             preferencesEditor.apply();
+
+            if(settingsToSave.getBoolean(CFG_MSG_ENABLED)) {
+                requestNotificationPermissions();
+            }
+
         } catch (final JSONException e) {
             Log.e(DailyVersesPlugin.class.getCanonicalName(), "Error while saving config", e);
+        }
+
+    }
+
+    private void requestNotificationPermissions() {
+        //Starting with Android 13 it is necessary to request a permission before we are allowed to show notifications
+        if (Build.VERSION.SDK_INT >= 33 && context instanceof Activity) { 
+            Activity activity = (Activity) context;
+
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+            }
         }
     }
 
@@ -271,6 +300,10 @@ public final class ConfigController {
             Log.e(DailyVersesPlugin.class.getCanonicalName(), "Error while loading settings", e);
         }
 
+        if(msgEnabled) {
+            requestNotificationPermissions();
+        }
+
         Log.i(DailyVersesPlugin.class.getCanonicalName(),
                 "<--- Returning" + result);
 
@@ -332,6 +365,26 @@ public final class ConfigController {
 
     public int getNotificationMinute() {
         return getPreferences().getInt(CFG_MSG_MINUTE, 0);
+    }
+
+
+    public void createVerseOfTheDayNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        final String verseOfTheDayTxt = getVerseOfTheDayTxt();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            final NotificationChannel channel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    verseOfTheDayTxt,
+                    NotificationManager.IMPORTANCE_LOW);
+
+            // Starting with Android 26 each notification must be associated with a notification
+            // channel. If the channel does not exist yet we need to create it before sending
+            // the notification
+            final NotificationManager notificationManager =
+                    context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }

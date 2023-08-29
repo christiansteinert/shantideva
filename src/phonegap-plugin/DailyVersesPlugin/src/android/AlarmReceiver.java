@@ -29,7 +29,6 @@ import android.text.TextUtils;
 public final class AlarmReceiver extends BroadcastReceiver {
 
     private static final int NOTIFICATION_TYPE_VERSE_OF_THE_DAY = 1;
-    private static final String NOTIFICATION_CHANNEL_ID = "verseOfTheDay";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -50,30 +49,20 @@ public final class AlarmReceiver extends BroadcastReceiver {
         AlarmUtil.setNextAlarm(context);
     }
 
-    private void showNotification(final Context context, final String verseText) {
+    private void showNotification(final Context context, final String verseText) {        
+        final ConfigController configController = new ConfigController(context);
+        
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        final String verseOfTheDayTxt = new ConfigController(context).getVerseOfTheDayTxt();
+        configController.createVerseOfTheDayNotificationChannel();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final NotificationChannel channel = new NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    verseOfTheDayTxt,
-                    NotificationManager.IMPORTANCE_LOW);
-
-            // Starting with Android 26 each notification must be associated with a notification
-            // channel. If the channel does not exist yet we need to create it before sending
-            // the notification
-            final NotificationManager notificationManager =
-                    context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
+        // create the actual notifiation
+        final String verseOfTheDayTxt = configController.getVerseOfTheDayTxt();
         final int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             ? PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
             : PendingIntent.FLAG_ONE_SHOT;
         final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), flags);
-        final NotificationCompat.Builder notification = (new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID))
+        final NotificationCompat.Builder notification = (new NotificationCompat.Builder(context, ConfigController.NOTIFICATION_CHANNEL_ID))
                 .setContentTitle(verseOfTheDayTxt + ":")
                 .setContentText(verseText)
                 .setPriority(Notification.PRIORITY_LOW)
