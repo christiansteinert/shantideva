@@ -12,6 +12,8 @@ export JAVA_TOOL_OPTIONS="-Xmx2048m -XX:ReservedCodeCacheSize=1024m"
 
 rm -rf app/shantideva-phonegap/www/*
 cp -rv src/web/* app/shantideva-phonegap/www/
+cp src/icon/Shantideva/ic_shantideva_vectorized.xml app/shantideva-phonegap/platforms/android/app/src/main/res/drawable/ic_shantideva_splashscreen.xml
+
 rm -rf app/shantideva-phonegap/www/lib/jquery-ui-1.12.1.custom/debug
 rm app/shantideva-phonegap/www/css/*.ttf
 rm app/shantideva-phonegap/www/css/*.woff2

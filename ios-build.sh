@@ -1,3 +1,4 @@
+#!/bin/sh
 # sudo gem install cocoapods
 
 rm -rf app/shantideva-phonegap/www/*
@@ -14,6 +15,11 @@ rm app/shantideva-phonegap/www/favicon*.png
 #pod install
 
 cd app/shantideva-phonegap
+
+npm i cordova
+npm i cordova-ios
+cordova platform remove ios
+cordova platform add ios
 
 cordova plugin remove de.christiansteinert.dailyversesplugin
 rm node_modules/de-christian_steinert-shantideva_verses

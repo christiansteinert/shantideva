@@ -24,8 +24,8 @@
 
 @property (nonatomic, readwrite) NSMutableArray* allowIntents;
 @property (nonatomic, readwrite) NSMutableArray* allowNavigations;
-@property (nonatomic, readwrite) CDVWhitelist* allowIntentsWhitelist;
-@property (nonatomic, readwrite) CDVWhitelist* allowNavigationsWhitelist;
+@property (nonatomic, readwrite) CDVAllowList* allowIntentsList;
+@property (nonatomic, readwrite) CDVAllowList* allowNavigationsList;
 
 @end
 
@@ -46,15 +46,23 @@
 - (void)parserDidStartDocument:(NSXMLParser*)parser
 {
     // file: url <allow-navigations> are added by default
-    self.allowNavigations = [[NSMutableArray alloc] initWithArray:@[ @"file://" ]];
+    // navigation to the scheme used by the app is also allowed
+    self.allowNavigations = [[NSMutableArray alloc] initWithArray:@[ @"file://"]];
+
+    // If the custom app scheme is defined, append it to the allow navigation as default
+    NSString* scheme = ((CDVViewController*)self.viewController).appScheme;
+    if (scheme) {
+        [self.allowNavigations addObject: [NSString stringWithFormat:@"%@://", scheme]];
+    }
+
     // no intents are added by default
     self.allowIntents = [[NSMutableArray alloc] init];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser*)parser
 {
-    self.allowIntentsWhitelist = [[CDVWhitelist alloc] initWithArray:self.allowIntents];
-    self.allowNavigationsWhitelist = [[CDVWhitelist alloc] initWithArray:self.allowNavigations];
+    self.allowIntentsList = [[CDVAllowList alloc] initWithArray:self.allowIntents];
+    self.allowNavigationsList = [[CDVAllowList alloc] initWithArray:self.allowNavigations];
 }
 
 - (void)parser:(NSXMLParser*)parser parseErrorOccurred:(NSError*)parseError
@@ -71,13 +79,13 @@
     }
 }
 
-+ (CDVIntentAndNavigationFilterValue) filterUrl:(NSURL*)url intentsWhitelist:(CDVWhitelist*)intentsWhitelist navigationsWhitelist:(CDVWhitelist*)navigationsWhitelist
++ (CDVIntentAndNavigationFilterValue) filterUrl:(NSURL*)url allowIntentsList:(CDVAllowList*)allowIntentsList navigationsAllowList:(CDVAllowList*)navigationsAllowList
 {
     // a URL can only allow-intent OR allow-navigation, if both are specified,
     // only allow-navigation is allowed
 
-    BOOL allowNavigationsPass = [navigationsWhitelist URLIsAllowed:url logFailure:NO];
-    BOOL allowIntentPass = [intentsWhitelist URLIsAllowed:url logFailure:NO];
+    BOOL allowNavigationsPass = [navigationsAllowList URLIsAllowed:url logFailure:NO];
+    BOOL allowIntentPass = [allowIntentsList URLIsAllowed:url logFailure:NO];
 
     if (allowNavigationsPass && allowIntentPass) {
         return CDVIntentAndNavigationFilterValueNavigationAllowed;
@@ -92,30 +100,26 @@
 
 - (CDVIntentAndNavigationFilterValue) filterUrl:(NSURL*)url
 {
-    return [[self class] filterUrl:url intentsWhitelist:self.allowIntentsWhitelist navigationsWhitelist:self.allowNavigationsWhitelist];
+    return [[self class] filterUrl:url allowIntentsList:self.allowIntentsList navigationsAllowList:self.allowNavigationsList];
 }
 
-#if WK_WEB_VIEW_ONLY
 #define CDVWebViewNavigationTypeLinkClicked 0
-#define CDVWebViewNavigationTypeOther 5
-#else
-#define CDVWebViewNavigationTypeLinkClicked UIWebViewNavigationTypeLinkClicked
-#define CDVWebViewNavigationTypeOther UIWebViewNavigationTypeOther
-#endif
+#define CDVWebViewNavigationTypeLinkOther -1
 
 + (BOOL)shouldOpenURLRequest:(NSURLRequest*)request navigationType:(CDVWebViewNavigationType)navigationType
 {
-    return (CDVWebViewNavigationTypeLinkClicked == navigationType ||
-        (CDVWebViewNavigationTypeOther == navigationType &&
-         [[request.mainDocumentURL absoluteString] isEqualToString:[request.URL absoluteString]]
-         )
-        );
+    BOOL isMainNavigation = [[request.mainDocumentURL absoluteString] isEqualToString:[request.URL absoluteString]];
+
+    return (
+        navigationType == CDVWebViewNavigationTypeLinkClicked ||
+        (navigationType == CDVWebViewNavigationTypeLinkOther && isMainNavigation)
+    );
 }
 
 + (BOOL)shouldOverrideLoadWithRequest:(NSURLRequest*)request navigationType:(CDVWebViewNavigationType)navigationType filterValue:(CDVIntentAndNavigationFilterValue)filterValue
 {
-    NSString* allowIntents_whitelistRejectionFormatString = @"ERROR External navigation rejected - <allow-intent> not set for url='%@'";
-    NSString* allowNavigations_whitelistRejectionFormatString = @"ERROR Internal navigation rejected - <allow-navigation> not set for url='%@'";
+    NSString* allowIntents_allowListRejectionFormatString = @"ERROR External navigation rejected - <allow-intent> not set for url='%@'";
+    NSString* allowNavigations_allowListRejectionFormatString = @"ERROR Internal navigation rejected - <allow-navigation> not set for url='%@'";
 
     NSURL* url = [request URL];
 
@@ -123,8 +127,7 @@
         case CDVIntentAndNavigationFilterValueNavigationAllowed:
             return YES;
         case CDVIntentAndNavigationFilterValueIntentAllowed:
-            // only allow-intent if it's a UIWebViewNavigationTypeLinkClicked (anchor tag) OR
-            // it's a UIWebViewNavigationTypeOther, and it's an internal link
+            // only allow-intent if it's a CDVWebViewNavigationTypeLinkClicked (anchor tag) or CDVWebViewNavigationTypeOther and it's an internal link
             if ([[self class] shouldOpenURLRequest:request navigationType:navigationType]){
                 [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             }
@@ -133,10 +136,10 @@
             return NO;
         case CDVIntentAndNavigationFilterValueNoneAllowed:
             // allow-navigation attempt failed for sure
-            NSLog(@"%@", [NSString stringWithFormat:allowNavigations_whitelistRejectionFormatString, [url absoluteString]]);
+            NSLog(@"%@", [NSString stringWithFormat:allowNavigations_allowListRejectionFormatString, [url absoluteString]]);
             // anchor tag link means it was an allow-intent attempt that failed as well
             if (CDVWebViewNavigationTypeLinkClicked == navigationType) {
-                NSLog(@"%@", [NSString stringWithFormat:allowIntents_whitelistRejectionFormatString, [url absoluteString]]);
+                NSLog(@"%@", [NSString stringWithFormat:allowIntents_allowListRejectionFormatString, [url absoluteString]]);
             }
             return NO;
     }
