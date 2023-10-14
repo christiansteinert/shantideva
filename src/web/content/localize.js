@@ -717,6 +717,7 @@ LANG['de']={
     "Time":"Uhrzeit",
     "Daily Message":"Tägl. Nachricht",
     "Show Messages":"Nachrichten anzeigen",
+    "Favorite Verses":"Lieblingsverse",
     "Enable the options below to see the verse of the day as a notification message.":"Aktivieren Sie die unten stehenden Optionen, um den Vers des Tages als Benachrichtigung angezeigt zu bekommen.",
     "You need to be online when you save the notification settings.":"Sie müssen online sein, um die Benachrichtigungseinstellungen zu speichern.",
     "Notifications can only be displayed you when you are online.":"Benachrichtigungen werden nur angezeigt, während Sie online sind.",
