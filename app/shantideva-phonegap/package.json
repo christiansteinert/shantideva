@@ -14,7 +14,6 @@
     "@zestia/cordova-plugin-wkwebview-engine-windowopen": "^1.0.1",
     "cordova": "^9.0.0",
     "cordova-ios": "^7.0.1",
-    "cordova-plugin-wkwebview-engine": "^1.0.2",
     "node": "^20.7.0",
     "phonegap-plugin-multidex": "^1.0.0"
   },
