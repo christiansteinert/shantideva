@@ -7,6 +7,12 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    env: 
+      IPA_OUTPUT_PATH: '${{ github.workspace }}/app/shantideva-phonegap/platforms/ios/build/Release-iphoneos/'
+    defaults:
+      run:
+        working-directory: '${{ github.workspace }}/app/shantideva-phonegap'
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -32,18 +38,16 @@ jobs:
 
     - name: Prepare application files
       run: |
-        # copy files from web application directory 
-        rm -rf app/shantideva-phonegap/www/*
-        cp -rv src/web/* app/shantideva-phonegap/www/
-        rm -rf app/shantideva-phonegap/www/lib/jquery-ui-1.12.1.custom/debug
-        rm app/shantideva-phonegap/www/css/*.ttf
-        rm app/shantideva-phonegap/www/css/*.woff2
-        rm app/shantideva-phonegap/www/favicon*.png
+        # copy files from web application directory into cordova directory 
+        rm -rf www/*
+        cp -rv ../../src/web/* www/
+        rm -rf www/lib/jquery-ui-1.12.1.custom/debug
+        rm www/css/*.ttf
+        rm www/css/*.woff2
+        rm www/favicon*.png
 
     - name: Install dependencies
       run: |
-        cd app/shantideva-phonegap/
-
         npm install
         npm install cordova-ios
         cordova platform remove ios
@@ -51,8 +55,6 @@ jobs:
 
     - name: Add / update cordova plugins
       run: |
-        cd app/shantideva-phonegap/
-
         cordova plugin remove de.christiansteinert.dailyversesplugin
         rm node_modules/de-christian_steinert-shantideva_verses
         cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin
@@ -61,15 +63,12 @@ jobs:
 
     - name: Fix iOS bundle ID
       run: |
-        cd app/shantideva-phonegap/
-
         sed -i".bak" 's/de.christian_steinert.shantideva_verses/de.christiansteinert.shantidevaverses/g' config.xml
 
     - name: Import code signing profile 
       #env:
         #IOSDISTRIBUTIONCERTIFICATE_BASE64: "${{ secrets.SHANTIDEVAIOSDISTRIBUTIONCERTIFICATE_BASE64 }}"
       #run: |
-        #cd app/shantideva-phonegap/
         #security cms -D -i ~/'Library/MobileDevice/Provisioning Profiles/${{ secrets.SHANTIDEVAPROVISIONINGPROFILEID }}.mobileprovision'
         #echo "$IOSDISTRIBUTIONCERTIFICATE_BASE64" | base64 -d > ios_distribution.p12
         #security create-keychain -p "" build.keychain
@@ -90,36 +89,33 @@ jobs:
       env:
         PROVISIONINGPROFILE_BASE64: "${{ secrets.SHANTIDEVAPROVISIONINGPROFILE_BASE64 }}"
       run: |
-        cd app/shantideva-phonegap/
-
         mkdir -p ~/'Library/MobileDevice/Provisioning Profiles'
         echo "$PROVISIONINGPROFILE_BASE64" | base64 -d > ~/'Library/MobileDevice/Provisioning Profiles/${{ secrets.SHANTIDEVAPROVISIONINGPROFILEID }}.mobileprovision'
 
     - name: Build cordova app
       run: |
-        cd app/shantideva-phonegap/
-
         cordova build ios --release --device --codeSignIdentity="iPhone Distribution: Berzin Archives e.V. (${{ secrets.APPSTORECONNECTDEVELOPMENTTEAMID }})" --developmentTeam="${{ secrets.APPSTORECONNECTDEVELOPMENTTEAMID }}" --packageType=app-store --provisioningProfile="${{ secrets.SHANTIDEVAPROVISIONINGPROFILEID }}"
-     
+
+    - name: Publish artifact to Github Actions
+      uses: actions/upload-artifact@v3
+      with:
+        name: Shantideva.ipa
+        path: |
+          ${{ env.IPA_OUTPUT_PATH }}/Shantideva.ipa
+
     - name: Publish to App Store Connect
       run: |
-        cd app/shantideva-phonegap/
-
         # extract version number from config.xml
         APP_VERSION=`cat config.xml |grep 'version=".*"' |sed 's/.*version="\([^"]*\)".*/\1/'`
-
-        # get target path for the .ipa app file
-        OUTPUT_PATH='/Users/runner/work/shantideva/shantideva/app/shantideva-phonegap/platforms/ios/build/Release-iphoneos'
 
         # store private key for authenticating against app store connect
         mkdir private_keys
         echo '${{ secrets.APPSTORECONNECTPRIVATEKEY }}' > private_keys/AuthKey_${{ secrets.APPSTORECONNECTKEYID }}.p8
         
         # publish the .ipa file
-        xcrun altool --upload-package "${OUTPUT_PATH}/Shantideva.ipa" --type ios --apiKey ${{ secrets.APPSTORECONNECTKEYID }} --apiIssuer '${{ secrets.APPSTORECONNECTISSUERID }}' --apple-id ${{ secrets.APPLEID }} --bundle-id de.christiansteinert.shantidevaverses --bundle-version $APP_VERSION --bundle-short-version-string $APP_VERSION
+        xcrun altool --upload-package "${IPA_OUTPUT_PATH}/Shantideva.ipa" --type ios --apiKey ${{ secrets.APPSTORECONNECTKEYID }} --apiIssuer '${{ secrets.APPSTORECONNECTISSUERID }}' --apple-id ${{ secrets.APPLEID }} --bundle-id de.christiansteinert.shantidevaverses --bundle-version $APP_VERSION --bundle-short-version-string $APP_VERSION
 
     - name: Cleanup
       if: always()
       run: |
-        cd app/shantideva-phonegap
         rm -rf private_keys *.p12 *.keychain "~/Library/MobileDevice/Provisioning Profiles"
