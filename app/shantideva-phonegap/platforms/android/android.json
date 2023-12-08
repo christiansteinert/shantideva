@@ -58,13 +58,7 @@
     }
   },
   "installed_plugins": {
-    "cordova-plugin-wkwebview-engine": {
-      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
-    },
     "phonegap-plugin-multidex": {
-      "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
-    },
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": {
       "PACKAGE_NAME": "de.christian_steinert.shantideva_verses"
     },
     "de.christiansteinert.dailyversesplugin": {
@@ -83,9 +77,7 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-wkwebview-engine": "1.0.2",
     "phonegap-plugin-multidex": "1.0.0",
-    "zestia-cordova-plugin-wkwebview-engine-windowopen": "1.0.1",
     "de.christiansteinert.dailyversesplugin": "0.0.1"
   }
 }
