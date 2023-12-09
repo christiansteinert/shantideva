@@ -22,9 +22,9 @@
 	<title>Shantideva</title>
 
 <script>
-window.onerror = function(errorMsg, source, lineno, colno, error) {
-  alert(source + ":" + lineno + ":" + colno + " " + errorMsg);
-}
+addEventListener("error", function(event, source, lineno, colno, error) {
+  alert(source + ":" + lineno + ":" + colno + " " + JSON.stringify(event) + JSON.stringify(error));
+})
 </script>
 
 <script>
