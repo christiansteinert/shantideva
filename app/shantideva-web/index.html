@@ -22,7 +22,12 @@
 	<title>Shantideva</title>
 
 <script>
+window.onerror = function(errorMsg, source, lineno, colno, error) {
+  alert(source + ":" + lineno + ":" + colno + " " + errorMsg);
+}
+</script>
 
+<script>
 CONFIG = {
   _settings:{},
   _favoriteVerses:{},
