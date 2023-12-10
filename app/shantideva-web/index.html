@@ -249,6 +249,8 @@ CONFIG = {
   loadCordovaSettings:function(callbackFunc) {
     this.getCordovaPlugin().loadSettings(
       function(cordovaSettings, favoriteVerseSettings) {
+        console.log("loadCordovaSettings(): loaded the following: ", cordovaSettings);
+
         // user favorite verses and deviceID from cordova if available
         if(favoriteVerseSettings) {
           favoriteVersesCordova = JSON.parse(favoriteVerseSettings);
@@ -265,11 +267,14 @@ CONFIG = {
           // Then mix this with additional default settings. 
           // If necessary then we will save the settings back again so that the 
           // Java code has a new clean state
+          console.log("loadCordovaSettings(): mixing in cordova settings: ", cordovaSettings);      
           CONFIG._settings = CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromLocalStorage());
+          console.log("loadCordovaSettings(): passing on mixed settings: ", CONFIG._settings);      
           callbackFunc(CONFIG._settings);
         } else {
           //we already have the settings that we need on the cordova side and do not need to mix settings from localStorage
           CONFIG._settings = cordovaSettings;
+          console.log("loadCordovaSettings(): passing on settings: ", CONFIG._settings);      
           callbackFunc(CONFIG._settings);
         }
       }
@@ -284,6 +289,8 @@ CONFIG = {
    * attributes of the settings object: {messageEnabled:true, messageHour:'10', messageMinute:00, uiLanguage:'en', textLanguage:'en', textLanguage2:''}
    */ 
   saveSettings:function(settings, success, error) {
+    console.log("saveSettings(): settings=", settings);      
+
     for(var setting in settings) {
       // save all configuration properties
       localStorage.setItem(setting, settings[setting] );
@@ -1232,6 +1239,8 @@ function cordovaReady() {
   
   // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
   CONFIG.loadCordovaSettings(function(settings) {    
+    console.log("cordovaReady(): settings=", settings)
+
     DATA.loadVerses();
     CONFIG.getCordovaPlugin().setAlarm(settings);
     
