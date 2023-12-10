@@ -266,11 +266,11 @@ CONFIG = {
           // If necessary then we will save the settings back again so that the 
           // Java code has a new clean state
           CONFIG._settings = CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromLocalStorage());
-          callbackFunc();
+          callbackFunc(CONFIG._settings);
         } else {
           //we already have the settings that we need on the cordova side and do not need to mix settings from localStorage
           CONFIG._settings = cordovaSettings;
-          callbackFunc();
+          callbackFunc(CONFIG._settings);
         }
       }
     );
@@ -1231,9 +1231,9 @@ function cordovaReady() {
   $("body").addClass("cordova"); 
   
   // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
-  CONFIG.loadCordovaSettings(function() {    
+  CONFIG.loadCordovaSettings(function(settings) {    
     DATA.loadVerses();
-    CONFIG.getCordovaPlugin().setAlarm();
+    CONFIG.getCordovaPlugin().setAlarm(settings);
     
     // register for pause / resume events and make sure that the Java part initializes the timer for the notification message 
     document.addEventListener("pause", function() { UI.onPause(); });

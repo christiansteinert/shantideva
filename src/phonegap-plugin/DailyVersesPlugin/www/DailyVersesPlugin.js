@@ -12,6 +12,9 @@ if ( cordova.platformId == 'ios' ) {
     };  
 
     exports.setAlarm = function(settings, success, error) {
+        console.log('setAlarm. settings:');
+        console.log(settings);
+
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
         var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
@@ -135,7 +138,7 @@ if ( cordova.platformId == 'ios' ) {
     };
 
     exports.saveSettings = function(settings, success, error) {
-        localStorage.getItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
+        localStorage.setItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
         exports.setAlarm(settings, success, error); // register again with the server
     };
 
