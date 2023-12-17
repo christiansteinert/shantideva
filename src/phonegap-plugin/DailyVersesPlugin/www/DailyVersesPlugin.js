@@ -144,12 +144,8 @@ if ( cordova.platformId == 'ios' ) {
 
     exports.loadSettings = function(success, error) {
         // -> Return some default settings for iOS.
-        defaultSettings = {
-            messageHour: 10,
-            messageMinute: 0,
-            messageEnabled: false
-        };
-        console.log('loadSettings(): returning iOS notification defaults', JSON.stringify(defaultSettings));
+        defaultSettings = {};
+        console.log('loadSettings(): returning empty cordova notification defaults', JSON.stringify(defaultSettings));
         success( defaultSettings );
     };
 
