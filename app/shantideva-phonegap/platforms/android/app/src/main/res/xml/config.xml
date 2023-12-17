@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="202008" id="de.christian_steinert.shantideva_verses" version="2.2.8" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="202013" id="de.christian_steinert.shantideva_verses" version="2.2.13" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="DailyVersesPlugin">
         <param name="android-package" value="de.christiansteinert.dailyversesplugin.DailyVersesPlugin" />
     </feature>

@@ -8,16 +8,18 @@ if ( cordova.platformId == 'ios' ) {
     
     exports.testNotification = function(success, error) {
         // do nothing 
-        console.log('testNotification');
+        console.log('testNotification()');
     };  
 
     exports.setAlarm = function(settings, success, error) {
+        console.log('setAlarm(): settings=', JSON.stringify(settings));
+
         // find out how we are already registered with the cloud-based push service
         var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
         var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
         var pushRegistrationId = localStorage.getItem("apnsId")|| ''; // get last known apns ID
         var appMessageEnabled = settings.messageEnabled;
-        var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute) ;
+        //var appMessageTime = String(settings.messageHour) + ':' + String(settings.messageMinute);
         var payload = {};
         var payloadStr = '';
         var url = '';
@@ -66,7 +68,7 @@ if ( cordova.platformId == 'ios' ) {
         if(pushRegistrationId){
             // do an immediate config update on the server with the last known push registration ID
             // this saves time in case the user closes the app right after.
-            console.log('sending preliminary config update.');
+            console.log('setAlarm(): sending preliminary config update.');
             $.ajax({
                 method:'POST',
                 url:url, 
@@ -112,13 +114,13 @@ if ( cordova.platformId == 'ios' ) {
                     // Call was successful. Remember that this configuration is the one that was also sent to the cloud
                     localStorage.setItem("cloudMessageEnabled", appMessageEnabled);
                     localStorage.setItem("cloudSettings", payloadStr);
-                    console.log('success');
+                    console.log('setAlarm(): success while calling APNS device registration service.');
                     if(success) {
                         success();
                     }
                 }).fail(function() {
                     // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
-                    console.log('error');
+                    console.log('setAlarm(): error when calling APNS device registration service. Retrying in 1 minute.');
                     window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
                     if(error) {
                         error();
@@ -130,12 +132,13 @@ if ( cordova.platformId == 'ios' ) {
 
     exports.testTimer = function(success, error) {
         // do nothing 
-        console.log('testTimer');
+        console.log('testTimer()');
 
     };
 
     exports.saveSettings = function(settings, success, error) {
-        localStorage.getItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
+        console.log('saveSettings()', JSON.stringify(settings));
+        localStorage.setItem("cloudSettings", ''); // clear last synced cloud-settings to force re-registration of the device with the cloud
         exports.setAlarm(settings, success, error); // register again with the server
     };
 
@@ -146,6 +149,7 @@ if ( cordova.platformId == 'ios' ) {
             messageMinute: 0,
             messageEnabled: false
         };
+        console.log('loadSettings(): returning iOS notification defaults', JSON.stringify(defaultSettings));
         success( defaultSettings );
     };
 

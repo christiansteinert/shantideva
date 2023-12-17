@@ -988,7 +988,7 @@ DATA = {
   languageCount:0,
   languagesInitialized:0,
 
-  loadVerses:function(settings) {
+  loadVerses:function() {
     DATA.languageCount++;
     $.ajax({url:CONFIG.getTextUrl(), async: true, success:$.proxy(DATA.parseVerses1,DATA)});
     
