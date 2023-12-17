@@ -22,7 +22,12 @@
 	<title>Shantideva</title>
 
 <script>
+addEventListener("error", function(event, source, lineno, colno, error) {
+  alert(source + ":" + lineno + ":" + colno + " " + JSON.stringify(event) + JSON.stringify(error));
+})
+</script>
 
+<script>
 CONFIG = {
   _settings:{},
   _favoriteVerses:{},
@@ -244,6 +249,8 @@ CONFIG = {
   loadCordovaSettings:function(callbackFunc) {
     this.getCordovaPlugin().loadSettings(
       function(cordovaSettings, favoriteVerseSettings) {
+        console.log("loadCordovaSettings(): loaded the following: ", JSON.stringify(cordovaSettings));
+
         // user favorite verses and deviceID from cordova if available
         if(favoriteVerseSettings) {
           favoriteVersesCordova = JSON.parse(favoriteVerseSettings);
@@ -260,12 +267,15 @@ CONFIG = {
           // Then mix this with additional default settings. 
           // If necessary then we will save the settings back again so that the 
           // Java code has a new clean state
+          console.log("loadCordovaSettings(): mixing in cordova settings: ", JSON.stringify(cordovaSettings));      
           CONFIG._settings = CONFIG.mixSettings(cordovaSettings, CONFIG.getSettingsFromLocalStorage());
-          callbackFunc();
+          console.log("loadCordovaSettings(): passing on mixed settings: ", JSON.stringify(CONFIG._settings));      
+          callbackFunc(CONFIG._settings);
         } else {
           //we already have the settings that we need on the cordova side and do not need to mix settings from localStorage
           CONFIG._settings = cordovaSettings;
-          callbackFunc();
+          console.log("loadCordovaSettings(): passing on settings: ", JSON.stringify(CONFIG._settings));      
+          callbackFunc(CONFIG._settings);
         }
       }
     );
@@ -279,6 +289,8 @@ CONFIG = {
    * attributes of the settings object: {messageEnabled:true, messageHour:'10', messageMinute:00, uiLanguage:'en', textLanguage:'en', textLanguage2:''}
    */ 
   saveSettings:function(settings, success, error) {
+    console.log("saveSettings(): settings=", settings);      
+
     for(var setting in settings) {
       // save all configuration properties
       localStorage.setItem(setting, settings[setting] );
@@ -304,7 +316,7 @@ CONFIG = {
       // we are running as web application. Return a dummy object
       return {
         testNotification: function(success, error) {},
-        setAlarm: function(success, error) {},
+        setAlarm: function(settings, success, error) {},
         testTimer: function(success, error) {},
         saveSettings:function(settings, success, error) {},
         loadSettings:function(success, error) {success({}); },
@@ -1226,9 +1238,11 @@ function cordovaReady() {
   $("body").addClass("cordova"); 
   
   // the initialization of the UI has not happened yet. Trigger it now and do a config migration if needed
-  CONFIG.loadCordovaSettings(function() {    
+  CONFIG.loadCordovaSettings(function(settings) {    
+    console.log("cordovaReady(): settings=", JSON.stringify(settings))
+
     DATA.loadVerses();
-    CONFIG.getCordovaPlugin().setAlarm();
+    CONFIG.getCordovaPlugin().setAlarm(settings);
     
     // register for pause / resume events and make sure that the Java part initializes the timer for the notification message 
     document.addEventListener("pause", function() { UI.onPause(); });
