@@ -80,7 +80,7 @@ if ( cordova.platformId == 'ios' ) {
         }
 
         setTimeout(function() {
-            // use the phonegup-plugin-push plugin to activate the push functionality of ios and request a push token for this device
+            // use the cordova-plugin-push plugin to activate the push functionality of ios and request a push token for this device
             var push = PushNotification.init({
                 ios: {
                     alert: "true",
