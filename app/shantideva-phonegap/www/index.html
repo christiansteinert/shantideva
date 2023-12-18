@@ -176,12 +176,14 @@ CONFIG = {
   
   getSettingsFromLocalStorage:function() {
     var verseOfTheDayTxt = UI.getText("Verse of the Day");
+    var messageEnabled = localStorage.getItem("messageEnabled");
+
     var settings = {
       uiLanguage: localStorage.getItem("uiLanguage") || this.getPreferredUserLanguage(),
       textLanguage: localStorage.getItem("textLanguage") || this.getPreferredTextLanguage(),
       textLanguage2: localStorage.getItem("textLanguage2") || '',
       textLanguage3: localStorage.getItem("textLanguage3") || '',
-      messageEnabled: localStorage.getItem("messageEnabled") === false ? false : true,
+      messageEnabled: (messageEnabled===true||messageEnabled==="true")||false,
       messageHour: localStorage.getItem("messageHour") != null ? localStorage.getItem("messageHour") : 10,
       messageMinute: 0,
       fontSize: localStorage.getItem("fontSize") || 100,

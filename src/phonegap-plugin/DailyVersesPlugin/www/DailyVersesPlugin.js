@@ -15,7 +15,8 @@ if ( cordova.platformId == 'ios' ) {
         console.log('setAlarm(): settings=', JSON.stringify(settings));
 
         // find out how we are already registered with the cloud-based push service
-        var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
+        var messageEnabled = localStorage.getItem("cloudMessageEnabled")
+        var cloudMessageEnabled = (messageEnabled===true||messageEnabled==='true')||false; // get last message status that was already shared with the server
         var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
         var pushRegistrationId = localStorage.getItem("apnsId")|| ''; // get last known apns ID
         var appMessageEnabled = settings.messageEnabled;

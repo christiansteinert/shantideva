@@ -16,7 +16,8 @@ if ( cordova.platformId == 'ios' ) {
         console.log('setAlarm(): settings=', JSON.stringify(settings));
 
         // find out how we are already registered with the cloud-based push service
-        var cloudMessageEnabled = localStorage.getItem("cloudMessageEnabled")||false; // get last message status that was already shared with the server
+        var messageEnabled = localStorage.getItem("cloudMessageEnabled")
+        var cloudMessageEnabled = (messageEnabled===true||messageEnabled==='true')||false; // get last message status that was already shared with the server
         var cloudSettings = localStorage.getItem("cloudSettings")|| ''; // get last info that was already shared with the server        
         var pushRegistrationId = localStorage.getItem("apnsId")|| ''; // get last known apns ID
         var appMessageEnabled = settings.messageEnabled;
@@ -119,9 +120,9 @@ if ( cordova.platformId == 'ios' ) {
                     if(success) {
                         success();
                     }
-                }).fail(function() {
+                }).fail(function(jqXHR, textStatus, errorThrown) {
                     // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
-                    console.log('setAlarm(): error when calling APNS device registration service. Retrying in 1 minute.');
+                    console.log('setAlarm(): error when calling APNS device registration service. Retrying in 1 minute.', textStatus, JSON.stringify(errorThrown));
                     window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
                     if(error) {
                         error();
@@ -145,12 +146,8 @@ if ( cordova.platformId == 'ios' ) {
 
     exports.loadSettings = function(success, error) {
         // -> Return some default settings for iOS.
-        defaultSettings = {
-            messageHour: 10,
-            messageMinute: 0,
-            messageEnabled: false
-        };
-        console.log('loadSettings(): returning iOS notification defaults', JSON.stringify(defaultSettings));
+        defaultSettings = {};
+        console.log('loadSettings(): returning empty cordova notification defaults', JSON.stringify(defaultSettings));
         success( defaultSettings );
     };
 
