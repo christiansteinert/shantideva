@@ -118,9 +118,9 @@ if ( cordova.platformId == 'ios' ) {
                     if(success) {
                         success();
                     }
-                }).fail(function() {
+                }).fail(function(jqXHR, textStatus, errorThrown) {
                     // Call failed. Let's re-try in 1 minute by calling the setAlarm function again in 1 minute
-                    console.log('setAlarm(): error when calling APNS device registration service. Retrying in 1 minute.');
+                    console.log('setAlarm(): error when calling APNS device registration service. Retrying in 1 minute.', textStatus, JSON.stringify(errorThrown));
                     window.setTimeout( function() { exports.setAlarm( settings, success, error ) }, 60000 );
                     if(error) {
                         error();
