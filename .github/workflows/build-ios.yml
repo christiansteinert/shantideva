@@ -59,7 +59,7 @@ jobs:
         rm node_modules/de-christian_steinert-shantideva_verses
         cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin
         cordova plugin add @ahovakimyan/cordova-plugin-wkwebviewxhrfix
-        cordova plugin add cordova-plugin-push
+        cordova plugin add @havesource/cordova-plugin-push
 
         # cordova plugin remove cordova-plugin-inappbrowser
         # cordova plugin add cordova-plugincordova-plugin-wkwebview-engine-inappbrowser@latest
