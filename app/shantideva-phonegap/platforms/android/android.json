@@ -10,7 +10,7 @@
           "/manifest/application": [
             {
               "xml": "<meta-data android:name=\"ic_notify\" android:resource=\"@drawable/ic_notify\" />",
-              "count": 86
+              "count": 91
             },
             {
               "xml": "<receiver android:enabled=\"true\" android:exported=\"false\" android:name=\"de.christiansteinert.dailyversesplugin.BootupReceiver\" android:permission=\"android.permission.RECEIVE_BOOT_COMPLETED\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter><intent-filter><action android:name=\"android.intent.action.PACKAGE_REPLACED\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></receiver>",
