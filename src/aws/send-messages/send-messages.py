@@ -149,7 +149,7 @@ def adjust_verse_text(chapter_num, verse_num_in_chapter, verse_text):
     verse_text = re.sub('^\([١٢٣٤٥٦٧٨٩٠]+\) *(.*)', '\\1', verse_text)
 
     # remove old verse number for Tibetan:
-    verse_text = re.sub('^[༡༢༣༤༥༦༧༨༩༠]+༽ *(.*)', '།\\1', verse_text)
+    verse_text = re.sub('^[༡༢༣༤༥༦༧༨༩༠]+༽ *(.*)', '\\1', verse_text)
     
     # remove old verse number for Devanagari:
     verse_text = re.sub('^\([१२३४५६७८९०]+\) *(.*)', '\\1', verse_text)

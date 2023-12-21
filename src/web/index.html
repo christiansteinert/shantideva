@@ -1154,7 +1154,7 @@ DATA = {
       var verseText = verseInfo.verseText;
       verseText = verseText.replace(/^<p>\([0-9]+\) */,"<p>"); // remove verse number at the beginning of the first line
       verseText = verseText.replace(/^<p>\([١٢٣٤٥٦٧٨٩٠]+\) */,"<p>"); // remove Arabic verse number at the beginning of the first line
-      verseText = verseText.replace(/^<p>[༡༢༣༤༥༦༧༨༩༠]+༽ */,"<p>།"); // remove Tibetan verse number at the beginning of the first line
+      verseText = verseText.replace(/^<p>[༡༢༣༤༥༦༧༨༩༠]+༽ */,"<p>"); // remove Tibetan verse number at the beginning of the first line
       verseText = verseText.replace(/^<p>\([१२३४५६७८९०]+\) */,"<p>"); // remove Devanagari verse number at the beginning of the first line
       return verseText;
     } else {
