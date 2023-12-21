@@ -111,7 +111,7 @@ public final class VerseAccess {
                 // remove old verse number for Arabic:
                 line = line.replaceAll("^\\([١٢٣٤٥٦٧٨٩٠]+\\) *", "");
                 // remove old verse number for Tibetan:
-                line = line.replaceAll("^[༡༢༣༤༥༦༧༨༩༠]+༽ *", "།");
+                line = line.replaceAll("^[༡༢༣༤༥༦༧༨༩༠]+༽ *", "");
                 // remove old verse number for Devanagari:
                 line = line.replaceAll("^\\([१२३४५६७८९०]+\\) *", "");
             }
