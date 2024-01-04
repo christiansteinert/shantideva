@@ -581,7 +581,7 @@ LANG['nl']={
 	"Time": "Tijd",
 	"Daily Message": "Dagelijks bericht",
 	"Show Messages": "Berichten weergeven",
-	"Enable the options below the see the verse of the day as a notification message.": "Schakel de onderstaande opties in om het vers van de dag als een meldingsbericht te bekijken.",
+	"Enable the options below to see the verse of the day as a notification message.": "Schakel de onderstaande opties in om het vers van de dag als een meldingsbericht te bekijken.",
 	"You need to be online when you save the notification settings.": "U moet online zijn wanneer u de meldingsinstellingen opslaat.",
 	"Notifications can only be displayed you when you are online.": "Meldingen kunnen alleen worden weergegeven als u online bent.",
 	"Favorite Verses": "Favoriete verzen",
