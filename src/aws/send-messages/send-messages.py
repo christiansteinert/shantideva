@@ -41,7 +41,7 @@ def read_pending_notifications(is_sandbox_environment):
     now = datetime.utcnow()
     minutes_since_midnight = now.hour * 60 + now.minute + 1
     today = now.replace(hour=0, minute=0, second=0, microsecond=0) # start of current day
-    
+
     # get all push subscriptions for which we need to send a notification now.
     # These are all subcriptions for which the following conditions are met:
     # - notifications are enabled for the respective device
@@ -188,6 +188,7 @@ def do_get_verse_of_the_day(day, lang):
     return ''
 
 def get_verse_of_the_day(user_day, lang):
+    now = datetime.utcnow()
     day = user_day
     
     while True:

@@ -1,0 +1,48 @@
+# openapi.yml
+openapi: 3.0.1
+info:
+  title: Shantideva API
+  version: 1.0.0
+
+paths:
+  /v1/device/register:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './device-register/schema-device_register_request.json'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+
+  /v1/device/unregister:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './device-unregister/schema-device_unregister_request.json'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+
+  /v1/verses/favorite:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './verses-favorite/schema-verses_favorite.json'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
