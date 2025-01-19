@@ -143,16 +143,16 @@ def read_all_verses(lang):
 
 def adjust_verse_text(chapter_num, verse_num_in_chapter, verse_text):
     # remove old verse number which is contained in brackets at the beginning of the first line
-    verse_text = re.sub('^\([0-9]+\) *(.*)', '\\1', verse_text)
+    verse_text = re.sub(r'^\([0-9]+\) *(.*)', r'\1', verse_text)
 
     # remove old verse number for Arabic:
-    verse_text = re.sub('^\([١٢٣٤٥٦٧٨٩٠]+\) *(.*)', '\\1', verse_text)
+    verse_text = re.sub(r'^\([١٢٣٤٥٦٧٨٩٠]+\) *(.*)', r'\1', verse_text)
 
     # remove old verse number for Tibetan:
-    verse_text = re.sub('^[༡༢༣༤༥༦༧༨༩༠]+༽ *(.*)', '\\1', verse_text)
+    verse_text = re.sub(r'^[༡༢༣༤༥༦༧༨༩༠]+༽ *(.*)', r'\1', verse_text)
     
     # remove old verse number for Devanagari:
-    verse_text = re.sub('^\([१२३४५६७८९०]+\) *(.*)', '\\1', verse_text)
+    verse_text = re.sub(r'^\([१२३४५६७८९०]+\) *(.*)', r'\1', verse_text)
 
     #add a chapter and verse number at the end of the last line
     verse_text += f' [{chapter_num}.{verse_num_in_chapter}]'
