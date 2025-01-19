@@ -13,7 +13,7 @@ service: shantideva
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.12
 
   stage: prd           # stage-ID
   region: eu-central-1 # AWS region to deploy to
@@ -23,7 +23,7 @@ provider:
 
   httpApi:
     payload: '2.0'
-    openApiSpec: openapi.yml
+#    openApiSpec: openapi.yml
     cors:
       allowedOrigins:
         - '*'
@@ -85,7 +85,6 @@ functions:
       - httpApi:
           path: /v1/verses/favorite
           method: post
-          cors: true
     package:
       include:
         - 'verses-favorite/**'
