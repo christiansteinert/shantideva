@@ -10,8 +10,9 @@ DBTABLE_PUSH_SUBSCRIPTIONS = os.environ.get('DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE',
 
 def register(event, context):
     event_body = json.loads(event['body'])
+    device_token = event_body['devicetoken']
     db_item = {
-        'push_devicetoken':{'S': event_body['devicetoken']}, 
+        'push_devicetoken':{'S': device_token},
         'push_platform':{'S': 'apns'}, 
         'subscribe_timestamp':{'S': datetime.utcnow().isoformat()},
         'is_disabled':{'N': '0'},
@@ -38,6 +39,8 @@ def register(event, context):
         # through XCode then the respective setting must be changed manually in dynamoDB.
         'is_sandbox':{'N': '0'}
     }
+
+    print(f"registering device with push token {device_token}")
     
     dynamodb = boto3.client('dynamodb')
     dynamodb.put_item(TableName=DBTABLE_PUSH_SUBSCRIPTIONS, Item=db_item )

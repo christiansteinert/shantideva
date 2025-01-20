@@ -10,11 +10,13 @@ DBTABLE_PUSH_SUBSCRIPTIONS = os.environ.get('DYNAMODB_PUSH_SUBSCRIPTIONS_TABLE',
 
 def unregister(event, context):
     event_body = json.loads(event['body'])
+    device_token = event_body['devicetoken']
+
+    print(f"deregistering device with push token {device_token}")
 
     key = {'push_platform':{'S': 'apns'}, 'push_devicetoken':{'S':event_body['devicetoken']}}
     dynamodb = boto3.client('dynamodb')
-    db_item = dynamodb.get_item(TableName=DBTABLE_PUSH_SUBSCRIPTIONS, 
-                                Key=key)
+    db_item = dynamodb.get_item(TableName=DBTABLE_PUSH_SUBSCRIPTIONS, Key=key)
 
     dynamodb.update_item(
         TableName=DBTABLE_PUSH_SUBSCRIPTIONS,

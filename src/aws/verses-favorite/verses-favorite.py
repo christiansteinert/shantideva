@@ -20,6 +20,7 @@ def save_favorite_verses(event, context):
     }
     
     dynamodb = boto3.client('dynamodb')
+    print(f"updating favorite verses for device {device_id}, platform {platform}")
     dynamodb.put_item(TableName=DYNAMODB_FAVORITE_VERSES_TABLE, Item=db_item )
 
     return {
