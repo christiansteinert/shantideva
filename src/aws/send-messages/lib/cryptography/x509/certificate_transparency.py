@@ -2,9 +2,7 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-
-import abc
-import datetime
+from __future__ import annotations
 
 from cryptography import utils
 from cryptography.hazmat.bindings._rust import x509 as rust_x509
@@ -19,30 +17,19 @@ class Version(utils.Enum):
     v1 = 0
 
 
-class SignedCertificateTimestamp(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
-    def version(self) -> Version:
-        """
-        Returns the SCT version.
-        """
+class SignatureAlgorithm(utils.Enum):
+    """
+    Signature algorithms that are valid for SCTs.
 
-    @abc.abstractproperty
-    def log_id(self) -> bytes:
-        """
-        Returns an identifier indicating which log this SCT is for.
-        """
+    These are exactly the same as SignatureAlgorithm in RFC 5246 (TLS 1.2).
 
-    @abc.abstractproperty
-    def timestamp(self) -> datetime.datetime:
-        """
-        Returns the timestamp for this SCT.
-        """
+    See: <https://datatracker.ietf.org/doc/html/rfc5246#section-7.4.1.4.1>
+    """
 
-    @abc.abstractproperty
-    def entry_type(self) -> LogEntryType:
-        """
-        Returns whether this is an SCT for a certificate or pre-certificate.
-        """
+    ANONYMOUS = 0
+    RSA = 1
+    DSA = 2
+    ECDSA = 3
 
 
-SignedCertificateTimestamp.register(rust_x509.Sct)
+SignedCertificateTimestamp = rust_x509.Sct

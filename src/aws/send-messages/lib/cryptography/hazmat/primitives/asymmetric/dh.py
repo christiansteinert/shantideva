@@ -2,141 +2,24 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
 import abc
-import typing
 
-from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.bindings._rust import openssl as rust_openssl
+from cryptography.hazmat.primitives import _serialization
 
-
-_MIN_MODULUS_SIZE = 512
-
-
-def generate_parameters(
-    generator: int, key_size: int, backend: typing.Any = None
-) -> "DHParameters":
-    from cryptography.hazmat.backends.openssl.backend import backend as ossl
-
-    return ossl.generate_dh_parameters(generator, key_size)
+generate_parameters = rust_openssl.dh.generate_parameters
 
 
-class DHParameterNumbers(object):
-    def __init__(self, p: int, g: int, q: typing.Optional[int] = None) -> None:
-        if not isinstance(p, int) or not isinstance(g, int):
-            raise TypeError("p and g must be integers")
-        if q is not None and not isinstance(q, int):
-            raise TypeError("q must be integer or None")
-
-        if g < 2:
-            raise ValueError("DH generator must be 2 or greater")
-
-        if p.bit_length() < _MIN_MODULUS_SIZE:
-            raise ValueError(
-                "p (modulus) must be at least {}-bit".format(_MIN_MODULUS_SIZE)
-            )
-
-        self._p = p
-        self._g = g
-        self._q = q
-
-    def __eq__(self, other):
-        if not isinstance(other, DHParameterNumbers):
-            return NotImplemented
-
-        return (
-            self._p == other._p and self._g == other._g and self._q == other._q
-        )
-
-    def __ne__(self, other):
-        return not self == other
-
-    def parameters(self, backend: typing.Any = None) -> "DHParameters":
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        return ossl.load_dh_parameter_numbers(self)
-
-    p = property(lambda self: self._p)
-    g = property(lambda self: self._g)
-    q = property(lambda self: self._q)
-
-
-class DHPublicNumbers(object):
-    def __init__(self, y: int, parameter_numbers: DHParameterNumbers) -> None:
-        if not isinstance(y, int):
-            raise TypeError("y must be an integer.")
-
-        if not isinstance(parameter_numbers, DHParameterNumbers):
-            raise TypeError(
-                "parameters must be an instance of DHParameterNumbers."
-            )
-
-        self._y = y
-        self._parameter_numbers = parameter_numbers
-
-    def __eq__(self, other):
-        if not isinstance(other, DHPublicNumbers):
-            return NotImplemented
-
-        return (
-            self._y == other._y
-            and self._parameter_numbers == other._parameter_numbers
-        )
-
-    def __ne__(self, other):
-        return not self == other
-
-    def public_key(self, backend: typing.Any = None) -> "DHPublicKey":
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        return ossl.load_dh_public_numbers(self)
-
-    y = property(lambda self: self._y)
-    parameter_numbers = property(lambda self: self._parameter_numbers)
-
-
-class DHPrivateNumbers(object):
-    def __init__(self, x: int, public_numbers: DHPublicNumbers) -> None:
-        if not isinstance(x, int):
-            raise TypeError("x must be an integer.")
-
-        if not isinstance(public_numbers, DHPublicNumbers):
-            raise TypeError(
-                "public_numbers must be an instance of " "DHPublicNumbers."
-            )
-
-        self._x = x
-        self._public_numbers = public_numbers
-
-    def __eq__(self, other):
-        if not isinstance(other, DHPrivateNumbers):
-            return NotImplemented
-
-        return (
-            self._x == other._x
-            and self._public_numbers == other._public_numbers
-        )
-
-    def __ne__(self, other):
-        return not self == other
-
-    def private_key(self, backend: typing.Any = None) -> "DHPrivateKey":
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        return ossl.load_dh_private_numbers(self)
-
-    public_numbers = property(lambda self: self._public_numbers)
-    x = property(lambda self: self._x)
+DHPrivateNumbers = rust_openssl.dh.DHPrivateNumbers
+DHPublicNumbers = rust_openssl.dh.DHPublicNumbers
+DHParameterNumbers = rust_openssl.dh.DHParameterNumbers
 
 
 class DHParameters(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def generate_private_key(self) -> "DHPrivateKey":
+    def generate_private_key(self) -> DHPrivateKey:
         """
         Generates and returns a DHPrivateKey.
         """
@@ -144,8 +27,8 @@ class DHParameters(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def parameter_bytes(
         self,
-        encoding: "serialization.Encoding",
-        format: "serialization.ParameterFormat",
+        encoding: _serialization.Encoding,
+        format: _serialization.ParameterFormat,
     ) -> bytes:
         """
         Returns the parameters serialized as bytes.
@@ -159,10 +42,12 @@ class DHParameters(metaclass=abc.ABCMeta):
 
 
 DHParametersWithSerialization = DHParameters
+DHParameters.register(rust_openssl.dh.DHParameters)
 
 
 class DHPublicKey(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def key_size(self) -> int:
         """
         The bit length of the prime modulus.
@@ -183,19 +68,27 @@ class DHPublicKey(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def public_bytes(
         self,
-        encoding: "serialization.Encoding",
-        format: "serialization.PublicFormat",
+        encoding: _serialization.Encoding,
+        format: _serialization.PublicFormat,
     ) -> bytes:
         """
         Returns the key serialized as bytes.
         """
 
+    @abc.abstractmethod
+    def __eq__(self, other: object) -> bool:
+        """
+        Checks equality.
+        """
+
 
 DHPublicKeyWithSerialization = DHPublicKey
+DHPublicKey.register(rust_openssl.dh.DHPublicKey)
 
 
 class DHPrivateKey(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def key_size(self) -> int:
         """
         The bit length of the prime modulus.
@@ -229,9 +122,9 @@ class DHPrivateKey(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def private_bytes(
         self,
-        encoding: "serialization.Encoding",
-        format: "serialization.PrivateFormat",
-        encryption_algorithm: "serialization.KeySerializationEncryption",
+        encoding: _serialization.Encoding,
+        format: _serialization.PrivateFormat,
+        encryption_algorithm: _serialization.KeySerializationEncryption,
     ) -> bytes:
         """
         Returns the key serialized as bytes.
@@ -239,3 +132,4 @@ class DHPrivateKey(metaclass=abc.ABCMeta):
 
 
 DHPrivateKeyWithSerialization = DHPrivateKey
+DHPrivateKey.register(rust_openssl.dh.DHPrivateKey)

@@ -2,8 +2,9 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
-import typing
+import abc
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives._asymmetric import (
@@ -16,23 +17,48 @@ class PKCS1v15(AsymmetricPadding):
     name = "EMSA-PKCS1-v1_5"
 
 
-class PSS(AsymmetricPadding):
-    MAX_LENGTH = object()
-    name = "EMSA-PSS"
+class _MaxLength:
+    "Sentinel value for `MAX_LENGTH`."
 
-    def __init__(self, mgf, salt_length):
+
+class _Auto:
+    "Sentinel value for `AUTO`."
+
+
+class _DigestLength:
+    "Sentinel value for `DIGEST_LENGTH`."
+
+
+class PSS(AsymmetricPadding):
+    MAX_LENGTH = _MaxLength()
+    AUTO = _Auto()
+    DIGEST_LENGTH = _DigestLength()
+    name = "EMSA-PSS"
+    _salt_length: int | _MaxLength | _Auto | _DigestLength
+
+    def __init__(
+        self,
+        mgf: MGF,
+        salt_length: int | _MaxLength | _Auto | _DigestLength,
+    ) -> None:
         self._mgf = mgf
 
-        if (
-            not isinstance(salt_length, int)
-            and salt_length is not self.MAX_LENGTH
+        if not isinstance(
+            salt_length, (int, _MaxLength, _Auto, _DigestLength)
         ):
-            raise TypeError("salt_length must be an integer.")
+            raise TypeError(
+                "salt_length must be an integer, MAX_LENGTH, "
+                "DIGEST_LENGTH, or AUTO"
+            )
 
-        if salt_length is not self.MAX_LENGTH and salt_length < 0:
+        if isinstance(salt_length, int) and salt_length < 0:
             raise ValueError("salt_length must be zero or greater.")
 
         self._salt_length = salt_length
+
+    @property
+    def mgf(self) -> MGF:
+        return self._mgf
 
 
 class OAEP(AsymmetricPadding):
@@ -40,9 +66,9 @@ class OAEP(AsymmetricPadding):
 
     def __init__(
         self,
-        mgf: "MGF1",
+        mgf: MGF,
         algorithm: hashes.HashAlgorithm,
-        label: typing.Optional[bytes],
+        label: bytes | None,
     ):
         if not isinstance(algorithm, hashes.HashAlgorithm):
             raise TypeError("Expected instance of hashes.HashAlgorithm.")
@@ -51,9 +77,21 @@ class OAEP(AsymmetricPadding):
         self._algorithm = algorithm
         self._label = label
 
+    @property
+    def algorithm(self) -> hashes.HashAlgorithm:
+        return self._algorithm
 
-class MGF1(object):
-    MAX_LENGTH = object()
+    @property
+    def mgf(self) -> MGF:
+        return self._mgf
+
+
+class MGF(metaclass=abc.ABCMeta):
+    _algorithm: hashes.HashAlgorithm
+
+
+class MGF1(MGF):
+    MAX_LENGTH = _MaxLength()
 
     def __init__(self, algorithm: hashes.HashAlgorithm):
         if not isinstance(algorithm, hashes.HashAlgorithm):
@@ -63,7 +101,7 @@ class MGF1(object):
 
 
 def calculate_max_pss_salt_length(
-    key: typing.Union["rsa.RSAPrivateKey", "rsa.RSAPublicKey"],
+    key: rsa.RSAPrivateKey | rsa.RSAPublicKey,
     hash_algorithm: hashes.HashAlgorithm,
 ) -> int:
     if not isinstance(key, (rsa.RSAPrivateKey, rsa.RSAPublicKey)):

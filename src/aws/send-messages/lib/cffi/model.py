@@ -117,8 +117,8 @@ class PrimitiveType(BasePrimitiveType):
         'float':              'f',
         'double':             'f',
         'long double':        'f',
-        'float _Complex':     'j',
-        'double _Complex':    'j',
+        '_cffi_float_complex_t': 'j',
+        '_cffi_double_complex_t': 'j',
         '_Bool':              'i',
         # the following types are not primitive in the C sense
         'wchar_t':            'c',
@@ -264,9 +264,10 @@ class PointerType(BaseType):
     def __init__(self, totype, quals=0):
         self.totype = totype
         self.quals = quals
-        extra = qualify(quals, " *&")
+        extra = " *&"
         if totype.is_array_type:
             extra = "(%s)" % (extra.lstrip(),)
+        extra = qualify(quals, extra)
         self.c_name_with_marker = totype.c_name_with_marker.replace('&', extra)
 
     def build_backend_type(self, ffi, finishlist):

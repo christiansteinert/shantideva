@@ -2,51 +2,65 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
 import abc
 import datetime
 import os
 import typing
+import warnings
 
 from cryptography import utils
 from cryptography.hazmat.bindings._rust import x509 as rust_x509
-from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import (
     dsa,
     ec,
-    ed25519,
     ed448,
+    ed25519,
+    padding,
     rsa,
-    x25519,
     x448,
+    x25519,
 )
 from cryptography.hazmat.primitives.asymmetric.types import (
-    CERTIFICATE_PUBLIC_KEY_TYPES,
-    PRIVATE_KEY_TYPES as PRIVATE_KEY_TYPES,
-    PUBLIC_KEY_TYPES as PUBLIC_KEY_TYPES,
+    CertificateIssuerPrivateKeyTypes,
+    CertificatePublicKeyTypes,
 )
 from cryptography.x509.extensions import (
     Extension,
-    ExtensionType,
     Extensions,
+    ExtensionType,
     _make_sequence_methods,
 )
 from cryptography.x509.name import Name, _ASN1Type
 from cryptography.x509.oid import ObjectIdentifier
 
-
 _EARLIEST_UTC_TIME = datetime.datetime(1950, 1, 1)
+
+# This must be kept in sync with sign.rs's list of allowable types in
+# identify_hash_type
+_AllowedHashTypes = typing.Union[
+    hashes.SHA224,
+    hashes.SHA256,
+    hashes.SHA384,
+    hashes.SHA512,
+    hashes.SHA3_224,
+    hashes.SHA3_256,
+    hashes.SHA3_384,
+    hashes.SHA3_512,
+]
 
 
 class AttributeNotFound(Exception):
     def __init__(self, msg: str, oid: ObjectIdentifier) -> None:
-        super(AttributeNotFound, self).__init__(msg)
+        super().__init__(msg)
         self.oid = oid
 
 
 def _reject_duplicate_extension(
     extension: Extension[ExtensionType],
-    extensions: typing.List[Extension[ExtensionType]],
+    extensions: list[Extension[ExtensionType]],
 ) -> None:
     # This is quadratic in the number of extensions
     for e in extensions:
@@ -56,10 +70,10 @@ def _reject_duplicate_extension(
 
 def _reject_duplicate_attribute(
     oid: ObjectIdentifier,
-    attributes: typing.List[typing.Tuple[ObjectIdentifier, bytes]],
+    attributes: list[tuple[ObjectIdentifier, bytes, int | None]],
 ) -> None:
     # This is quadratic in the number of attributes
-    for attr_oid, _ in attributes:
+    for attr_oid, _, _ in attributes:
         if attr_oid == oid:
             raise ValueError("This attribute has already been set.")
 
@@ -97,10 +111,10 @@ class Attribute:
     def value(self) -> bytes:
         return self._value
 
-    def __repr__(self):
-        return "<Attribute(oid={}, value={!r})>".format(self.oid, self.value)
+    def __repr__(self) -> str:
+        return f"<Attribute(oid={self.oid}, value={self.value!r})>"
 
-    def __eq__(self, other: typing.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Attribute):
             return NotImplemented
 
@@ -109,9 +123,6 @@ class Attribute:
             and self.value == other.value
             and self._type == other._type
         )
-
-    def __ne__(self, other: typing.Any) -> bool:
-        return not self == other
 
     def __hash__(self) -> int:
         return hash((self.oid, self.value, self._type))
@@ -126,15 +137,15 @@ class Attributes:
 
     __len__, __iter__, __getitem__ = _make_sequence_methods("_attributes")
 
-    def __repr__(self):
-        return "<Attributes({})>".format(self._attributes)
+    def __repr__(self) -> str:
+        return f"<Attributes({self._attributes})>"
 
     def get_attribute_for_oid(self, oid: ObjectIdentifier) -> Attribute:
         for attr in self:
             if attr.oid == oid:
                 return attr
 
-        raise AttributeNotFound("No {} attribute was found".format(oid), oid)
+        raise AttributeNotFound(f"No {oid} attribute was found", oid)
 
 
 class Version(utils.Enum):
@@ -144,135 +155,38 @@ class Version(utils.Enum):
 
 class InvalidVersion(Exception):
     def __init__(self, msg: str, parsed_version: int) -> None:
-        super(InvalidVersion, self).__init__(msg)
+        super().__init__(msg)
         self.parsed_version = parsed_version
 
 
-class Certificate(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def fingerprint(self, algorithm: hashes.HashAlgorithm) -> bytes:
-        """
-        Returns bytes using digest passed.
-        """
-
-    @abc.abstractproperty
-    def serial_number(self) -> int:
-        """
-        Returns certificate serial number
-        """
-
-    @abc.abstractproperty
-    def version(self) -> Version:
-        """
-        Returns the certificate version
-        """
-
-    @abc.abstractmethod
-    def public_key(self) -> CERTIFICATE_PUBLIC_KEY_TYPES:
-        """
-        Returns the public key
-        """
-
-    @abc.abstractproperty
-    def not_valid_before(self) -> datetime.datetime:
-        """
-        Not before time (represented as UTC datetime)
-        """
-
-    @abc.abstractproperty
-    def not_valid_after(self) -> datetime.datetime:
-        """
-        Not after time (represented as UTC datetime)
-        """
-
-    @abc.abstractproperty
-    def issuer(self) -> Name:
-        """
-        Returns the issuer name object.
-        """
-
-    @abc.abstractproperty
-    def subject(self) -> Name:
-        """
-        Returns the subject name object.
-        """
-
-    @abc.abstractproperty
-    def signature_hash_algorithm(
-        self,
-    ) -> typing.Optional[hashes.HashAlgorithm]:
-        """
-        Returns a HashAlgorithm corresponding to the type of the digest signed
-        in the certificate.
-        """
-
-    @abc.abstractproperty
-    def signature_algorithm_oid(self) -> ObjectIdentifier:
-        """
-        Returns the ObjectIdentifier of the signature algorithm.
-        """
-
-    @abc.abstractproperty
-    def extensions(self) -> Extensions:
-        """
-        Returns an Extensions object.
-        """
-
-    @abc.abstractproperty
-    def signature(self) -> bytes:
-        """
-        Returns the signature bytes.
-        """
-
-    @abc.abstractproperty
-    def tbs_certificate_bytes(self) -> bytes:
-        """
-        Returns the tbsCertificate payload bytes as defined in RFC 5280.
-        """
-
-    @abc.abstractmethod
-    def __eq__(self, other: object) -> bool:
-        """
-        Checks equality.
-        """
-
-    @abc.abstractmethod
-    def __ne__(self, other: object) -> bool:
-        """
-        Checks not equal.
-        """
-
-    @abc.abstractmethod
-    def __hash__(self) -> int:
-        """
-        Computes a hash.
-        """
-
-    @abc.abstractmethod
-    def public_bytes(self, encoding: serialization.Encoding) -> bytes:
-        """
-        Serializes the certificate to PEM or DER format.
-        """
-
-
-# Runtime isinstance checks need this since the rust class is not a subclass.
-Certificate.register(rust_x509.Certificate)
+Certificate = rust_x509.Certificate
 
 
 class RevokedCertificate(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def serial_number(self) -> int:
         """
         Returns the serial number of the revoked certificate.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def revocation_date(self) -> datetime.datetime:
         """
         Returns the date of when this certificate was revoked.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
+    def revocation_date_utc(self) -> datetime.datetime:
+        """
+        Returns the date of when this certificate was revoked as a non-naive
+        UTC datetime.
+        """
+
+    @property
+    @abc.abstractmethod
     def extensions(self) -> Extensions:
         """
         Returns an Extensions object containing a list of Revoked extensions.
@@ -300,278 +214,45 @@ class _RawRevokedCertificate(RevokedCertificate):
 
     @property
     def revocation_date(self) -> datetime.datetime:
+        warnings.warn(
+            "Properties that return a naïve datetime object have been "
+            "deprecated. Please switch to revocation_date_utc.",
+            utils.DeprecatedIn42,
+            stacklevel=2,
+        )
         return self._revocation_date
+
+    @property
+    def revocation_date_utc(self) -> datetime.datetime:
+        return self._revocation_date.replace(tzinfo=datetime.timezone.utc)
 
     @property
     def extensions(self) -> Extensions:
         return self._extensions
 
 
-class CertificateRevocationList(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def public_bytes(self, encoding: serialization.Encoding) -> bytes:
-        """
-        Serializes the CRL to PEM or DER format.
-        """
-
-    @abc.abstractmethod
-    def fingerprint(self, algorithm: hashes.HashAlgorithm) -> bytes:
-        """
-        Returns bytes using digest passed.
-        """
-
-    @abc.abstractmethod
-    def get_revoked_certificate_by_serial_number(
-        self, serial_number: int
-    ) -> typing.Optional[RevokedCertificate]:
-        """
-        Returns an instance of RevokedCertificate or None if the serial_number
-        is not in the CRL.
-        """
-
-    @abc.abstractproperty
-    def signature_hash_algorithm(
-        self,
-    ) -> typing.Optional[hashes.HashAlgorithm]:
-        """
-        Returns a HashAlgorithm corresponding to the type of the digest signed
-        in the certificate.
-        """
-
-    @abc.abstractproperty
-    def signature_algorithm_oid(self) -> ObjectIdentifier:
-        """
-        Returns the ObjectIdentifier of the signature algorithm.
-        """
-
-    @abc.abstractproperty
-    def issuer(self) -> Name:
-        """
-        Returns the X509Name with the issuer of this CRL.
-        """
-
-    @abc.abstractproperty
-    def next_update(self) -> typing.Optional[datetime.datetime]:
-        """
-        Returns the date of next update for this CRL.
-        """
-
-    @abc.abstractproperty
-    def last_update(self) -> datetime.datetime:
-        """
-        Returns the date of last update for this CRL.
-        """
-
-    @abc.abstractproperty
-    def extensions(self) -> Extensions:
-        """
-        Returns an Extensions object containing a list of CRL extensions.
-        """
-
-    @abc.abstractproperty
-    def signature(self) -> bytes:
-        """
-        Returns the signature bytes.
-        """
-
-    @abc.abstractproperty
-    def tbs_certlist_bytes(self) -> bytes:
-        """
-        Returns the tbsCertList payload bytes as defined in RFC 5280.
-        """
-
-    @abc.abstractmethod
-    def __eq__(self, other: object) -> bool:
-        """
-        Checks equality.
-        """
-
-    @abc.abstractmethod
-    def __ne__(self, other: object) -> bool:
-        """
-        Checks not equal.
-        """
-
-    @abc.abstractmethod
-    def __len__(self) -> int:
-        """
-        Number of revoked certificates in the CRL.
-        """
-
-    @typing.overload
-    def __getitem__(self, idx: int) -> RevokedCertificate:
-        ...
-
-    @typing.overload
-    def __getitem__(self, idx: slice) -> typing.List[RevokedCertificate]:
-        ...
-
-    @abc.abstractmethod
-    def __getitem__(
-        self, idx: typing.Union[int, slice]
-    ) -> typing.Union[RevokedCertificate, typing.List[RevokedCertificate]]:
-        """
-        Returns a revoked certificate (or slice of revoked certificates).
-        """
-
-    @abc.abstractmethod
-    def __iter__(self) -> typing.Iterator[RevokedCertificate]:
-        """
-        Iterator over the revoked certificates
-        """
-
-    @abc.abstractmethod
-    def is_signature_valid(self, public_key: PUBLIC_KEY_TYPES) -> bool:
-        """
-        Verifies signature of revocation list against given public key.
-        """
+CertificateRevocationList = rust_x509.CertificateRevocationList
+CertificateSigningRequest = rust_x509.CertificateSigningRequest
 
 
-CertificateRevocationList.register(rust_x509.CertificateRevocationList)
+load_pem_x509_certificate = rust_x509.load_pem_x509_certificate
+load_der_x509_certificate = rust_x509.load_der_x509_certificate
+
+load_pem_x509_certificates = rust_x509.load_pem_x509_certificates
+
+load_pem_x509_csr = rust_x509.load_pem_x509_csr
+load_der_x509_csr = rust_x509.load_der_x509_csr
+
+load_pem_x509_crl = rust_x509.load_pem_x509_crl
+load_der_x509_crl = rust_x509.load_der_x509_crl
 
 
-class CertificateSigningRequest(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def __eq__(self, other: object) -> bool:
-        """
-        Checks equality.
-        """
-
-    @abc.abstractmethod
-    def __ne__(self, other: object) -> bool:
-        """
-        Checks not equal.
-        """
-
-    @abc.abstractmethod
-    def __hash__(self) -> int:
-        """
-        Computes a hash.
-        """
-
-    @abc.abstractmethod
-    def public_key(self) -> PUBLIC_KEY_TYPES:
-        """
-        Returns the public key
-        """
-
-    @abc.abstractproperty
-    def subject(self) -> Name:
-        """
-        Returns the subject name object.
-        """
-
-    @abc.abstractproperty
-    def signature_hash_algorithm(
-        self,
-    ) -> typing.Optional[hashes.HashAlgorithm]:
-        """
-        Returns a HashAlgorithm corresponding to the type of the digest signed
-        in the certificate.
-        """
-
-    @abc.abstractproperty
-    def signature_algorithm_oid(self) -> ObjectIdentifier:
-        """
-        Returns the ObjectIdentifier of the signature algorithm.
-        """
-
-    @abc.abstractproperty
-    def extensions(self) -> Extensions:
-        """
-        Returns the extensions in the signing request.
-        """
-
-    @abc.abstractproperty
-    def attributes(self) -> Attributes:
-        """
-        Returns an Attributes object.
-        """
-
-    @abc.abstractmethod
-    def public_bytes(self, encoding: serialization.Encoding) -> bytes:
-        """
-        Encodes the request to PEM or DER format.
-        """
-
-    @abc.abstractproperty
-    def signature(self) -> bytes:
-        """
-        Returns the signature bytes.
-        """
-
-    @abc.abstractproperty
-    def tbs_certrequest_bytes(self) -> bytes:
-        """
-        Returns the PKCS#10 CertificationRequestInfo bytes as defined in RFC
-        2986.
-        """
-
-    @abc.abstractproperty
-    def is_signature_valid(self) -> bool:
-        """
-        Verifies signature of signing request.
-        """
-
-    @abc.abstractmethod
-    def get_attribute_for_oid(self, oid: ObjectIdentifier) -> bytes:
-        """
-        Get the attribute value for a given OID.
-        """
-
-
-# Runtime isinstance checks need this since the rust class is not a subclass.
-CertificateSigningRequest.register(rust_x509.CertificateSigningRequest)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_pem_x509_certificate(
-    data: bytes, backend: typing.Any = None
-) -> Certificate:
-    return rust_x509.load_pem_x509_certificate(data)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_der_x509_certificate(
-    data: bytes, backend: typing.Any = None
-) -> Certificate:
-    return rust_x509.load_der_x509_certificate(data)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_pem_x509_csr(
-    data: bytes, backend: typing.Any = None
-) -> CertificateSigningRequest:
-    return rust_x509.load_pem_x509_csr(data)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_der_x509_csr(
-    data: bytes, backend: typing.Any = None
-) -> CertificateSigningRequest:
-    return rust_x509.load_der_x509_csr(data)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_pem_x509_crl(
-    data: bytes, backend: typing.Any = None
-) -> CertificateRevocationList:
-    return rust_x509.load_pem_x509_crl(data)
-
-
-# Backend argument preserved for API compatibility, but ignored.
-def load_der_x509_crl(
-    data: bytes, backend: typing.Any = None
-) -> CertificateRevocationList:
-    return rust_x509.load_der_x509_crl(data)
-
-
-class CertificateSigningRequestBuilder(object):
+class CertificateSigningRequestBuilder:
     def __init__(
         self,
-        subject_name: typing.Optional[Name] = None,
-        extensions: typing.List[Extension[ExtensionType]] = [],
-        attributes: typing.List[typing.Tuple[ObjectIdentifier, bytes]] = [],
+        subject_name: Name | None = None,
+        extensions: list[Extension[ExtensionType]] = [],
+        attributes: list[tuple[ObjectIdentifier, bytes, int | None]] = [],
     ):
         """
         Creates an empty X.509 certificate request (v1).
@@ -580,7 +261,7 @@ class CertificateSigningRequestBuilder(object):
         self._extensions = extensions
         self._attributes = attributes
 
-    def subject_name(self, name: Name) -> "CertificateSigningRequestBuilder":
+    def subject_name(self, name: Name) -> CertificateSigningRequestBuilder:
         """
         Sets the certificate requestor's distinguished name.
         """
@@ -594,7 +275,7 @@ class CertificateSigningRequestBuilder(object):
 
     def add_extension(
         self, extval: ExtensionType, critical: bool
-    ) -> "CertificateSigningRequestBuilder":
+    ) -> CertificateSigningRequestBuilder:
         """
         Adds an X.509 extension to the certificate request.
         """
@@ -606,13 +287,17 @@ class CertificateSigningRequestBuilder(object):
 
         return CertificateSigningRequestBuilder(
             self._subject_name,
-            self._extensions + [extension],
+            [*self._extensions, extension],
             self._attributes,
         )
 
     def add_attribute(
-        self, oid: ObjectIdentifier, value: bytes
-    ) -> "CertificateSigningRequestBuilder":
+        self,
+        oid: ObjectIdentifier,
+        value: bytes,
+        *,
+        _tag: _ASN1Type | None = None,
+    ) -> CertificateSigningRequestBuilder:
         """
         Adds an X.509 attribute with an OID and associated value.
         """
@@ -622,40 +307,59 @@ class CertificateSigningRequestBuilder(object):
         if not isinstance(value, bytes):
             raise TypeError("value must be bytes")
 
+        if _tag is not None and not isinstance(_tag, _ASN1Type):
+            raise TypeError("tag must be _ASN1Type")
+
         _reject_duplicate_attribute(oid, self._attributes)
+
+        if _tag is not None:
+            tag = _tag.value
+        else:
+            tag = None
 
         return CertificateSigningRequestBuilder(
             self._subject_name,
             self._extensions,
-            self._attributes + [(oid, value)],
+            [*self._attributes, (oid, value, tag)],
         )
 
     def sign(
         self,
-        private_key: PRIVATE_KEY_TYPES,
-        algorithm: typing.Optional[hashes.HashAlgorithm],
+        private_key: CertificateIssuerPrivateKeyTypes,
+        algorithm: _AllowedHashTypes | None,
         backend: typing.Any = None,
+        *,
+        rsa_padding: padding.PSS | padding.PKCS1v15 | None = None,
     ) -> CertificateSigningRequest:
         """
         Signs the request using the requestor's private key.
         """
         if self._subject_name is None:
             raise ValueError("A CertificateSigningRequest must have a subject")
-        return rust_x509.create_x509_csr(self, private_key, algorithm)
+
+        if rsa_padding is not None:
+            if not isinstance(rsa_padding, (padding.PSS, padding.PKCS1v15)):
+                raise TypeError("Padding must be PSS or PKCS1v15")
+            if not isinstance(private_key, rsa.RSAPrivateKey):
+                raise TypeError("Padding is only supported for RSA keys")
+
+        return rust_x509.create_x509_csr(
+            self, private_key, algorithm, rsa_padding
+        )
 
 
-class CertificateBuilder(object):
-    _extensions: typing.List[Extension[ExtensionType]]
+class CertificateBuilder:
+    _extensions: list[Extension[ExtensionType]]
 
     def __init__(
         self,
-        issuer_name: typing.Optional[Name] = None,
-        subject_name: typing.Optional[Name] = None,
-        public_key: typing.Optional[CERTIFICATE_PUBLIC_KEY_TYPES] = None,
-        serial_number: typing.Optional[int] = None,
-        not_valid_before: typing.Optional[datetime.datetime] = None,
-        not_valid_after: typing.Optional[datetime.datetime] = None,
-        extensions: typing.List[Extension[ExtensionType]] = [],
+        issuer_name: Name | None = None,
+        subject_name: Name | None = None,
+        public_key: CertificatePublicKeyTypes | None = None,
+        serial_number: int | None = None,
+        not_valid_before: datetime.datetime | None = None,
+        not_valid_after: datetime.datetime | None = None,
+        extensions: list[Extension[ExtensionType]] = [],
     ) -> None:
         self._version = Version.v3
         self._issuer_name = issuer_name
@@ -666,7 +370,7 @@ class CertificateBuilder(object):
         self._not_valid_after = not_valid_after
         self._extensions = extensions
 
-    def issuer_name(self, name: Name) -> "CertificateBuilder":
+    def issuer_name(self, name: Name) -> CertificateBuilder:
         """
         Sets the CA's distinguished name.
         """
@@ -684,7 +388,7 @@ class CertificateBuilder(object):
             self._extensions,
         )
 
-    def subject_name(self, name: Name) -> "CertificateBuilder":
+    def subject_name(self, name: Name) -> CertificateBuilder:
         """
         Sets the requestor's distinguished name.
         """
@@ -704,8 +408,8 @@ class CertificateBuilder(object):
 
     def public_key(
         self,
-        key: CERTIFICATE_PUBLIC_KEY_TYPES,
-    ) -> "CertificateBuilder":
+        key: CertificatePublicKeyTypes,
+    ) -> CertificateBuilder:
         """
         Sets the requestor's public key (as found in the signing request).
         """
@@ -739,7 +443,7 @@ class CertificateBuilder(object):
             self._extensions,
         )
 
-    def serial_number(self, number: int) -> "CertificateBuilder":
+    def serial_number(self, number: int) -> CertificateBuilder:
         """
         Sets the certificate serial number.
         """
@@ -754,7 +458,7 @@ class CertificateBuilder(object):
         # zero.
         if number.bit_length() >= 160:  # As defined in RFC 5280
             raise ValueError(
-                "The serial number should not be more than 159 " "bits."
+                "The serial number should not be more than 159 bits."
             )
         return CertificateBuilder(
             self._issuer_name,
@@ -766,9 +470,7 @@ class CertificateBuilder(object):
             self._extensions,
         )
 
-    def not_valid_before(
-        self, time: datetime.datetime
-    ) -> "CertificateBuilder":
+    def not_valid_before(self, time: datetime.datetime) -> CertificateBuilder:
         """
         Sets the certificate activation time.
         """
@@ -797,7 +499,7 @@ class CertificateBuilder(object):
             self._extensions,
         )
 
-    def not_valid_after(self, time: datetime.datetime) -> "CertificateBuilder":
+    def not_valid_after(self, time: datetime.datetime) -> CertificateBuilder:
         """
         Sets the certificate expiration time.
         """
@@ -831,7 +533,7 @@ class CertificateBuilder(object):
 
     def add_extension(
         self, extval: ExtensionType, critical: bool
-    ) -> "CertificateBuilder":
+    ) -> CertificateBuilder:
         """
         Adds an X.509 extension to the certificate.
         """
@@ -848,14 +550,16 @@ class CertificateBuilder(object):
             self._serial_number,
             self._not_valid_before,
             self._not_valid_after,
-            self._extensions + [extension],
+            [*self._extensions, extension],
         )
 
     def sign(
         self,
-        private_key: PRIVATE_KEY_TYPES,
-        algorithm: typing.Optional[hashes.HashAlgorithm],
+        private_key: CertificateIssuerPrivateKeyTypes,
+        algorithm: _AllowedHashTypes | None,
         backend: typing.Any = None,
+        *,
+        rsa_padding: padding.PSS | padding.PKCS1v15 | None = None,
     ) -> Certificate:
         """
         Signs the certificate using the CA's private key.
@@ -878,20 +582,28 @@ class CertificateBuilder(object):
         if self._public_key is None:
             raise ValueError("A certificate must have a public key")
 
-        return rust_x509.create_x509_certificate(self, private_key, algorithm)
+        if rsa_padding is not None:
+            if not isinstance(rsa_padding, (padding.PSS, padding.PKCS1v15)):
+                raise TypeError("Padding must be PSS or PKCS1v15")
+            if not isinstance(private_key, rsa.RSAPrivateKey):
+                raise TypeError("Padding is only supported for RSA keys")
+
+        return rust_x509.create_x509_certificate(
+            self, private_key, algorithm, rsa_padding
+        )
 
 
-class CertificateRevocationListBuilder(object):
-    _extensions: typing.List[Extension[ExtensionType]]
-    _revoked_certificates: typing.List[RevokedCertificate]
+class CertificateRevocationListBuilder:
+    _extensions: list[Extension[ExtensionType]]
+    _revoked_certificates: list[RevokedCertificate]
 
     def __init__(
         self,
-        issuer_name: typing.Optional[Name] = None,
-        last_update: typing.Optional[datetime.datetime] = None,
-        next_update: typing.Optional[datetime.datetime] = None,
-        extensions: typing.List[Extension[ExtensionType]] = [],
-        revoked_certificates: typing.List[RevokedCertificate] = [],
+        issuer_name: Name | None = None,
+        last_update: datetime.datetime | None = None,
+        next_update: datetime.datetime | None = None,
+        extensions: list[Extension[ExtensionType]] = [],
+        revoked_certificates: list[RevokedCertificate] = [],
     ):
         self._issuer_name = issuer_name
         self._last_update = last_update
@@ -901,7 +613,7 @@ class CertificateRevocationListBuilder(object):
 
     def issuer_name(
         self, issuer_name: Name
-    ) -> "CertificateRevocationListBuilder":
+    ) -> CertificateRevocationListBuilder:
         if not isinstance(issuer_name, Name):
             raise TypeError("Expecting x509.Name object.")
         if self._issuer_name is not None:
@@ -916,7 +628,7 @@ class CertificateRevocationListBuilder(object):
 
     def last_update(
         self, last_update: datetime.datetime
-    ) -> "CertificateRevocationListBuilder":
+    ) -> CertificateRevocationListBuilder:
         if not isinstance(last_update, datetime.datetime):
             raise TypeError("Expecting datetime object.")
         if self._last_update is not None:
@@ -924,7 +636,7 @@ class CertificateRevocationListBuilder(object):
         last_update = _convert_to_naive_utc_time(last_update)
         if last_update < _EARLIEST_UTC_TIME:
             raise ValueError(
-                "The last update date must be on or after" " 1950 January 1."
+                "The last update date must be on or after 1950 January 1."
             )
         if self._next_update is not None and last_update > self._next_update:
             raise ValueError(
@@ -940,7 +652,7 @@ class CertificateRevocationListBuilder(object):
 
     def next_update(
         self, next_update: datetime.datetime
-    ) -> "CertificateRevocationListBuilder":
+    ) -> CertificateRevocationListBuilder:
         if not isinstance(next_update, datetime.datetime):
             raise TypeError("Expecting datetime object.")
         if self._next_update is not None:
@@ -948,7 +660,7 @@ class CertificateRevocationListBuilder(object):
         next_update = _convert_to_naive_utc_time(next_update)
         if next_update < _EARLIEST_UTC_TIME:
             raise ValueError(
-                "The last update date must be on or after" " 1950 January 1."
+                "The last update date must be on or after 1950 January 1."
             )
         if self._last_update is not None and next_update < self._last_update:
             raise ValueError(
@@ -964,7 +676,7 @@ class CertificateRevocationListBuilder(object):
 
     def add_extension(
         self, extval: ExtensionType, critical: bool
-    ) -> "CertificateRevocationListBuilder":
+    ) -> CertificateRevocationListBuilder:
         """
         Adds an X.509 extension to the certificate revocation list.
         """
@@ -977,13 +689,13 @@ class CertificateRevocationListBuilder(object):
             self._issuer_name,
             self._last_update,
             self._next_update,
-            self._extensions + [extension],
+            [*self._extensions, extension],
             self._revoked_certificates,
         )
 
     def add_revoked_certificate(
         self, revoked_certificate: RevokedCertificate
-    ) -> "CertificateRevocationListBuilder":
+    ) -> CertificateRevocationListBuilder:
         """
         Adds a revoked certificate to the CRL.
         """
@@ -995,14 +707,16 @@ class CertificateRevocationListBuilder(object):
             self._last_update,
             self._next_update,
             self._extensions,
-            self._revoked_certificates + [revoked_certificate],
+            [*self._revoked_certificates, revoked_certificate],
         )
 
     def sign(
         self,
-        private_key: PRIVATE_KEY_TYPES,
-        algorithm: typing.Optional[hashes.HashAlgorithm],
+        private_key: CertificateIssuerPrivateKeyTypes,
+        algorithm: _AllowedHashTypes | None,
         backend: typing.Any = None,
+        *,
+        rsa_padding: padding.PSS | padding.PKCS1v15 | None = None,
     ) -> CertificateRevocationList:
         if self._issuer_name is None:
             raise ValueError("A CRL must have an issuer name")
@@ -1013,21 +727,29 @@ class CertificateRevocationListBuilder(object):
         if self._next_update is None:
             raise ValueError("A CRL must have a next update time")
 
-        return rust_x509.create_x509_crl(self, private_key, algorithm)
+        if rsa_padding is not None:
+            if not isinstance(rsa_padding, (padding.PSS, padding.PKCS1v15)):
+                raise TypeError("Padding must be PSS or PKCS1v15")
+            if not isinstance(private_key, rsa.RSAPrivateKey):
+                raise TypeError("Padding is only supported for RSA keys")
+
+        return rust_x509.create_x509_crl(
+            self, private_key, algorithm, rsa_padding
+        )
 
 
-class RevokedCertificateBuilder(object):
+class RevokedCertificateBuilder:
     def __init__(
         self,
-        serial_number: typing.Optional[int] = None,
-        revocation_date: typing.Optional[datetime.datetime] = None,
-        extensions: typing.List[Extension[ExtensionType]] = [],
+        serial_number: int | None = None,
+        revocation_date: datetime.datetime | None = None,
+        extensions: list[Extension[ExtensionType]] = [],
     ):
         self._serial_number = serial_number
         self._revocation_date = revocation_date
         self._extensions = extensions
 
-    def serial_number(self, number: int) -> "RevokedCertificateBuilder":
+    def serial_number(self, number: int) -> RevokedCertificateBuilder:
         if not isinstance(number, int):
             raise TypeError("Serial number must be of integral type.")
         if self._serial_number is not None:
@@ -1039,7 +761,7 @@ class RevokedCertificateBuilder(object):
         # zero.
         if number.bit_length() >= 160:  # As defined in RFC 5280
             raise ValueError(
-                "The serial number should not be more than 159 " "bits."
+                "The serial number should not be more than 159 bits."
             )
         return RevokedCertificateBuilder(
             number, self._revocation_date, self._extensions
@@ -1047,7 +769,7 @@ class RevokedCertificateBuilder(object):
 
     def revocation_date(
         self, time: datetime.datetime
-    ) -> "RevokedCertificateBuilder":
+    ) -> RevokedCertificateBuilder:
         if not isinstance(time, datetime.datetime):
             raise TypeError("Expecting datetime object.")
         if self._revocation_date is not None:
@@ -1055,7 +777,7 @@ class RevokedCertificateBuilder(object):
         time = _convert_to_naive_utc_time(time)
         if time < _EARLIEST_UTC_TIME:
             raise ValueError(
-                "The revocation date must be on or after" " 1950 January 1."
+                "The revocation date must be on or after 1950 January 1."
             )
         return RevokedCertificateBuilder(
             self._serial_number, time, self._extensions
@@ -1063,7 +785,7 @@ class RevokedCertificateBuilder(object):
 
     def add_extension(
         self, extval: ExtensionType, critical: bool
-    ) -> "RevokedCertificateBuilder":
+    ) -> RevokedCertificateBuilder:
         if not isinstance(extval, ExtensionType):
             raise TypeError("extension must be an ExtensionType")
 
@@ -1072,7 +794,7 @@ class RevokedCertificateBuilder(object):
         return RevokedCertificateBuilder(
             self._serial_number,
             self._revocation_date,
-            self._extensions + [extension],
+            [*self._extensions, extension],
         )
 
     def build(self, backend: typing.Any = None) -> RevokedCertificate:

@@ -2,6 +2,8 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
+
 import typing
 
 from cryptography import utils
@@ -28,6 +30,7 @@ class Mode(utils.Enum):
 class CounterLocation(utils.Enum):
     BeforeFixed = "before_fixed"
     AfterFixed = "after_fixed"
+    MiddleFixed = "middle_fixed"
 
 
 class _KBKDFDeriver:
@@ -37,11 +40,12 @@ class _KBKDFDeriver:
         mode: Mode,
         length: int,
         rlen: int,
-        llen: typing.Optional[int],
+        llen: int | None,
         location: CounterLocation,
-        label: typing.Optional[bytes],
-        context: typing.Optional[bytes],
-        fixed: typing.Optional[bytes],
+        break_location: int | None,
+        label: bytes | None,
+        context: bytes | None,
+        fixed: bytes | None,
     ):
         assert callable(prf)
 
@@ -51,9 +55,27 @@ class _KBKDFDeriver:
         if not isinstance(location, CounterLocation):
             raise TypeError("location must be of type CounterLocation")
 
+        if break_location is None and location is CounterLocation.MiddleFixed:
+            raise ValueError("Please specify a break_location")
+
+        if (
+            break_location is not None
+            and location != CounterLocation.MiddleFixed
+        ):
+            raise ValueError(
+                "break_location is ignored when location is not"
+                " CounterLocation.MiddleFixed"
+            )
+
+        if break_location is not None and not isinstance(break_location, int):
+            raise TypeError("break_location must be an integer")
+
+        if break_location is not None and break_location < 0:
+            raise ValueError("break_location must be a positive integer")
+
         if (label or context) and fixed:
             raise ValueError(
-                "When supplying fixed data, " "label and context are ignored."
+                "When supplying fixed data, label and context are ignored."
             )
 
         if rlen is None or not self._valid_byte_length(rlen):
@@ -64,6 +86,9 @@ class _KBKDFDeriver:
 
         if llen is not None and not isinstance(llen, int):
             raise TypeError("llen must be an integer")
+
+        if llen == 0:
+            raise ValueError("llen must be non-zero")
 
         if label is None:
             label = b""
@@ -79,6 +104,7 @@ class _KBKDFDeriver:
         self._rlen = rlen
         self._llen = llen
         self._location = location
+        self._break_location = break_location
         self._label = label
         self._context = context
         self._used = False
@@ -114,17 +140,29 @@ class _KBKDFDeriver:
         if rounds > pow(2, len(r_bin) * 8) - 1:
             raise ValueError("There are too many iterations.")
 
+        fixed = self._generate_fixed_input()
+
+        if self._location == CounterLocation.BeforeFixed:
+            data_before_ctr = b""
+            data_after_ctr = fixed
+        elif self._location == CounterLocation.AfterFixed:
+            data_before_ctr = fixed
+            data_after_ctr = b""
+        else:
+            if isinstance(
+                self._break_location, int
+            ) and self._break_location > len(fixed):
+                raise ValueError("break_location offset > len(fixed)")
+            data_before_ctr = fixed[: self._break_location]
+            data_after_ctr = fixed[self._break_location :]
+
         for i in range(1, rounds + 1):
             h = self._prf(key_material)
 
             counter = utils.int_to_bytes(i, self._rlen)
-            if self._location == CounterLocation.BeforeFixed:
-                h.update(counter)
+            input_data = data_before_ctr + counter + data_after_ctr
 
-            h.update(self._generate_fixed_input())
-
-            if self._location == CounterLocation.AfterFixed:
-                h.update(counter)
+            h.update(input_data)
 
             output.append(h.finalize())
 
@@ -146,12 +184,14 @@ class KBKDFHMAC(KeyDerivationFunction):
         mode: Mode,
         length: int,
         rlen: int,
-        llen: typing.Optional[int],
+        llen: int | None,
         location: CounterLocation,
-        label: typing.Optional[bytes],
-        context: typing.Optional[bytes],
-        fixed: typing.Optional[bytes],
+        label: bytes | None,
+        context: bytes | None,
+        fixed: bytes | None,
         backend: typing.Any = None,
+        *,
+        break_location: int | None = None,
     ):
         if not isinstance(algorithm, hashes.HashAlgorithm):
             raise UnsupportedAlgorithm(
@@ -178,15 +218,16 @@ class KBKDFHMAC(KeyDerivationFunction):
             rlen,
             llen,
             location,
+            break_location,
             label,
             context,
             fixed,
         )
 
-    def _prf(self, key_material: bytes):
+    def _prf(self, key_material: bytes) -> hmac.HMAC:
         return hmac.HMAC(key_material, self._algorithm)
 
-    def derive(self, key_material) -> bytes:
+    def derive(self, key_material: bytes) -> bytes:
         return self._deriver.derive(key_material, self._algorithm.digest_size)
 
     def verify(self, key_material: bytes, expected_key: bytes) -> None:
@@ -201,12 +242,14 @@ class KBKDFCMAC(KeyDerivationFunction):
         mode: Mode,
         length: int,
         rlen: int,
-        llen: typing.Optional[int],
+        llen: int | None,
         location: CounterLocation,
-        label: typing.Optional[bytes],
-        context: typing.Optional[bytes],
-        fixed: typing.Optional[bytes],
+        label: bytes | None,
+        context: bytes | None,
+        fixed: bytes | None,
         backend: typing.Any = None,
+        *,
+        break_location: int | None = None,
     ):
         if not issubclass(
             algorithm, ciphers.BlockCipherAlgorithm
@@ -217,7 +260,7 @@ class KBKDFCMAC(KeyDerivationFunction):
             )
 
         self._algorithm = algorithm
-        self._cipher: typing.Optional[ciphers.BlockCipherAlgorithm] = None
+        self._cipher: ciphers.BlockCipherAlgorithm | None = None
 
         self._deriver = _KBKDFDeriver(
             self._prf,
@@ -226,12 +269,13 @@ class KBKDFCMAC(KeyDerivationFunction):
             rlen,
             llen,
             location,
+            break_location,
             label,
             context,
             fixed,
         )
 
-    def _prf(self, _: bytes):
+    def _prf(self, _: bytes) -> cmac.CMAC:
         assert self._cipher is not None
 
         return cmac.CMAC(self._cipher)

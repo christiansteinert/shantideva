@@ -151,7 +151,7 @@ class ChangedSetting:
         )
 
 
-class Settings(collections.MutableMapping):
+class Settings(collections.abc.MutableMapping):
     """
     An object that encapsulates HTTP/2 settings state.
 

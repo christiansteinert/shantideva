@@ -407,7 +407,7 @@ class Recompiler:
             prnt('  NULL,  /* no includes */')
         prnt('  %d,  /* num_types */' % (len(self.cffi_types),))
         flags = 0
-        if self._num_externpy:
+        if self._num_externpy > 0 or self.ffi._embedding is not None:
             flags |= 1     # set to mean that we use extern "Python"
         prnt('  %d,  /* flags */' % flags)
         prnt('};')
@@ -422,7 +422,7 @@ class Recompiler:
         prnt('PyMODINIT_FUNC')
         prnt('_cffi_pypyinit_%s(const void *p[])' % (base_module_name,))
         prnt('{')
-        if self._num_externpy:
+        if flags & 1:
             prnt('    if (((intptr_t)p[0]) >= 0x0A03) {')
             prnt('        _cffi_call_python_org = '
                  '(void(*)(struct _cffi_externpy_s *, char *))p[1];')
@@ -953,7 +953,7 @@ class Recompiler:
                 if cname is None or fbitsize >= 0:
                     offset = '(size_t)-1'
                 elif named_ptr is not None:
-                    offset = '((char *)&((%s)0)->%s) - (char *)0' % (
+                    offset = '((char *)&((%s)4096)->%s) - (char *)4096' % (
                         named_ptr.name, fldname)
                 else:
                     offset = 'offsetof(%s, %s)' % (tp.get_c_name(''), fldname)
@@ -1419,6 +1419,10 @@ else:
                 s = s.encode('ascii')
             super(NativeIO, self).write(s)
 
+def _is_file_like(maybefile):
+    # compare to xml.etree.ElementTree._get_writer
+    return hasattr(maybefile, 'write')
+
 def _make_c_or_py_source(ffi, module_name, preamble, target_file, verbose):
     if verbose:
         print("generating %s" % (target_file,))
@@ -1426,6 +1430,9 @@ def _make_c_or_py_source(ffi, module_name, preamble, target_file, verbose):
                             target_is_python=(preamble is None))
     recompiler.collect_type_table()
     recompiler.collect_step_tables()
+    if _is_file_like(target_file):
+        recompiler.write_source_to_f(target_file, preamble)
+        return True
     f = NativeIO()
     recompiler.write_source_to_f(f, preamble)
     output = f.getvalue()
@@ -1483,13 +1490,16 @@ def _unpatch_meths(patchlist):
 def _patch_for_embedding(patchlist):
     if sys.platform == 'win32':
         # we must not remove the manifest when building for embedding!
-        from distutils.msvc9compiler import MSVCCompiler
-        _patch_meth(patchlist, MSVCCompiler, '_remove_visual_c_ref',
-                    lambda self, manifest_file: manifest_file)
+        # FUTURE: this module was removed in setuptools 74; this is likely dead code and should be removed,
+        #  since the toolchain it supports (VS2005-2008) is also long dead.
+        from cffi._shimmed_dist_utils import MSVCCompiler
+        if MSVCCompiler is not None:
+            _patch_meth(patchlist, MSVCCompiler, '_remove_visual_c_ref',
+                        lambda self, manifest_file: manifest_file)
 
     if sys.platform == 'darwin':
         # we must not make a '-bundle', but a '-dynamiclib' instead
-        from distutils.ccompiler import CCompiler
+        from cffi._shimmed_dist_utils import CCompiler
         def my_link_shared_object(self, *args, **kwds):
             if '-bundle' in self.linker_so:
                 self.linker_so = list(self.linker_so)
@@ -1501,7 +1511,7 @@ def _patch_for_embedding(patchlist):
                                              my_link_shared_object)
 
 def _patch_for_target(patchlist, target):
-    from distutils.command.build_ext import build_ext
+    from cffi._shimmed_dist_utils import build_ext
     # if 'target' is different from '*', we need to patch some internal
     # method to just return this 'target' value, instead of having it
     # built from module_name
@@ -1519,12 +1529,16 @@ def _patch_for_target(patchlist, target):
 
 def recompile(ffi, module_name, preamble, tmpdir='.', call_c_compiler=True,
               c_file=None, source_extension='.c', extradir=None,
-              compiler_verbose=1, target=None, debug=None, **kwds):
+              compiler_verbose=1, target=None, debug=None,
+              uses_ffiplatform=True, **kwds):
     if not isinstance(module_name, str):
         module_name = module_name.encode('ascii')
     if ffi._windows_unicode:
         ffi._apply_windows_unicode(kwds)
     if preamble is not None:
+        if call_c_compiler and _is_file_like(c_file):
+            raise TypeError("Writing to file-like objects is not supported "
+                            "with call_c_compiler=True")
         embedding = (ffi._embedding is not None)
         if embedding:
             ffi._apply_embedding_fix(kwds)
@@ -1543,7 +1557,10 @@ def recompile(ffi, module_name, preamble, tmpdir='.', call_c_compiler=True,
             else:
                 target = '*'
         #
-        ext = ffiplatform.get_extension(ext_c_file, module_name, **kwds)
+        if uses_ffiplatform:
+            ext = ffiplatform.get_extension(ext_c_file, module_name, **kwds)
+        else:
+            ext = None
         updated = make_c_source(ffi, module_name, preamble, c_file,
                                 verbose=compiler_verbose)
         if call_c_compiler:

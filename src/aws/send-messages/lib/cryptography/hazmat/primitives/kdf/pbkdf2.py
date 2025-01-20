@@ -2,6 +2,7 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
 import typing
 
@@ -12,6 +13,7 @@ from cryptography.exceptions import (
     UnsupportedAlgorithm,
     _Reasons,
 )
+from cryptography.hazmat.bindings._rust import openssl as rust_openssl
 from cryptography.hazmat.primitives import constant_time, hashes
 from cryptography.hazmat.primitives.kdf import KeyDerivationFunction
 
@@ -31,9 +33,7 @@ class PBKDF2HMAC(KeyDerivationFunction):
 
         if not ossl.pbkdf2_hmac_supported(algorithm):
             raise UnsupportedAlgorithm(
-                "{} is not supported for PBKDF2 by this backend.".format(
-                    algorithm.name
-                ),
+                f"{algorithm.name} is not supported for PBKDF2.",
                 _Reasons.UNSUPPORTED_HASH,
             )
         self._used = False
@@ -48,15 +48,12 @@ class PBKDF2HMAC(KeyDerivationFunction):
             raise AlreadyFinalized("PBKDF2 instances can only be used once.")
         self._used = True
 
-        utils._check_byteslike("key_material", key_material)
-        from cryptography.hazmat.backends.openssl.backend import backend
-
-        return backend.derive_pbkdf2_hmac(
+        return rust_openssl.kdf.derive_pbkdf2_hmac(
+            key_material,
             self._algorithm,
-            self._length,
             self._salt,
             self._iterations,
-            key_material,
+            self._length,
         )
 
     def verify(self, key_material: bytes, expected_key: bytes) -> None:

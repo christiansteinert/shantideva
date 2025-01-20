@@ -2,22 +2,20 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
 import abc
 import typing
-import warnings
 
 from cryptography import utils
+from cryptography.exceptions import UnsupportedAlgorithm, _Reasons
 from cryptography.hazmat._oid import ObjectIdentifier
+from cryptography.hazmat.bindings._rust import openssl as rust_openssl
 from cryptography.hazmat.primitives import _serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import (
-    AsymmetricSignatureContext,
-    AsymmetricVerificationContext,
-    utils as asym_utils,
-)
+from cryptography.hazmat.primitives.asymmetric import utils as asym_utils
 
 
-class EllipticCurveOID(object):
+class EllipticCurveOID:
     SECP192R1 = ObjectIdentifier("1.2.840.10045.3.1.1")
     SECP224R1 = ObjectIdentifier("1.3.132.0.33")
     SECP256K1 = ObjectIdentifier("1.3.132.0.10")
@@ -40,13 +38,15 @@ class EllipticCurveOID(object):
 
 
 class EllipticCurve(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def name(self) -> str:
         """
         The name of the curve. e.g. secp256r1.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def key_size(self) -> int:
         """
         Bit size of a secret scalar for the curve.
@@ -54,10 +54,11 @@ class EllipticCurve(metaclass=abc.ABCMeta):
 
 
 class EllipticCurveSignatureAlgorithm(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def algorithm(
         self,
-    ) -> typing.Union[asym_utils.Prehashed, hashes.HashAlgorithm]:
+    ) -> asym_utils.Prehashed | hashes.HashAlgorithm:
         """
         The digest algorithm used with this signature.
         """
@@ -65,17 +66,8 @@ class EllipticCurveSignatureAlgorithm(metaclass=abc.ABCMeta):
 
 class EllipticCurvePrivateKey(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def signer(
-        self,
-        signature_algorithm: EllipticCurveSignatureAlgorithm,
-    ) -> AsymmetricSignatureContext:
-        """
-        Returns an AsymmetricSignatureContext used for signing data.
-        """
-
-    @abc.abstractmethod
     def exchange(
-        self, algorithm: "ECDH", peer_public_key: "EllipticCurvePublicKey"
+        self, algorithm: ECDH, peer_public_key: EllipticCurvePublicKey
     ) -> bytes:
         """
         Performs a key exchange operation using the provided algorithm with the
@@ -83,18 +75,20 @@ class EllipticCurvePrivateKey(metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def public_key(self) -> "EllipticCurvePublicKey":
+    def public_key(self) -> EllipticCurvePublicKey:
         """
         The EllipticCurvePublicKey for this private key.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def curve(self) -> EllipticCurve:
         """
         The EllipticCurve that this key is on.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def key_size(self) -> int:
         """
         Bit size of a secret scalar for the curve.
@@ -111,7 +105,7 @@ class EllipticCurvePrivateKey(metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def private_numbers(self) -> "EllipticCurvePrivateNumbers":
+    def private_numbers(self) -> EllipticCurvePrivateNumbers:
         """
         Returns an EllipticCurvePrivateNumbers.
         """
@@ -129,33 +123,26 @@ class EllipticCurvePrivateKey(metaclass=abc.ABCMeta):
 
 
 EllipticCurvePrivateKeyWithSerialization = EllipticCurvePrivateKey
+EllipticCurvePrivateKey.register(rust_openssl.ec.ECPrivateKey)
 
 
 class EllipticCurvePublicKey(metaclass=abc.ABCMeta):
+    @property
     @abc.abstractmethod
-    def verifier(
-        self,
-        signature: bytes,
-        signature_algorithm: EllipticCurveSignatureAlgorithm,
-    ) -> AsymmetricVerificationContext:
-        """
-        Returns an AsymmetricVerificationContext used for signing data.
-        """
-
-    @abc.abstractproperty
     def curve(self) -> EllipticCurve:
         """
         The EllipticCurve that this key is on.
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def key_size(self) -> int:
         """
         Bit size of a secret scalar for the curve.
         """
 
     @abc.abstractmethod
-    def public_numbers(self) -> "EllipticCurvePublicNumbers":
+    def public_numbers(self) -> EllipticCurvePublicNumbers:
         """
         Returns an EllipticCurvePublicNumbers.
         """
@@ -184,11 +171,8 @@ class EllipticCurvePublicKey(metaclass=abc.ABCMeta):
     @classmethod
     def from_encoded_point(
         cls, curve: EllipticCurve, data: bytes
-    ) -> "EllipticCurvePublicKey":
+    ) -> EllipticCurvePublicKey:
         utils._check_bytes("data", data)
-
-        if not isinstance(curve, EllipticCurve):
-            raise TypeError("curve must be an EllipticCurve instance")
 
         if len(data) == 0:
             raise ValueError("data must not be an empty byte string")
@@ -196,12 +180,20 @@ class EllipticCurvePublicKey(metaclass=abc.ABCMeta):
         if data[0] not in [0x02, 0x03, 0x04]:
             raise ValueError("Unsupported elliptic curve point type")
 
-        from cryptography.hazmat.backends.openssl.backend import backend
+        return rust_openssl.ec.from_public_bytes(curve, data)
 
-        return backend.load_elliptic_curve_public_bytes(curve, data)
+    @abc.abstractmethod
+    def __eq__(self, other: object) -> bool:
+        """
+        Checks equality.
+        """
 
 
 EllipticCurvePublicKeyWithSerialization = EllipticCurvePublicKey
+EllipticCurvePublicKey.register(rust_openssl.ec.ECPublicKey)
+
+EllipticCurvePrivateNumbers = rust_openssl.ec.EllipticCurvePrivateNumbers
+EllipticCurvePublicNumbers = rust_openssl.ec.EllipticCurvePublicNumbers
 
 
 class SECT571R1(EllipticCurve):
@@ -299,51 +291,65 @@ class BrainpoolP512R1(EllipticCurve):
     key_size = 512
 
 
-_CURVE_TYPES: typing.Dict[str, typing.Type[EllipticCurve]] = {
-    "prime192v1": SECP192R1,
-    "prime256v1": SECP256R1,
-    "secp192r1": SECP192R1,
-    "secp224r1": SECP224R1,
-    "secp256r1": SECP256R1,
-    "secp384r1": SECP384R1,
-    "secp521r1": SECP521R1,
-    "secp256k1": SECP256K1,
-    "sect163k1": SECT163K1,
-    "sect233k1": SECT233K1,
-    "sect283k1": SECT283K1,
-    "sect409k1": SECT409K1,
-    "sect571k1": SECT571K1,
-    "sect163r2": SECT163R2,
-    "sect233r1": SECT233R1,
-    "sect283r1": SECT283R1,
-    "sect409r1": SECT409R1,
-    "sect571r1": SECT571R1,
-    "brainpoolP256r1": BrainpoolP256R1,
-    "brainpoolP384r1": BrainpoolP384R1,
-    "brainpoolP512r1": BrainpoolP512R1,
+_CURVE_TYPES: dict[str, EllipticCurve] = {
+    "prime192v1": SECP192R1(),
+    "prime256v1": SECP256R1(),
+    "secp192r1": SECP192R1(),
+    "secp224r1": SECP224R1(),
+    "secp256r1": SECP256R1(),
+    "secp384r1": SECP384R1(),
+    "secp521r1": SECP521R1(),
+    "secp256k1": SECP256K1(),
+    "sect163k1": SECT163K1(),
+    "sect233k1": SECT233K1(),
+    "sect283k1": SECT283K1(),
+    "sect409k1": SECT409K1(),
+    "sect571k1": SECT571K1(),
+    "sect163r2": SECT163R2(),
+    "sect233r1": SECT233R1(),
+    "sect283r1": SECT283R1(),
+    "sect409r1": SECT409R1(),
+    "sect571r1": SECT571R1(),
+    "brainpoolP256r1": BrainpoolP256R1(),
+    "brainpoolP384r1": BrainpoolP384R1(),
+    "brainpoolP512r1": BrainpoolP512R1(),
 }
 
 
 class ECDSA(EllipticCurveSignatureAlgorithm):
     def __init__(
         self,
-        algorithm: typing.Union[asym_utils.Prehashed, hashes.HashAlgorithm],
+        algorithm: asym_utils.Prehashed | hashes.HashAlgorithm,
+        deterministic_signing: bool = False,
     ):
+        from cryptography.hazmat.backends.openssl.backend import backend
+
+        if (
+            deterministic_signing
+            and not backend.ecdsa_deterministic_supported()
+        ):
+            raise UnsupportedAlgorithm(
+                "ECDSA with deterministic signature (RFC 6979) is not "
+                "supported by this version of OpenSSL.",
+                _Reasons.UNSUPPORTED_PUBLIC_KEY_ALGORITHM,
+            )
         self._algorithm = algorithm
+        self._deterministic_signing = deterministic_signing
 
     @property
     def algorithm(
         self,
-    ) -> typing.Union[asym_utils.Prehashed, hashes.HashAlgorithm]:
+    ) -> asym_utils.Prehashed | hashes.HashAlgorithm:
         return self._algorithm
 
+    @property
+    def deterministic_signing(
+        self,
+    ) -> bool:
+        return self._deterministic_signing
 
-def generate_private_key(
-    curve: EllipticCurve, backend: typing.Any = None
-) -> EllipticCurvePrivateKey:
-    from cryptography.hazmat.backends.openssl.backend import backend as ossl
 
-    return ossl.generate_elliptic_curve_private_key(curve)
+generate_private_key = rust_openssl.ec.generate_private_key
 
 
 def derive_private_key(
@@ -351,156 +357,16 @@ def derive_private_key(
     curve: EllipticCurve,
     backend: typing.Any = None,
 ) -> EllipticCurvePrivateKey:
-    from cryptography.hazmat.backends.openssl.backend import backend as ossl
-
     if not isinstance(private_value, int):
         raise TypeError("private_value must be an integer type.")
 
     if private_value <= 0:
         raise ValueError("private_value must be a positive integer.")
 
-    if not isinstance(curve, EllipticCurve):
-        raise TypeError("curve must provide the EllipticCurve interface.")
-
-    return ossl.derive_elliptic_curve_private_key(private_value, curve)
+    return rust_openssl.ec.derive_private_key(private_value, curve)
 
 
-class EllipticCurvePublicNumbers(object):
-    def __init__(self, x: int, y: int, curve: EllipticCurve):
-        if not isinstance(x, int) or not isinstance(y, int):
-            raise TypeError("x and y must be integers.")
-
-        if not isinstance(curve, EllipticCurve):
-            raise TypeError("curve must provide the EllipticCurve interface.")
-
-        self._y = y
-        self._x = x
-        self._curve = curve
-
-    def public_key(self, backend: typing.Any = None) -> EllipticCurvePublicKey:
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        return ossl.load_elliptic_curve_public_numbers(self)
-
-    def encode_point(self) -> bytes:
-        warnings.warn(
-            "encode_point has been deprecated on EllipticCurvePublicNumbers"
-            " and will be removed in a future version. Please use "
-            "EllipticCurvePublicKey.public_bytes to obtain both "
-            "compressed and uncompressed point encoding.",
-            utils.PersistentlyDeprecated2019,
-            stacklevel=2,
-        )
-        # key_size is in bits. Convert to bytes and round up
-        byte_length = (self.curve.key_size + 7) // 8
-        return (
-            b"\x04"
-            + utils.int_to_bytes(self.x, byte_length)
-            + utils.int_to_bytes(self.y, byte_length)
-        )
-
-    @classmethod
-    def from_encoded_point(
-        cls, curve: EllipticCurve, data: bytes
-    ) -> "EllipticCurvePublicNumbers":
-        if not isinstance(curve, EllipticCurve):
-            raise TypeError("curve must be an EllipticCurve instance")
-
-        warnings.warn(
-            "Support for unsafe construction of public numbers from "
-            "encoded data will be removed in a future version. "
-            "Please use EllipticCurvePublicKey.from_encoded_point",
-            utils.PersistentlyDeprecated2019,
-            stacklevel=2,
-        )
-
-        if data.startswith(b"\x04"):
-            # key_size is in bits. Convert to bytes and round up
-            byte_length = (curve.key_size + 7) // 8
-            if len(data) == 2 * byte_length + 1:
-                x = int.from_bytes(data[1 : byte_length + 1], "big")
-                y = int.from_bytes(data[byte_length + 1 :], "big")
-                return cls(x, y, curve)
-            else:
-                raise ValueError("Invalid elliptic curve point data length")
-        else:
-            raise ValueError("Unsupported elliptic curve point type")
-
-    curve = property(lambda self: self._curve)
-    x = property(lambda self: self._x)
-    y = property(lambda self: self._y)
-
-    def __eq__(self, other):
-        if not isinstance(other, EllipticCurvePublicNumbers):
-            return NotImplemented
-
-        return (
-            self.x == other.x
-            and self.y == other.y
-            and self.curve.name == other.curve.name
-            and self.curve.key_size == other.curve.key_size
-        )
-
-    def __ne__(self, other):
-        return not self == other
-
-    def __hash__(self):
-        return hash((self.x, self.y, self.curve.name, self.curve.key_size))
-
-    def __repr__(self):
-        return (
-            "<EllipticCurvePublicNumbers(curve={0.curve.name}, x={0.x}, "
-            "y={0.y}>".format(self)
-        )
-
-
-class EllipticCurvePrivateNumbers(object):
-    def __init__(
-        self, private_value: int, public_numbers: EllipticCurvePublicNumbers
-    ):
-        if not isinstance(private_value, int):
-            raise TypeError("private_value must be an integer.")
-
-        if not isinstance(public_numbers, EllipticCurvePublicNumbers):
-            raise TypeError(
-                "public_numbers must be an EllipticCurvePublicNumbers "
-                "instance."
-            )
-
-        self._private_value = private_value
-        self._public_numbers = public_numbers
-
-    def private_key(
-        self, backend: typing.Any = None
-    ) -> EllipticCurvePrivateKey:
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        return ossl.load_elliptic_curve_private_numbers(self)
-
-    private_value = property(lambda self: self._private_value)
-    public_numbers = property(lambda self: self._public_numbers)
-
-    def __eq__(self, other):
-        if not isinstance(other, EllipticCurvePrivateNumbers):
-            return NotImplemented
-
-        return (
-            self.private_value == other.private_value
-            and self.public_numbers == other.public_numbers
-        )
-
-    def __ne__(self, other):
-        return not self == other
-
-    def __hash__(self):
-        return hash((self.private_value, self.public_numbers))
-
-
-class ECDH(object):
+class ECDH:
     pass
 
 
@@ -527,7 +393,7 @@ _OID_TO_CURVE = {
 }
 
 
-def get_curve_for_oid(oid: ObjectIdentifier) -> typing.Type[EllipticCurve]:
+def get_curve_for_oid(oid: ObjectIdentifier) -> type[EllipticCurve]:
     try:
         return _OID_TO_CURVE[oid]
     except KeyError:

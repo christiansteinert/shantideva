@@ -2,20 +2,22 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
+
 from cryptography.hazmat._oid import (
     AttributeOID,
     AuthorityInformationAccessOID,
-    CRLEntryExtensionOID,
     CertificatePoliciesOID,
+    CRLEntryExtensionOID,
     ExtendedKeyUsageOID,
     ExtensionOID,
     NameOID,
-    OCSPExtensionOID,
     ObjectIdentifier,
+    OCSPExtensionOID,
+    PublicKeyAlgorithmOID,
     SignatureAlgorithmOID,
     SubjectInformationAccessOID,
 )
-
 
 __all__ = [
     "AttributeOID",
@@ -27,6 +29,7 @@ __all__ = [
     "NameOID",
     "OCSPExtensionOID",
     "ObjectIdentifier",
+    "PublicKeyAlgorithmOID",
     "SignatureAlgorithmOID",
     "SubjectInformationAccessOID",
 ]

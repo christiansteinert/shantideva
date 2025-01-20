@@ -2,9 +2,9 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
 import base64
-import struct
 import typing
 from urllib.parse import quote, urlencode
 
@@ -12,16 +12,15 @@ from cryptography.hazmat.primitives import constant_time, hmac
 from cryptography.hazmat.primitives.hashes import SHA1, SHA256, SHA512
 from cryptography.hazmat.primitives.twofactor import InvalidToken
 
-
-_ALLOWED_HASH_TYPES = typing.Union[SHA1, SHA256, SHA512]
+HOTPHashTypes = typing.Union[SHA1, SHA256, SHA512]
 
 
 def _generate_uri(
-    hotp: "HOTP",
+    hotp: HOTP,
     type_name: str,
     account_name: str,
-    issuer: typing.Optional[str],
-    extra_parameters: typing.List[typing.Tuple[str, int]],
+    issuer: str | None,
+    extra_parameters: list[tuple[str, int]],
 ) -> str:
     parameters = [
         ("digits", hotp._length),
@@ -34,24 +33,20 @@ def _generate_uri(
 
     parameters.extend(extra_parameters)
 
-    uriparts = {
-        "type": type_name,
-        "label": (
-            "%s:%s" % (quote(issuer), quote(account_name))
-            if issuer
-            else quote(account_name)
-        ),
-        "parameters": urlencode(parameters),
-    }
-    return "otpauth://{type}/{label}?{parameters}".format(**uriparts)
+    label = (
+        f"{quote(issuer)}:{quote(account_name)}"
+        if issuer
+        else quote(account_name)
+    )
+    return f"otpauth://{type_name}/{label}?{urlencode(parameters)}"
 
 
-class HOTP(object):
+class HOTP:
     def __init__(
         self,
         key: bytes,
         length: int,
-        algorithm: _ALLOWED_HASH_TYPES,
+        algorithm: HOTPHashTypes,
         backend: typing.Any = None,
         enforce_key_length: bool = True,
     ) -> None:
@@ -62,7 +57,7 @@ class HOTP(object):
             raise TypeError("Length parameter must be an integer type.")
 
         if length < 6 or length > 8:
-            raise ValueError("Length of HOTP has to be between 6 to 8.")
+            raise ValueError("Length of HOTP has to be between 6 and 8.")
 
         if not isinstance(algorithm, (SHA1, SHA256, SHA512)):
             raise TypeError("Algorithm must be SHA1, SHA256 or SHA512.")
@@ -72,8 +67,11 @@ class HOTP(object):
         self._algorithm = algorithm
 
     def generate(self, counter: int) -> bytes:
+        if not isinstance(counter, int):
+            raise TypeError("Counter parameter must be an integer type.")
+
         truncated_value = self._dynamic_truncate(counter)
-        hotp = truncated_value % (10 ** self._length)
+        hotp = truncated_value % (10**self._length)
         return "{0:0{1}}".format(hotp, self._length).encode()
 
     def verify(self, hotp: bytes, counter: int) -> None:
@@ -82,15 +80,20 @@ class HOTP(object):
 
     def _dynamic_truncate(self, counter: int) -> int:
         ctx = hmac.HMAC(self._key, self._algorithm)
-        ctx.update(struct.pack(">Q", counter))
+
+        try:
+            ctx.update(counter.to_bytes(length=8, byteorder="big"))
+        except OverflowError:
+            raise ValueError(f"Counter must be between 0 and {2 ** 64 - 1}.")
+
         hmac_value = ctx.finalize()
 
         offset = hmac_value[len(hmac_value) - 1] & 0b1111
         p = hmac_value[offset : offset + 4]
-        return struct.unpack(">I", p)[0] & 0x7FFFFFFF
+        return int.from_bytes(p, byteorder="big") & 0x7FFFFFFF
 
     def get_provisioning_uri(
-        self, account_name: str, counter: int, issuer: typing.Optional[str]
+        self, account_name: str, counter: int, issuer: str | None
     ) -> str:
         return _generate_uri(
             self, "hotp", account_name, issuer, [("counter", int(counter))]

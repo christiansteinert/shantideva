@@ -2,30 +2,55 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-import abc
-import typing
+from __future__ import annotations
 
-from cryptography import utils
-from cryptography.exceptions import (
-    AlreadyFinalized,
-)
+import abc
+
+from cryptography.hazmat.bindings._rust import openssl as rust_openssl
+
+__all__ = [
+    "MD5",
+    "SHA1",
+    "SHA3_224",
+    "SHA3_256",
+    "SHA3_384",
+    "SHA3_512",
+    "SHA224",
+    "SHA256",
+    "SHA384",
+    "SHA512",
+    "SHA512_224",
+    "SHA512_256",
+    "SHAKE128",
+    "SHAKE256",
+    "SM3",
+    "BLAKE2b",
+    "BLAKE2s",
+    "ExtendableOutputFunction",
+    "Hash",
+    "HashAlgorithm",
+    "HashContext",
+]
 
 
 class HashAlgorithm(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def name(self) -> str:
         """
         A string naming this algorithm (e.g. "sha256", "md5").
         """
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def digest_size(self) -> int:
         """
         The size of the resulting digest in bytes.
         """
 
-    @abc.abstractproperty
-    def block_size(self) -> typing.Optional[int]:
+    @property
+    @abc.abstractmethod
+    def block_size(self) -> int | None:
         """
         The internal block size of the hash function, or None if the hash
         function does not use blocks internally (e.g. SHA3).
@@ -33,7 +58,8 @@ class HashAlgorithm(metaclass=abc.ABCMeta):
 
 
 class HashContext(metaclass=abc.ABCMeta):
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def algorithm(self) -> HashAlgorithm:
         """
         A HashAlgorithm that will be used by this context.
@@ -52,59 +78,20 @@ class HashContext(metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def copy(self) -> "HashContext":
+    def copy(self) -> HashContext:
         """
         Return a HashContext that is a copy of the current context.
         """
+
+
+Hash = rust_openssl.hashes.Hash
+HashContext.register(Hash)
 
 
 class ExtendableOutputFunction(metaclass=abc.ABCMeta):
     """
     An interface for extendable output functions.
     """
-
-
-class Hash(HashContext):
-    def __init__(
-        self,
-        algorithm: HashAlgorithm,
-        backend: typing.Any = None,
-        ctx: typing.Optional["HashContext"] = None,
-    ):
-        if not isinstance(algorithm, HashAlgorithm):
-            raise TypeError("Expected instance of hashes.HashAlgorithm.")
-        self._algorithm = algorithm
-
-        if ctx is None:
-            from cryptography.hazmat.backends.openssl.backend import (
-                backend as ossl,
-            )
-
-            self._ctx = ossl.create_hash_ctx(self.algorithm)
-        else:
-            self._ctx = ctx
-
-    @property
-    def algorithm(self) -> HashAlgorithm:
-        return self._algorithm
-
-    def update(self, data: bytes) -> None:
-        if self._ctx is None:
-            raise AlreadyFinalized("Context was already finalized.")
-        utils._check_byteslike("data", data)
-        self._ctx.update(data)
-
-    def copy(self) -> "Hash":
-        if self._ctx is None:
-            raise AlreadyFinalized("Context was already finalized.")
-        return Hash(self.algorithm, ctx=self._ctx.copy())
-
-    def finalize(self) -> bytes:
-        if self._ctx is None:
-            raise AlreadyFinalized("Context was already finalized.")
-        digest = self._ctx.finalize()
-        self._ctx = None
-        return digest
 
 
 class SHA1(HashAlgorithm):
@@ -222,7 +209,6 @@ class BLAKE2b(HashAlgorithm):
     block_size = 128
 
     def __init__(self, digest_size: int):
-
         if digest_size != 64:
             raise ValueError("Digest size must be 64")
 
@@ -240,7 +226,6 @@ class BLAKE2s(HashAlgorithm):
     _min_digest_size = 1
 
     def __init__(self, digest_size: int):
-
         if digest_size != 32:
             raise ValueError("Digest size must be 32")
 

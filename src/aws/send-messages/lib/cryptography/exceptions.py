@@ -2,28 +2,21 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
+from __future__ import annotations
 
-from cryptography import utils
+import typing
 
+from cryptography.hazmat.bindings._rust import exceptions as rust_exceptions
 
-class _Reasons(utils.Enum):
-    BACKEND_MISSING_INTERFACE = 0
-    UNSUPPORTED_HASH = 1
-    UNSUPPORTED_CIPHER = 2
-    UNSUPPORTED_PADDING = 3
-    UNSUPPORTED_MGF = 4
-    UNSUPPORTED_PUBLIC_KEY_ALGORITHM = 5
-    UNSUPPORTED_ELLIPTIC_CURVE = 6
-    UNSUPPORTED_SERIALIZATION = 7
-    UNSUPPORTED_X509 = 8
-    UNSUPPORTED_EXCHANGE_ALGORITHM = 9
-    UNSUPPORTED_DIFFIE_HELLMAN = 10
-    UNSUPPORTED_MAC = 11
+if typing.TYPE_CHECKING:
+    from cryptography.hazmat.bindings._rust import openssl as rust_openssl
+
+_Reasons = rust_exceptions._Reasons
 
 
 class UnsupportedAlgorithm(Exception):
-    def __init__(self, message, reason=None):
-        super(UnsupportedAlgorithm, self).__init__(message)
+    def __init__(self, message: str, reason: _Reasons | None = None) -> None:
+        super().__init__(message)
         self._reason = reason
 
 
@@ -48,8 +41,10 @@ class InvalidSignature(Exception):
 
 
 class InternalError(Exception):
-    def __init__(self, msg, err_code):
-        super(InternalError, self).__init__(msg)
+    def __init__(
+        self, msg: str, err_code: list[rust_openssl.OpenSSLError]
+    ) -> None:
+        super().__init__(msg)
         self.err_code = err_code
 
 

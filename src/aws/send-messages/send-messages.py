@@ -22,7 +22,7 @@ TEXT_FILES_FOLDER = FUNCTION_ROOT + '/content'
 
 # add the folder to the search path if it is not there yet
 LIB_FOLDER=FUNCTION_ROOT + '/lib'
-sys.path.append(LIB_FOLDER)
+sys.path.insert(0,LIB_FOLDER)
 
 try:
     sys.path.index(LIB_FOLDER)
@@ -247,7 +247,7 @@ def flatten_dynamodb_object(obj):
 def send_notfication_to_lang_group(subscriptions, is_sandbox_environment):
     now = datetime.utcnow()
     now_str = now.isoformat()
-    
+
     # get the verse of the day which is the same for all users
     user_day = now + timedelta(minutes=int(subscriptions[0]['timezone_offset']['N'])) # find out date and time in the user's time zone
     user_lang = subscriptions[0]['language']['S'] # get the desired language
@@ -259,38 +259,43 @@ def send_notfication_to_lang_group(subscriptions, is_sandbox_environment):
     # update the status for each recipient in dynamodb. Do this in a batched way so that we avoid needless DB roundtrips
     dynamodb = boto3.resource('dynamodb')
     with dynamodb.Table(DBTABLE_PUSH_SUBSCRIPTIONS).batch_writer() as dynamo_batch:
-        
         for item in subscriptions:
             # get the APNS return code for sending this push recipient
             token = item['push_devicetoken']['S']
             result = results[token]
-            
+
+            if result is tuple or isinstance(result, list):
+                result = result[0]
+
             # update subscription info 
             # - for successful send: write the date of the message
             # - for bad tokens: stop the subscription
             if result == 'Success':
                 item['last_push_date'] = {'S': now_str }
                 dynamo_batch.put_item( Item = flatten_dynamodb_object( item ) )
-            elif result == 'BadDeviceToken':
+            elif result == 'BadDeviceToken' or result == 'Unregistered':
                 item['is_disabled'] = {'N': '1'}
                 item['disable_reason'] = {'S': result}
-                item['disable_timestamp'] = {'S': now_str}                
+                item['disable_timestamp'] = {'S': now_str}
                 dynamo_batch.put_item( Item = flatten_dynamodb_object( item ) )
+            else:
+                print(f"unexpected error {result} during APNS push")
 
 
 # Send all messages either within APNS sandbbox or within regular notification environment
 def send_msgs_within_environment(is_sandbox_environment):
-    
+
     # find out which groups devices should be notified now
     notification_groups = read_pending_notifications(is_sandbox_environment)
-    
+
     print( f'Sending to { len(notification_groups) } recepient groups. Sandbox: {is_sandbox_environment}')
-        
+
     # send a notification to each device group
     for subscription_id in notification_groups:
+        print(f"sending to group {subscription_id}")
         subscriptions = notification_groups[subscription_id]
         send_notfication_to_lang_group(subscriptions, is_sandbox_environment)
-
+    print("done.")
 
 # main lambda handler function
 def send_msgs(event, context):
@@ -305,9 +310,11 @@ def send_msgs(event, context):
         'body': json.dumps("done")
     }
 
-
+def main():
+    print("Test")
+    print(get_verse_of_the_day( datetime.utcnow(), 'en')) 
+    send_msgs({},{})
 
 # For tests outside of AWS
 if __name__ == "__main__":
-    print(get_verse_of_the_day( datetime.utcnow(), 'en')) 
-    send_msgs({},{})
+    main()
