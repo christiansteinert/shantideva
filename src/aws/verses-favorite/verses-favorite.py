@@ -14,7 +14,7 @@ def save_favorite_verses(event, context):
     device_id = event_body['device_id']
 
     db_item = {
-        'device_id':{'S': }, 
+        'device_id':{'S': device_id},
         'platform':{'S': event_body['platform']}, 
         'last_update_date':{'S': datetime.utcnow().isoformat()},
         'favorite_verses':{'S': event_body['favorite_verses']},
