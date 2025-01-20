@@ -264,7 +264,9 @@ def send_notfication_to_lang_group(subscriptions, is_sandbox_environment):
             token = item['push_devicetoken']['S']
             result = results[token]
 
-            if result is tuple or isinstance(result, list):
+            if isinstance(result, tuple) or isinstance(result, list):
+                # for success we seem to receive the "Success" but for errors we may receive a tuple
+                # such as ('Unregistered', 1723324922797) which we have to unpack
                 result = result[0]
 
             # update subscription info 
