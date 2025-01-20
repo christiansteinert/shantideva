@@ -11,16 +11,17 @@ DYNAMODB_FAVORITE_VERSES_TABLE = os.environ.get('DYNAMODB_DYNAMODB_FAVORITE_VERS
 def save_favorite_verses(event, context):
     event_body = json.loads(event['body'])
     json.loads(event_body['favorite_verses']) # make sure that the list of verses is valid JSON
+    device_id = event_body['device_id']
 
     db_item = {
-        'device_id':{'S': event_body['device_id']}, 
+        'device_id':{'S': }, 
         'platform':{'S': event_body['platform']}, 
         'last_update_date':{'S': datetime.utcnow().isoformat()},
         'favorite_verses':{'S': event_body['favorite_verses']},
     }
     
     dynamodb = boto3.client('dynamodb')
-    print(f"updating favorite verses for device {device_id}, platform {platform}")
+    print(f"updating favorite verses for device {device_id}")
     dynamodb.put_item(TableName=DYNAMODB_FAVORITE_VERSES_TABLE, Item=db_item )
 
     return {

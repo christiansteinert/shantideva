@@ -13,23 +13,23 @@ def register(event, context):
     device_token = event_body['devicetoken']
     db_item = {
         'push_devicetoken':{'S': device_token},
-        'push_platform':{'S': 'apns'}, 
+        'push_platform':{'S': 'apns'},
         'subscribe_timestamp':{'S': datetime.utcnow().isoformat()},
         'is_disabled':{'N': '0'},
         'disable_reason':{'S': ''},
         'disable_timestamp':{'S': datetime(1, 1, 1).isoformat()},
         
         #number of minutes that the device is currently offset from GMT
-        'timezone_offset':{'N': event_body['timezone_offset']}, 
+        'timezone_offset':{'N': event_body['timezone_offset']},
         
         #day (based on GMT time) when the last push message was sent to this device, e.g. 2020-12-31
-        'last_push_date':{'S': datetime(1, 1, 1).isoformat()},  
+        'last_push_date':{'S': datetime(1, 1, 1).isoformat()},
         
         #desired notification time expressed in minutes since midnight based on GMT time; the value is expected to always be positive
-        'notification_time':{'N': event_body['notification_time']}, 
+        'notification_time':{'N': event_body['notification_time']},
         
         #desired language for the verse of the day
-        'language':{'S': event_body['language'].lower()}, 
+        'language':{'S': event_body['language'].lower()},
 
         #UI language within the app (currently not used)
         'ui_language':{'S': event_body['ui_language'].lower()},
@@ -41,7 +41,7 @@ def register(event, context):
     }
 
     print(f"registering device with push token {device_token}")
-    
+
     dynamodb = boto3.client('dynamodb')
     dynamodb.put_item(TableName=DBTABLE_PUSH_SUBSCRIPTIONS, Item=db_item )
 

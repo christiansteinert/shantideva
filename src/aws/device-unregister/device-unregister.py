@@ -26,7 +26,7 @@ def unregister(event, context):
             ':a': {'N': '1'},
             ':b': {'S': 'DisabledByUser'},
             ':c': {'S': datetime.utcnow().isoformat()}
-        },    
+        },
         ReturnValues="NONE"
     )
 
