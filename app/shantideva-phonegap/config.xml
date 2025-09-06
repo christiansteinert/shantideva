@@ -30,11 +30,22 @@
         <resource-file src="strings-tw.xml" target="app/src/main/res/values-zh-rMO/strings.xml" />
         <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+HK/strings.xml" />
         <resource-file src="strings-cn.xml" target="app/src/main/res/values-b+zh+Hans+MO/strings.xml" />
+        <resource-file src="ic_android_splash.xml" target="app/src/main/res/drawable/ic_android_splash.xml" />
+        <resource-file src="ic_android_splash_legacy.png" target="app/src/main/res/drawable/ic_android_splash_legacy.png" />
 
         <allow-intent href="market:*" />
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
             <meta-data android:name="ic_notify" android:resource="@drawable/ic_notify" />
         </config-file>
+
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="ic_android_splash.xml" />
+        
+        <!-- For legacy Android versions that don't support vector drawables -->
+        <preference name="SplashScreen" value="ic_android_splash_legacy" />
+        <preference name="SplashScreenDelay" value="1000" />
+        <preference name="FadeSplashScreen" value="false" />
+        <preference name="SplashMaintainAspectRatio" value="true" />
+        <preference name="SplashShowOnlyFirstTime" value="false" />
 
     </platform>
     <platform name="ios">

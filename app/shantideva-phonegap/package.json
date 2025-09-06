@@ -18,7 +18,6 @@
     "phonegap-plugin-multidex": "^1.0.0"
   },
   "devDependencies": {
-    "cordova-android": "^14.0.1",
     "de-christian_steinert-shantideva_verses": "file:../../src/phonegap-plugin/DailyVersesPlugin",
     "ios": "0.0.1"
   }
