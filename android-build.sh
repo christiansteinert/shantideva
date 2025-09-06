@@ -3,7 +3,7 @@ export ANDROID_SDK_ROOT=$ANDROID_HOME
 export PATH=$ANDROID_HOME/platform-tools:$PATH 
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-export PATH=$ANDROID_HOME/cmdline-tools/build-tools/33.0.2:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/build-tools/35.0.0:$PATH
 
 export ANDROID_TOOLS_VERSION=`ls -1 $ANDROID_HOME/build-tools/ |tail -n 1 `
 export ANDROID_TOOLS_PATH="$ANDROID_HOME/build-tools/$ANDROID_TOOLS_VERSION"
@@ -12,7 +12,6 @@ export JAVA_TOOL_OPTIONS="-Xmx2048m -XX:ReservedCodeCacheSize=1024m"
 
 rm -rf app/shantideva-phonegap/www/*
 cp -rv src/web/* app/shantideva-phonegap/www/
-cp src/icon/App-Icons/ic_icon.xml app/shantideva-phonegap/platforms/android/app/src/main/res/drawable/ic_shantideva_splashscreen.xml
 
 rm -rf app/shantideva-phonegap/www/lib/jquery-ui-1.12.1.custom/debug
 rm app/shantideva-phonegap/www/css/*.ttf
@@ -20,6 +19,8 @@ rm app/shantideva-phonegap/www/css/*.woff2
 rm app/shantideva-phonegap/www/favicon*.png
 
 cd app/shantideva-phonegap
+
+cordova prepare android
 
 cordova plugin remove de.christiansteinert.dailyversesplugin
 cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin

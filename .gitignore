@@ -5,3 +5,6 @@ ShantidevaVerses.apk
 .serverless
 ShantidevaVerses-aligned.apk.idsig
 .DS_Store
+node_modules
+app/shantideva-phonegap/platforms/
+app/shantideva-phonegap/plugins/
