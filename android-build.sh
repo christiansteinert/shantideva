@@ -3,7 +3,7 @@ export ANDROID_SDK_ROOT=$ANDROID_HOME
 export PATH=$ANDROID_HOME/platform-tools:$PATH 
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-export PATH=$ANDROID_HOME/cmdline-tools/build-tools/33.0.2:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/build-tools/35.0.0:$PATH
 
 export ANDROID_TOOLS_VERSION=`ls -1 $ANDROID_HOME/build-tools/ |tail -n 1 `
 export ANDROID_TOOLS_PATH="$ANDROID_HOME/build-tools/$ANDROID_TOOLS_VERSION"

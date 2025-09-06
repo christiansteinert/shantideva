@@ -5,8 +5,8 @@ export ANDROID_SDK_ROOT=$ANDROID_HOME
 export PATH=$ANDROID_HOME/platform-tools:$PATH 
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-export PATH=$ANDROID_HOME/cmdline-tools/build-tools/33.0.2:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/build-tools/35.0.0:$PATH
 
 cd app/shantideva-phonegap
 
-cordova run android --debug
+cordova run android --verbose
