@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "displayName": "ShantidevaVerses",
   "cordova": {
-    "platforms": [
-      "android"
-    ],
+    "platforms": [],
     "plugins": {
       "de.christiansteinert.dailyversesplugin": {}
     }

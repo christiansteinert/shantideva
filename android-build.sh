@@ -25,6 +25,9 @@ cordova prepare android
 cordova plugin remove de.christiansteinert.dailyversesplugin
 cordova plugin add ../../src/phonegap-plugin/DailyVersesPlugin
 
+cp platforms/android/app/src/main/res/drawable/ic_android_splash.xml platforms/android/app/src/main/res/drawable/ic_cdv_splashscreen.xml
+
+
 echo ">> starting build"
 cordova build android --release -- --packageType=apk
 
