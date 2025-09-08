@@ -100,7 +100,7 @@ jobs:
         cordova build ios --release --device --codeSignIdentity="iPhone Distribution: Berzin Archives e.V. (${{ secrets.APPSTORECONNECTDEVELOPMENTTEAMID }})" --developmentTeam="${{ secrets.APPSTORECONNECTDEVELOPMENTTEAMID }}" --packageType=app-store --provisioningProfile="${{ secrets.SHANTIDEVAPROVISIONINGPROFILEID }}"
 
     - name: Publish artifact to Github Actions
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Shantideva.ipa
         path: |
