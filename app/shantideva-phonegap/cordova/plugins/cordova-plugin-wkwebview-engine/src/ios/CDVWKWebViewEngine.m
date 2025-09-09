@@ -100,7 +100,7 @@
     wkWebView.UIDelegate = self.uiDelegate;
     self.engineWebView = wkWebView;
 
-    if (IsAtLeastiOSVersion(@"9.0") && [self.viewController isKindOfClass:[CDVViewController class]]) {
+    if (IsAtLeastiOSVersion(@"12.0") && [self.viewController isKindOfClass:[CDVViewController class]]) {
         wkWebView.customUserAgent = ((CDVViewController*) self.viewController).userAgent;
     }
 
@@ -139,7 +139,7 @@
 static void * KVOContext = &KVOContext;
 
 - (void)addURLObserver {
-    if(!IsAtLeastiOSVersion(@"9.0")){
+    if(!IsAtLeastiOSVersion(@"12.0")){
         [self.webView addObserver:self forKeyPath:@"URL" options:0 context:KVOContext];
     }
 }

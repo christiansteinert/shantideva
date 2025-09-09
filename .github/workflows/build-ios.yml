@@ -30,7 +30,7 @@ jobs:
     - name: Install Node.js and npm
       uses: actions/setup-node@v2
       with:
-        node-version: '18.x'
+        node-version: '22.x'
 
     - name: Install Cordova
       run: |
