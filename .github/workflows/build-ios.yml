@@ -27,6 +27,12 @@ jobs:
       with:
         xcode-version: latest-stable
 
+    - name: Install latest CocoaPods
+      run: sudo gem install cocoapods
+
+    - name: Check CocoaPods version
+      run: pod --version
+
     - name: Install Node.js and npm
       uses: actions/setup-node@v2
       with:
