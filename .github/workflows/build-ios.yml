@@ -48,10 +48,14 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm install
-        npm install cordova-ios
-        cordova platform remove ios
-        cordova platform add ios@latest
+        # Ignore any existing package-lock.json
+        rm -f package-lock.json
+        # Tell npm not to create a new lock file
+        export npm_config_package_lock=false
+        npm install --no-package-lock
+        # Ensure desired cordova-ios version from package.json is used
+        cordova platform rm ios || true
+        cordova platform add ios@7.1.1
 
     - name: Add / update cordova plugins
       run: |
