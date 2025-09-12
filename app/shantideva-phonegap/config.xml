@@ -93,4 +93,8 @@
          data in the App's SharedPreferences in the latest version. -->
     <preference name="AndroidInsecureFileModeEnabled" value="true" />
 
+    <!-- Added engine declarations to lock platform versions -->
+    <engine name="cordova-android" spec="^14.0.0" />
+    <engine name="cordova-ios" spec="^7.1.1" />
+
 </widget>
