@@ -49,6 +49,8 @@
 
     </platform>
     <platform name="ios">
+        <!-- Raised iOS deployment target for Firebase 11.x (Messaging) compatibility -->
+        <preference name="deployment-target" value="13.0" />
         <splash src="www/content/info-logo.png" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
