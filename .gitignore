@@ -6,5 +6,8 @@ ShantidevaVerses.apk
 ShantidevaVerses-aligned.apk.idsig
 .DS_Store
 node_modules
+app/shantideva-phonegap/plugins/de.christiansteinert.dailyversesplugin/node_modules/
 app/shantideva-phonegap/platforms/
 app/shantideva-phonegap/plugins/
+app/shantideva-phonegap/www/
+app/shantideva-web

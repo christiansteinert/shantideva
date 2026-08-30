@@ -20,6 +20,8 @@ rm app/shantideva-phonegap/www/favicon*.png
 
 cd app/shantideva-phonegap
 
+cordova platform rm android
+cordova platform add android@15.1.0
 cordova prepare android
 
 cordova plugin remove de.christiansteinert.dailyversesplugin

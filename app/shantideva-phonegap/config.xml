@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="202021" id="de.christian_steinert.shantideva_verses" version="2.2.21" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="202022" id="de.christian_steinert.shantideva_verses" version="2.2.22" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Shantideva</name>
     <description>
     An application that displays a daily verse from Shantideva's text "Engaging in Bodhisattva Behavior" and allows reading through the text. 
@@ -47,6 +47,9 @@
         <preference name="SplashMaintainAspectRatio" value="true" />
         <preference name="SplashShowOnlyFirstTime" value="false" />
 
+        <!-- Enable R8 minification and resource shrinking -->
+        <resource-file src="proguard-rules.pro" target="app/proguard-rules.pro" />
+        <resource-file src="build-extras.gradle" target="app/build-extras.gradle" />
     </platform>
     <platform name="ios">
         <!-- Raised iOS deployment target for Firebase 11.x (Messaging) compatibility -->
@@ -86,7 +89,7 @@
         <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     </platform>
     <preference name="android-minSdkVersion" value="24" />
-    <preference name="android-targetSdkVersion" value="35" />
+    <preference name="android-targetSdkVersion" value="36" />
     <preference name="AndroidXEnabled" value="true" />
     <preference name="GradlePluginGoogleServicesEnabled" value="false" />
 
@@ -96,7 +99,7 @@
     <preference name="AndroidInsecureFileModeEnabled" value="true" />
 
     <!-- Added engine declarations to lock platform versions -->
-    <engine name="cordova-android" spec="^14.0.0" />
-    <engine name="cordova-ios" spec="^7.1.1" />
+    <engine name="cordova-android" spec="^15.1.0" />
+    <engine name="cordova-ios" spec="^8.1.1" />
 
 </widget>

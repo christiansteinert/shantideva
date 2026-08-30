@@ -4,8 +4,10 @@
   "displayName": "ShantidevaVerses",
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "cordova-android",
+      "cordova-ios",
+      "android"
     ],
     "plugins": {
       "de.christiansteinert.dailyversesplugin": {}
@@ -15,10 +17,10 @@
     "@zestia/cordova-plugin-wkwebview-engine-windowopen": "^1.0.1",
     "cordova": "^12.0.0",
     "cordova-ios": "^7.1.1",
-    "cordova-android": "^14.0.0",
     "phonegap-plugin-multidex": "^1.0.0"
   },
   "devDependencies": {
+    "cordova-android": "^15.1.0",
     "de-christian_steinert-shantideva_verses": "file:../../src/phonegap-plugin/DailyVersesPlugin"
   }
 }

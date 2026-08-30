@@ -40,7 +40,7 @@ jobs:
 
     - name: Install Cordova
       run: |
-        npm install -g cordova@12.0.0
+        npm install -g cordova@13.0.0
 
     - name: Prepare application files
       run: |
