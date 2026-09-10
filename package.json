@@ -1,0 +1,25 @@
+{
+  "name": "shantideva-development",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs serve",
+    "build:web": "node scripts/dev.mjs web",
+    "setup:ios": "node scripts/dev.mjs setup ios",
+    "build:ios": "node scripts/dev.mjs build ios",
+    "run:ios": "node scripts/dev.mjs run ios",
+    "open:ios": "node scripts/dev.mjs open ios",
+    "setup:android": "node scripts/dev.mjs setup android",
+    "build:android": "node scripts/dev.mjs build android",
+    "run:android": "node scripts/dev.mjs run android",
+    "doctor": "node scripts/dev.mjs doctor",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2"
+  }
+}

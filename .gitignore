@@ -11,3 +11,8 @@ app/shantideva-phonegap/platforms/
 app/shantideva-phonegap/plugins/
 app/shantideva-phonegap/www/
 app/shantideva-web
+
+# Local development and test outputs
+.local/
+playwright-report/
+test-results/

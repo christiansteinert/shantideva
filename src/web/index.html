@@ -2,10 +2,10 @@
 <html class="no-js">
 <head>
 	<meta charset="UTF-8">
-  <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />-->
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="stylesheet" type="text/css" href="css/custom.css" />
     <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.13.2.custom/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/modern.css" />
 
     <link rel="icon" href="favicon_180.png" type="image/png" sizes="180x180" />
     <link rel="icon" href="favicon_48.png" type="image/png" sizes="48x48" />    
@@ -322,7 +322,7 @@ CONFIG = {
         testTimer: function(success, error) {},
         saveSettings:function(settings, success, error) {},
         loadSettings:function(success, error) {success({}); },
-        saveFavoriteVerses:function(success, error) {success()}
+        saveFavoriteVerses:function(favoriteVerses, success, error) {if(success) success();}
       };
     }
   },
@@ -382,6 +382,7 @@ CONFIG = {
   },
 
   saveFavoriteVersesToCloud:function() {
+    if(window.SHANTIDEVA_LOCAL_DEV) return;
     var versesToSave = localStorage.getItem('favoriteVersesForCloud');
     
     if(versesToSave ) {
@@ -515,7 +516,7 @@ UI = {
     var isLiked = favorites[String(chapter)][String(verse)];
     var cssClass = isLiked?'liked':'unliked';
     
-    return '<a href="#" class="likeBtn likeBtn'+chapter+'_'+verse+' '+cssClass+'" onclick="return UI.onLikeButton('+chapter+','+verse+');"></a>';
+    return '<a href="#" role="button" aria-label="'+this.getText('Favorite Verses')+'" aria-pressed="'+!!isLiked+'" class="likeBtn likeBtn'+chapter+'_'+verse+' '+cssClass+'" onclick="return UI.onLikeButton('+chapter+','+verse+');"></a>';
   },
   
   onLikeButton:function(chapter, verse) {
@@ -525,7 +526,7 @@ UI = {
     var isLiked = favorites[String(chapter)][String(verse)];
     var cssClass = isLiked?'liked':'unliked';
 
-    $('.likeBtn'+chapter+'_'+verse).removeClass('liked').removeClass('unliked').addClass(cssClass);
+    $('.likeBtn'+chapter+'_'+verse).removeClass('liked').removeClass('unliked').addClass(cssClass).attr('aria-pressed', !!isLiked);
     CONFIG.saveFavoriteVerses();
     UI.setFavoritesBtnVisibility();
     
@@ -553,9 +554,9 @@ UI = {
     }
     
     if(hasFavorites) {
-      $('#favoritesTabBtn').show();
+      $('#favoritesTabBtn').parent().show();
     } else {
-      $('#favoritesTabBtn').hide();
+      $('#favoritesTabBtn').parent().hide();
     }
   },
   
@@ -651,8 +652,10 @@ UI = {
     
     $('.tabtitle').hide(); // hide all tabs titles
     $('#'+tabName+"Title").show(); // show title of desired tab
-    $('#footer .tab').show(); // make sure the footer becomes visible
+    $('#footer .tab').css('display', 'flex'); // make sure the footer becomes visible
     
+    $('.tablinks').removeAttr('aria-current');
+    $('#'+tabName+'Btn').attr('aria-current', 'page');
     $('.tab li').removeClass("active"); // make the currently active tab inactive
     $('#'+tabName+"Btn").parent().addClass("active"); // make the newly selected tab active
 
@@ -751,6 +754,7 @@ UI = {
     
     htmlCode = '<div id="verseOfTheDayCont" class="vcenterContainer"><div id="verseOfTheDay" class="vcenter">';
     htmlCode += '<div id="verseOfTheDayNarrow">';
+    htmlCode += '<div class="daily-heading">'+this.getText('Verse of the Day')+'</div>';
 
     htmlCode += '<div class="verse '+cssClass+'" lang="'+lang+'">';
     htmlCode += verseText;
@@ -1253,7 +1257,7 @@ function cordovaReady() {
 
 }
 
-if(location.href.indexOf('https://localhost') === 0 || location.href.indexOf('file://') === 0) {
+if(['https:', 'app:', 'file:'].includes(location.protocol) && (location.hostname === 'localhost' || location.protocol === 'file:')) {
   // running inside cordova  
   // add handler to do the rest of the initialization when Cordova is ready
   document.addEventListener("deviceready", function() { $(cordovaReady); });  
@@ -1274,7 +1278,7 @@ if(location.href.indexOf('https://localhost') === 0 || location.href.indexOf('fi
   <div id="bodyContent">
     <div class="header" id="header">
       <div class="tabtitle" id="homeTabTitle">
-        <h1>{{App_Title}} - {{Verse of the Day}}</h1>
+        <h1>{{App_Title}}</h1>
       </div>
       <div class="tabtitle" id="textTabTitle">
         <a href="javascript:void(0)" id="btnBack" onclick="UI.moveChapter(-1)"></a>

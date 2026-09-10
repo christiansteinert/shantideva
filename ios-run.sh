@@ -1,6 +1,4 @@
-./ios-build.sh
-
-
-cd app/shantideva-phonegap
-
-cordova run ios --debug
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")"
+exec npm run run:ios -- "$@"
