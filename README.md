@@ -1,23 +1,45 @@
 # Shantideva
-This app contains the text *Engaging in Bodhisattva Behavior* (Bodhicharyavatara) by Shantideva. The app contains the full text by Shantideva in multiple languages and allows to browse through it chapter by chapter. It also selects a random verse from the text as "verse of the day".
 
-The app is packaged into an installable app with Apache Cordova. Most of the logic is implemented in Javascript. The app can also be used as a single page web application that is simply served from a webserver without being packaged into a mobile app. The cordova version of the app, however, has one additional feature that the web application does not have: in the Android version of the app the user can choose to see the verse of the day as a notification message. This is accomplished with an additional Cordova plugin for Android that is implemented in Java.
+A multilingual reader for Shantideva's *Engaging in Bodhisattva Behavior* (Bodhicharyavatara), with a daily verse, full chapters, favorites, parallel translations, and reading preferences. One HTML/CSS/JavaScript app supports the browser, iOS, and Android through Apache Cordova.
 
-Any source code of the app itself released under the GPL v2 or GPL v3, whatever you prefer. Note that some of the contained libraries and other files (such as fonts) have their own licenses and that the copyright for the included Shantideva translations lies not with me but with the respective translators. Therefore, the translations themselves are not released under GPL.
+## Start here
 
-## Project structure
-The folder structure is as follows
-* src/ This folder contains the main source code that is shared by all versions of the app. It also contains additional resources such as icons in editable formats. The main folder is src/web/ which contains all the html, javascript, and css resources that is used by all versions of the app. The folder src/phonegap-plugin/ also contains the Cordova plugin for the Android version of the app. Finally, the src/aws/ folder contains a set of AWS lambda functions that are used for sending push notifications to iOS devices because without a cloud-based trigger it is impossible for these devices to show notifications in a reliable way.
-* app/ This folder contains the app projects for different platforms. app/shantideva-phonegap/ contains the Cordova project for the app. app/shantideva-web/ contains the web version of the app; this is almost identical to the contents of the src/web/ folder but there are a few additional files in the app/shantideva-web/ folder.
-* android_releases/ This folder contains the APK files for Android releases of the app. 
+- [Project map](docs/PROJECT_MAP.md): architecture, source directories, data flow, native plugins and backend.
+- [Local development](docs/DEVELOPMENT.md): build, run, test, iOS Simulator and Xcode/Codex workflow.
+- [Agent instructions](AGENTS.md): source boundaries, verification and history requirements.
+- [Task log](log.md): one dated entry per task, linked to detailed records and evidence.
 
-## Build scripts
-There are the following build scripts. 
-These scripts are written for linux. The ndroid build process requires an installed Android SDK and an installation of Cordova. 
-* webapp-build.sh generates the content for the single-page web application. The output folder is app/shantideva-phonegap/
-* android_build.sh triggers the build process of the Android application
-* android_run.sh triggers the build process of the Android application and then runs the app in the Android emulator
-* ios_build.sh triggers the build process of the iOS application
-* ios_run.sh triggers the build process of the iOS application and then runs the app in the iOS Simulator
+## Run and test
 
+Requires Node 22. Run from the repository root:
 
+```sh
+npm ci
+npx playwright install chromium webkit
+npm run dev
+```
+
+Open [the local app](http://127.0.0.1:4173). Edit `src/web/`, then reload. In another terminal:
+
+```sh
+npm test
+npm run build:web
+```
+
+For iOS on a Mac with Xcode, an installed iOS simulator and CocoaPods:
+
+```sh
+npm run setup:ios
+npm run build:ios
+npm run run:ios
+# Optional native debugging:
+npm run open:ios
+```
+
+Use Codex for shared UI editing and repeatable command-line tests/builds. Use Xcode for native debugging and signing. Local native projects live in ignored `.local/`, use a separate development bundle ID, and do not overwrite release configuration. Local browser and iOS development disable production cloud synchronization.
+
+The shared UI has browser coverage for iPhone WebKit, Android-sized Chromium and desktop Chromium. Native Android, physical-device signing and production push delivery require separate validation; see the [development guide](docs/DEVELOPMENT.md).
+
+## Licensing
+
+The original application's source code is released under GPL v2 or GPL v3, at your choice. Bundled libraries and fonts have their own licenses. Copyright in the included Shantideva translations belongs to the respective translators; translations are not released under the app's GPL license. Preserve translator credits and license notices.

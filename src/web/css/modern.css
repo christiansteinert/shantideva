@@ -1,0 +1,95 @@
+/* Shared visual layer. Keep language-specific typography in custom.css. */
+:root {
+  --paper: #f7f6f1;
+  --surface: #fffefa;
+  --ink: #273e39;
+  --muted: #60736b;
+  --accent: #286653;
+  --tint: #e6eee6;
+  --line: #dce3d9;
+  --top: calc(4rem + env(safe-area-inset-top, 0px));
+  --bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+}
+body.dark {
+  --paper: #17231f;
+  --surface: #202f29;
+  --ink: #e9eee4;
+  --muted: #b5c4b8;
+  --accent: #afd6bb;
+  --tint: #31493b;
+  --line: #3c5145;
+}
+html, body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+body.light, body.dark { background: var(--paper); color: var(--ink); }
+a { color: var(--accent); }
+.header, .footer { box-sizing: border-box; background: var(--surface); color: var(--ink); }
+.header { height: var(--top); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); }
+.header .tabtitle { box-sizing: border-box; height: 4rem; padding-top: .625rem; }
+.header h1 { margin: 0; padding: 0 1rem; font-size: 1.1rem; font-weight: 600; line-height: 2.75rem; letter-spacing: .02em; }
+.tabcontentWrap { top: var(--top); bottom: var(--bottom); padding: 0 env(safe-area-inset-right, 0px) 0 env(safe-area-inset-left, 0px); box-sizing: border-box; }
+.tabcontent { width: auto; margin: 0; padding: 1.5rem; box-sizing: border-box; }
+#homeTab { padding: 2rem 1.25rem; }
+#verseOfTheDayNarrow { width: 100%; max-width: 38rem; box-sizing: border-box; padding: 2.5rem 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: 1.5rem; box-shadow: 0 12px 40px #24392a08; }
+.daily-heading { color: var(--muted); font: 600 .8rem/1.6 -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: .1em; margin-bottom: 1.8rem; }
+.daily-heading::before { content: ''; display: block; width: 2rem; height: 2rem; margin: 0 auto 1rem; background: url('../icons/sun_active.png') center / contain no-repeat; filter: grayscale(1); opacity: .65; }
+#verseOfTheDay .verse.latin { font-family: Georgia, 'Times New Roman', serif; font-size: 1.5em; line-height: 1.55; font-weight: normal; }
+#verseOfTheDay .verse p { margin: .3em 0; }
+#verseOfTheDay .verse { line-height: 1.55; }
+#verseOfTheDay .likeBtn { display: block; margin: 1rem auto .5rem; }
+.likeBtn { width: 44px; height: 44px; background-size: 24px; border-radius: 50%; }
+.likeBtn:hover { background-color: var(--tint); }
+.dark .unliked { filter: brightness(2); }
+.ui-button, a.btn.ui-button, .ui-selectmenu-button.ui-button {
+  background: var(--tint); border: 1px solid var(--line); color: var(--accent); border-radius: .7rem; box-shadow: none; font-family: inherit;
+}
+a.btn.ui-button { min-height: 44px; box-sizing: border-box; padding: .75rem 1rem; font-size: .9rem; }
+.ui-button:hover, a.btn.ui-button:hover { background: var(--line); color: var(--ink); border-color: var(--muted); }
+.footer, .uilang-bo .footer { height: var(--bottom); padding: .4rem max(.5rem, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(.5rem, env(safe-area-inset-left, 0px)); border-top: 1px solid var(--line); overflow: hidden; }
+.footer .tabs { display: block; max-width: 42rem; margin: auto; }
+.footer .tab { display: flex; gap: .25rem; height: auto; }
+.footer .tab li { display: block; flex: 1; min-width: 0; height: auto; border-radius: .75rem; }
+.footer .tab li a, .uilang-bo .footer .tab li a { display: block; box-sizing: border-box; width: 100%; min-width: 0; height: 3.9rem; padding: 2.15rem .15rem .25rem; font-size: .65rem; line-height: 1.25; font-weight: 500; color: var(--muted); background-size: 1.4rem; background-position: center .4rem; overflow-wrap: anywhere; }
+.uilang-bo .footer .tab li a { font-size: .8rem; }
+.footer .tab .active, .footer .tab li:hover, .footer .tab li:hover a { background-color: var(--tint); color: var(--accent); }
+.footer .tab .active a { background-color: transparent; color: var(--accent); font-weight: 700; }
+#homeTabBtn { background-image: url('../icons/sun_active.png'); }
+#textTabBtn { background-image: url('../icons/text_active.png'); }
+#favoritesTabBtn { background-image: url('../icons/favorites_active.png'); }
+#settingsTabBtn { background-image: url('../icons/settings_active.png'); }
+#infoTabBtn { background-image: url('../icons/info_active.png'); }
+.textView { max-width: 42rem; padding: .5rem 0 2rem; }
+.textView h1.latin { font-family: Georgia, serif; font-size: 1.6em; line-height: 1.4; border: 0; margin: .5rem 0 1.5rem; }
+.textView h1 { border: 0; }
+.textView p { line-height: 1.75; }
+.textView .verse { margin-bottom: 1.5rem; }
+.translationCredit { font-size: .9em; color: var(--muted); }
+.light .translationCredit a, .dark .translationCredit a, .light #infoTab a, .dark #infoTab a { color: var(--accent); }
+#settingsTab .settings { max-width: 38rem !important; }
+#settingsTab fieldset { border: 1px solid var(--line); border-radius: 1rem; padding: 1rem; background: var(--surface); margin: .5rem 0 1.5rem; min-width: 0; }
+#settingsTab legend { font-weight: 600; padding: 0 .4rem; }
+#settingsTab table { border-spacing: 0 .7rem; table-layout: fixed; }
+#settingsTab td { min-width: 0; overflow-wrap: anywhere; }
+#settingsTab td * { max-width: 100%; }
+#settingsTab select { box-sizing: border-box; width: 100%; max-width: 100%; min-height: 44px; padding: .5rem; font-size: 1rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); }
+.light .smallFormInfo, .dark .smallFormInfo { color: var(--muted); line-height: 1.6; }
+#settingsTab #saveBtn, #settingsTab #cancelBtn { box-sizing: border-box; min-height: 44px; padding: .8rem; border-radius: .75rem; text-decoration: none; font-size: 1rem; }
+#settingsTab #saveBtn { background: var(--accent); color: var(--surface); }
+#settingsTab #cancelBtn { background: var(--tint); color: var(--ink); }
+#infoTab { max-width: 46rem; margin: auto; line-height: 1.7; }
+#infoTab img { max-width: 100%; height: auto; }
+#textTabTitle { white-space: nowrap; }
+#textTabTitle > a { display: inline-flex; justify-content: center; align-items: center; box-sizing: border-box; min-width: 44px; height: 44px; padding: 0 .5rem; }
+#chapterDropdown .ui-selectmenu-button { box-sizing: border-box; width: 65%; max-width: 65%; padding: .7rem .5rem; font-size: .9rem; vertical-align: middle; }
+#chapterDropdown .ui-selectmenu-text { max-height: none; }
+.ui-widget-content, .ui-menu { background: var(--surface); color: var(--ink); border-color: var(--line); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 360px) {
+  .tabcontent { padding: 1rem; }
+  #homeTab { padding: 1rem .75rem; }
+  #verseOfTheDayNarrow { padding: 1.5rem 1rem; }
+  #verseOfTheDay .verse.latin { font-size: 1.3em; }
+  #settingsTab fieldset { padding: .75rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+.dark .daily-heading::before { filter: grayscale(1) brightness(2); }

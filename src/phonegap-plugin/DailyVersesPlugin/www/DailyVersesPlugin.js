@@ -12,6 +12,7 @@ if ( cordova.platformId == 'ios' ) {
     };  
 
     exports.setAlarm = function(settings, success, error) {
+        if (window.SHANTIDEVA_LOCAL_DEV) return;
         console.log('setAlarm(): settings=', JSON.stringify(settings));
 
         // find out how we are already registered with the cloud-based push service
